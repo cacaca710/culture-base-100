@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>山海匯聚｜中臺灣百頁共創計畫 — 百大文化基地</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="index.html" class="active">百大基地地圖</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <section class="map-wrap">
+      <div class="legend">
+        <span class="key"><i style="background:var(--tc)"></i>台中</span>
+        <span class="key"><i style="background:var(--ch)"></i>彰化</span>
+        <span class="key"><i style="background:var(--yl)"></i>雲林</span>
+        <span class="key"><i style="background:var(--nt)"></i>南投</span>
+        <span>── 展覽主軸縣市｜滑入各縣市看基地，點擊固定查看</span>
+      </div>
+      <div id="taiwan-map" aria-label="台灣百大文化基地互動地圖"></div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-head" id="panel-head">
+        <div class="kicker" id="panel-kicker">第 1 屆百大文化基地</div>
+        <h2 id="panel-title">山海匯聚・文化地圖</h2>
+        <button class="close" id="panel-close" title="回到總覽">✕</button>
+      </div>
+      <div class="panel-body" id="panel-body"></div>
+    </aside>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+    <span><b>協辦單位</b>｜中央書局、富興工廠1962</span>
+  </footer>
+</div>
+
+<div id="tooltip"></div>
+
+<script src="js/taiwan-map.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

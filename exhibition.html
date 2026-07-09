@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打開地方未來式｜中臺灣文化百頁行動共創展 — 山海匯聚</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* ── 共創展頁 ───────────────────── */
+  .expo-stage {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 58%) minmax(0, 42%);
+    align-items: center;
+    gap: 24px;
+  }
+  .grow-wrap { height: 100%; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .grow-wrap svg { width: 100%; height: 96%; }
+
+  .expo-info { padding-right: 3vw; }
+  .expo-info .kicker {
+    font-size: 13px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 10px;
+  }
+  .expo-title {
+    font-size: clamp(38px, 4.6vw, 64px);
+    font-weight: 900;
+    letter-spacing: .14em;
+    line-height: 1.25;
+    margin-bottom: 18px;
+    display: flex; flex-wrap: wrap;
+  }
+  .expo-title span {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  .play .expo-title span { animation: charUp .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes charUp { to { opacity: 1; transform: none; } }
+
+  .expo-meta {
+    opacity: 0;
+    transition: opacity 1s ease .2s;
+  }
+  .play .expo-meta { opacity: 1; transition-delay: 6.2s; }
+  .expo-meta .name { font-size: clamp(17px, 1.6vw, 22px); font-weight: 900; letter-spacing: .12em; margin-bottom: 14px; }
+  .expo-meta .date-big {
+    font-size: clamp(26px, 2.8vw, 40px); font-weight: 900; letter-spacing: .06em;
+    display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+  }
+  .expo-meta .date-big .wd { font-size: 14px; font-weight: 700; color: var(--ink-soft); letter-spacing: .1em; }
+  .expo-meta .date-big .arrow-line { flex: 0 0 44px; height: 2px; background: var(--ink); }
+  .expo-meta .rows { font-size: 15px; line-height: 2.1; letter-spacing: .06em; color: var(--ink); }
+  .expo-meta .rows b { letter-spacing: .18em; font-weight: 900; margin-right: 10px; }
+  .expo-meta .series {
+    display: inline-block; margin-top: 14px;
+    font-size: 12.5px; letter-spacing: .14em; color: var(--ink-soft);
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; background: var(--card);
+  }
+  .expo-actions { margin-top: 22px; display: flex; gap: 10px; }
+  .expo-actions button {
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: .1em;
+    padding: 9px 20px; border-radius: 999px; cursor: pointer;
+    border: 2px solid var(--ink); background: var(--card); color: var(--ink);
+    transition: all .2s;
+  }
+  .expo-actions button:hover { background: var(--ink); color: var(--paper); }
+
+  /* ── 年輪長芽成樹動畫 ───────────────────── */
+  .g-rings ellipse {
+    fill: none;
+    stroke: #b9b3a2;
+    transform-origin: 480px 600px;
+    transform: scale(0);
+    opacity: 0;
+  }
+  .play .g-rings ellipse { animation: ringGrow 1s cubic-bezier(.2,.75,.35,1.1) forwards; }
+  @keyframes ringGrow { to { transform: scale(1); opacity: 1; } }
+
+  .stem {
+    fill: none; stroke: #5d5b53; stroke-linecap: round;
+    stroke-dasharray: 1000; stroke-dashoffset: 1000;
+  }
+  .play .stem { animation: draw 1.6s ease-out forwards; }
+  .play .stem.trunk { animation-duration: 2s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .leaf {
+    fill: #84bf41;
+    transform-origin: var(--ox) var(--oy);
+    transform: scale(0);
+  }
+  .play .leaf { animation: pop .55s cubic-bezier(.3,1.6,.5,1) forwards; }
+  @keyframes pop { to { transform: scale(1); } }
+
+  .crown {
+    transform-origin: var(--ox) var(--oy);
+    transform: scale(0);
+  }
+  .play .crown { animation: pop .8s cubic-bezier(.3,1.5,.45,1) forwards; }
+  .crown-sway {
+    transform-origin: var(--ox) var(--oy);
+    animation: sway 5.5s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-1.4deg); }
+    50%      { transform: rotate(1.4deg); }
+  }
+  .crown circle { fill: none; }
+  .crown .disc { stroke: none; opacity: .16; }
+
+  .seed-note {
+    font-size: 15px; letter-spacing: .35em; fill: var(--ink-soft);
+    opacity: 0;
+  }
+  .play .seed-note { animation: fadeIn 1.2s ease 1s forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  @media (max-aspect-ratio: 1/1) {
+    .expo-stage { grid-template-columns: 1fr; }
+    .grow-wrap svg { height: 52vh; }
+    .expo-info { padding: 0 4vw 5vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="index.html">百大基地地圖</a>
+      <a href="exhibition.html" class="active">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="expo-stage" id="stage">
+    <section class="grow-wrap" id="grow-wrap">
+      <!-- 年輪 → 發芽 → 成樹 -->
+      <svg viewBox="0 0 960 700" aria-label="年輪發芽長成大樹動畫">
+        <!-- 地面年輪 -->
+        <g class="g-rings">
+          <ellipse cx="480" cy="600" rx="300" ry="72" stroke-width="2"   stroke-dasharray="180 14 90 10" style="animation-delay:.0s"/>
+          <ellipse cx="480" cy="600" rx="250" ry="60" stroke-width="2.4" stroke-dasharray="150 10 120 8" style="animation-delay:.15s"/>
+          <ellipse cx="480" cy="600" rx="202" ry="48" stroke-width="2"   stroke-dasharray="120 12 80 8"  style="animation-delay:.3s"/>
+          <ellipse cx="480" cy="600" rx="156" ry="37" stroke-width="2.6" stroke-dasharray="90 10 70 8"   style="animation-delay:.45s"/>
+          <ellipse cx="480" cy="600" rx="112" ry="27" stroke-width="2"   stroke-dasharray="80 8 50 8"    style="animation-delay:.6s"/>
+          <ellipse cx="480" cy="600" rx="72"  ry="17" stroke-width="2.4" stroke-dasharray="50 8 40 6"    style="animation-delay:.75s"/>
+          <ellipse cx="480" cy="600" rx="36"  ry="9"  stroke-width="2"                                    style="animation-delay:.9s"/>
+        </g>
+        <text class="seed-note" x="480" y="672" text-anchor="middle">地方的記憶，是年輪的疊層</text>
+
+        <!-- 幼芽 -->
+        <path class="stem" d="M480,598 C482,560 470,540 478,506" stroke-width="7" style="animation-delay:1.5s"/>
+        <path class="leaf" d="M478,516 C450,512 438,488 444,470 C468,474 480,494 478,516 Z" style="--ox:478px;--oy:516px;animation-delay:2.5s"/>
+        <path class="leaf" d="M478,510 C504,502 512,478 504,462 C482,468 472,490 478,510 Z" style="--ox:478px;--oy:510px;animation-delay:2.75s"/>
+
+        <!-- 主幹與枝枒 -->
+        <path class="stem trunk" d="M479,600 C481,540 468,470 476,404 C480,360 474,330 478,300" stroke-width="13" style="animation-delay:3.1s"/>
+        <path class="stem" d="M477,430 C440,400 408,388 372,380" stroke-width="7" style="animation-delay:4.0s"/>
+        <path class="stem" d="M477,380 C520,350 556,340 596,336" stroke-width="7" style="animation-delay:4.2s"/>
+        <path class="stem" d="M478,320 C452,286 430,272 404,262" stroke-width="6" style="animation-delay:4.4s"/>
+        <path class="stem" d="M478,300 C500,262 522,246 552,236" stroke-width="6" style="animation-delay:4.6s"/>
+
+        <!-- 四色年輪樹冠:台中藍/彰化粉/雲林黃/南投綠 -->
+        <g class="crown" style="--ox:352px;--oy:368px;animation-delay:4.5s">
+          <g class="crown-sway" style="--ox:352px;--oy:368px">
+            <circle class="disc" cx="352" cy="368" r="74" fill="#3fb6cd"/>
+            <circle cx="352" cy="368" r="16" stroke="#3fb6cd" stroke-width="2.6" stroke-dasharray="40 6"/>
+            <circle cx="352" cy="368" r="30" stroke="#3fb6cd" stroke-width="2.2" stroke-dasharray="70 8 40 6"/>
+            <circle cx="352" cy="368" r="44" stroke="#3fb6cd" stroke-width="2.6" stroke-dasharray="120 8 60 8"/>
+            <circle cx="352" cy="368" r="58" stroke="#3fb6cd" stroke-width="2.2" stroke-dasharray="160 10 90 8"/>
+            <circle cx="352" cy="368" r="71" stroke="#3fb6cd" stroke-width="2.6" stroke-dasharray="220 12 120 10"/>
+          </g>
+        </g>
+        <g class="crown" style="--ox:618px;--oy:322px;animation-delay:4.75s">
+          <g class="crown-sway" style="--ox:618px;--oy:322px;animation-delay:-1.6s">
+            <circle class="disc" cx="618" cy="322" r="80" fill="#ef9b84"/>
+            <circle cx="618" cy="322" r="17" stroke="#ef9b84" stroke-width="2.6" stroke-dasharray="44 6"/>
+            <circle cx="618" cy="322" r="32" stroke="#ef9b84" stroke-width="2.2" stroke-dasharray="76 8 44 6"/>
+            <circle cx="618" cy="322" r="48" stroke="#ef9b84" stroke-width="2.6" stroke-dasharray="130 10 66 8"/>
+            <circle cx="618" cy="322" r="63" stroke="#ef9b84" stroke-width="2.2" stroke-dasharray="170 10 96 8"/>
+            <circle cx="618" cy="322" r="77" stroke="#ef9b84" stroke-width="2.6" stroke-dasharray="230 12 130 10"/>
+          </g>
+        </g>
+        <g class="crown" style="--ox:388px;--oy:238px;animation-delay:5.0s">
+          <g class="crown-sway" style="--ox:388px;--oy:238px;animation-delay:-3.2s">
+            <circle class="disc" cx="388" cy="238" r="70" fill="#eecb2f"/>
+            <circle cx="388" cy="238" r="15" stroke="#eecb2f" stroke-width="2.6" stroke-dasharray="38 6"/>
+            <circle cx="388" cy="238" r="29" stroke="#eecb2f" stroke-width="2.2" stroke-dasharray="66 8 40 6"/>
+            <circle cx="388" cy="238" r="43" stroke="#eecb2f" stroke-width="2.6" stroke-dasharray="112 8 60 8"/>
+            <circle cx="388" cy="238" r="56" stroke="#eecb2f" stroke-width="2.2" stroke-dasharray="150 10 86 8"/>
+            <circle cx="388" cy="238" r="67" stroke="#eecb2f" stroke-width="2.6" stroke-dasharray="200 12 110 10"/>
+          </g>
+        </g>
+        <g class="crown" style="--ox:560px;--oy:186px;animation-delay:5.25s">
+          <g class="crown-sway" style="--ox:560px;--oy:186px;animation-delay:-4.5s">
+            <circle class="disc" cx="560" cy="186" r="86" fill="#84bf41"/>
+            <circle cx="560" cy="186" r="18" stroke="#84bf41" stroke-width="2.6" stroke-dasharray="46 6"/>
+            <circle cx="560" cy="186" r="34" stroke="#84bf41" stroke-width="2.2" stroke-dasharray="80 8 48 6"/>
+            <circle cx="560" cy="186" r="51" stroke="#84bf41" stroke-width="2.6" stroke-dasharray="140 10 70 8"/>
+            <circle cx="560" cy="186" r="68" stroke="#84bf41" stroke-width="2.2" stroke-dasharray="184 10 104 8"/>
+            <circle cx="560" cy="186" r="83" stroke="#84bf41" stroke-width="2.6" stroke-dasharray="250 12 140 10"/>
+          </g>
+        </g>
+      </svg>
+    </section>
+
+    <section class="expo-info">
+      <div class="kicker">濁水沃土之山海匯聚系列</div>
+      <h2 class="expo-title" id="expo-title">打開地方未來式</h2>
+      <div class="expo-meta">
+        <div class="name">中臺灣文化百頁行動共創展｜共創展開幕暨成果展覽</div>
+        <div class="date-big">
+          <span>11/7<span class="wd"> 六</span></span>
+          <span class="arrow-line"></span>
+          <span>11/22<span class="wd"> 日</span></span>
+        </div>
+        <div class="rows">
+          <div><b>地點</b>國立彰化生活美學館 第一、二展覽室</div>
+          <div><b>時間</b>9:00–17:00（逢週一休館）</div>
+        </div>
+        <span class="series">指導單位｜文化部　主辦單位｜國立彰化生活美學館　執行單位｜國立雲林科技大學</span>
+        <div class="expo-actions">
+          <button id="replay">↺ 重播動畫</button>
+          <button onclick="location.href='index.html'">← 回百大基地地圖</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span><b>山海匯聚</b>｜人文地景的交織與對話，描繪出文化的回響與土地的情感</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const stage = document.getElementById("stage");
+  const title = document.getElementById("expo-title");
+
+  // 標題逐字浮現
+  const text = title.textContent;
+  title.textContent = "";
+  [...text].forEach((ch, i) => {
+    const s = document.createElement("span");
+    s.textContent = ch;
+    s.style.animationDelay = (5.6 + i * 0.14) + "s";
+    title.appendChild(s);
+  });
+
+  function play() {
+    stage.classList.remove("play");
+    void stage.offsetWidth; // 觸發 reflow 重啟動畫
+    stage.classList.add("play");
+  }
+  document.getElementById("replay").addEventListener("click", play);
+  requestAnimationFrame(() => requestAnimationFrame(play));
+})();
+</script>
+</body>
+</html>
