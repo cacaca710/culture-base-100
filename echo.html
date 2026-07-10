@@ -178,17 +178,18 @@
     100% { transform: scale(1); opacity: 0; }
   }
 
-  /* 一道回聲從 A 被帶到 B(輕輕的弧線移動) */
-  .travel { opacity: 0; }
-  .play .travel { animation: travelArc 2.3s cubic-bezier(.5,.08,.42,1) var(--d, 0s) forwards; }
-  @keyframes travelArc {
-    0%   { opacity: 0; transform: translate(0, 0) scale(.4); }
-    12%  { opacity: 1; transform: translate(28px, -44px) scale(1); }
-    55%  { transform: translate(150px, -104px); }
-    88%  { transform: translate(276px, -30px); }
-    94%  { transform: translate(290px, -14px) scale(1.18, .8); }
-    100% { opacity: 1; transform: translate(290px, -14px) scale(1); }
+  /* 樹冠(四色年輪圓盤)輕輕搖曳 */
+  .crown-sway { transform-origin: var(--org); animation: sway 5.5s ease-in-out var(--d, 0s) infinite; }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.3deg); } 50% { transform: rotate(1.3deg); } }
+
+  /* 門扇打開(以門柱為軸的透視旋轉) */
+  .doorleaf { transform-origin: var(--org); opacity: 0; }
+  .play .doorleaf {
+    animation: leafShow .01s linear var(--show, 5s) forwards,
+               doorOpen 2.2s cubic-bezier(.65,.05,.3,1) var(--d, 6s) forwards;
   }
+  @keyframes leafShow { to { opacity: 1; } }
+  @keyframes doorOpen { from { transform: scaleX(1); } to { transform: scaleX(-.42); } }
 
   /* 一圈圈往外送的回聲 */
   .ewave { fill: none; transform-origin: var(--org); transform: scale(.1); opacity: 0; }
@@ -377,7 +378,7 @@ const TOPICS = [
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "回聲落在自己的場域", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "長成大樹，打開未來", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -385,7 +386,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "今天獲得的想法，被帶回自己的場域，成為新的開始"
+    note: "回聲長成大樹，替地方打開通往未來的門"
   }
 ];
 
@@ -499,39 +500,83 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 帶回:一道回聲離開今天的場域,落在自己的地方,產生新的迴響
+// 04 未來:第三段的四色年輪長成一棵大樹,枝枒指向一扇緩緩打開的雙開門
 function sceneFour(t) {
-  const ax = 255, ay = 468;  // A:今天參訪的場域(灰年輪)
-  const bx = ax + 290, by = ay - 14;  // B:自己的場域(原本安靜的空白)
-  // A:今天的場域,經驗與時間的年輪
-  const ringsA = etchRings(ax, ay, "#b9b3a2", [28, 56, 86, 118, 150], .9, .26);
-  // 回聲離開 A 時,A 輕輕泛起一圈
-  const departPulse = `<ellipse class="pulse1" cx="${ax}" cy="${ay}" rx="170" ry="${Math.round(170 * RY)}"
-    stroke="#b9b3a2" stroke-width="2" style="--org:${ax}px ${ay}px;--d:2.9s"/>`;
-  // 一道回聲:彩色小圓點,從 A 的中心被帶往 B(輕輕的弧線)
-  const dot = `<g class="travel" style="--d:3.2s">
-    <ellipse cx="${ax}" cy="${ay}" rx="9" ry="6" fill="${t.color}"/>
-  </g>`;
-  // 落下的瞬間:B 產生一道新的回聲(擴散兩次)
-  const landPulse = `
-    <ellipse class="pulse1" cx="${bx}" cy="${by}" rx="90" ry="${Math.round(90 * RY)}"
-      stroke="${t.color}" stroke-width="2.6" style="--org:${bx}px ${by}px;--d:5.5s"/>
-    <ellipse class="pulse1" cx="${bx}" cy="${by}" rx="140" ry="${Math.round(140 * RY)}"
-      stroke="${t.color}" stroke-width="2.2" style="--org:${bx}px ${by}px;--d:5.85s"/>`;
-  // 新的開始:B 刻下第一圈小小的年輪,回聲繼續輕輕擴散
-  const ringsB = etchRings(bx, by, t.color, [20, 42], 6.3, .3);
-  const liveWaves = eWaves(bx, by, t.color, 120, 7.2, 4.8, 2, 2);
+  const bx2 = 262, by2 = 538; // 樹的基座(四色年輪)
+  // 四色年輪(延續第三段疊好的顏色)
+  const base = [[30, C.tc], [56, C.ch], [84, C.yl], [114, C.nt]]
+    .map(([rx, c], i) =>
+      `<ellipse class="etch" cx="${bx2}" cy="${by2}" rx="${rx}" ry="${Math.round(rx * RY)}"
+        stroke="${c}" stroke-width="${i % 2 ? 2.2 : 2.6}"
+        stroke-dasharray="${Math.round(rx * 2.2)} ${8 + i} ${Math.round(rx * 1.1)} ${6 + i}"
+        style="--org:${bx2}px ${by2}px;--d:${(.9 + i * .3).toFixed(2)}s"/>`).join("");
+  // 大樹:主幹與枝枒(最長的枝伸向右方的門)
+  const tree = `
+    <path class="draw" d="M${bx2},${by2} C${bx2 + 2},${by2 - 66} ${bx2 - 12},${by2 - 140} ${bx2 - 4},${by2 - 210} C${bx2},${by2 - 252} ${bx2 - 6},${by2 - 282} ${bx2 - 2},${by2 - 312}"
+      stroke="#5d5b53" stroke-width="11" fill="none" stroke-linecap="round" style="--d:2.3s"/>
+    <path class="draw" d="M${bx2 - 3},${by2 - 176} C${bx2 - 40},${by2 - 204} ${bx2 - 70},${by2 - 216} ${bx2 - 104},${by2 - 224}"
+      stroke="#5d5b53" stroke-width="6" fill="none" stroke-linecap="round" style="--d:3.4s"/>
+    <path class="draw" d="M${bx2 - 2},${by2 - 286} C${bx2 - 26},${by2 - 318} ${bx2 - 46},${by2 - 332} ${bx2 - 70},${by2 - 342}"
+      stroke="#5d5b53" stroke-width="5.5" fill="none" stroke-linecap="round" style="--d:3.6s"/>
+    <path class="draw" d="M${bx2 - 3},${by2 - 226} C${bx2 + 44},${by2 - 258} ${bx2 + 92},${by2 - 270} ${bx2 + 148},${by2 - 270} C${bx2 + 178},${by2 - 270} ${bx2 + 204},${by2 - 266} ${bx2 + 226},${by2 - 260}"
+      stroke="#5d5b53" stroke-width="6.5" fill="none" stroke-linecap="round" style="--d:3.8s"/>`;
+  // 四色年輪樹冠
+  function crown(color, cx, cy, maxR, d, sd) {
+    const rs = [.22, .45, .68, .9].map(f => Math.round(maxR * f));
+    const cir = rs.map((r, i) =>
+      `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${i % 2 ? 2.2 : 2.7}"
+        stroke-dasharray="${Math.round(r * 2.6)} ${8 + i} ${Math.round(r * 1.4)} ${6 + i}"/>`).join("");
+    return `<g class="leafpop" style="--org:${cx}px ${cy}px;--d:${d}s">
+      <g class="crown-sway" style="--org:${cx}px ${cy}px;--d:${sd}s">
+        <circle cx="${cx}" cy="${cy}" r="${maxR}" fill="${color}" opacity=".08"/>${cir}
+      </g></g>`;
+  }
+  const crowns =
+    crown(C.tc, bx2 - 122, by2 - 246, 52, 4.4, 0) +
+    crown(C.ch, bx2 - 84, by2 - 362, 56, 4.65, -1.8) +
+    crown(C.yl, bx2 + 16, by2 - 344, 48, 4.9, -3.2) +
+    crown(C.nt, bx2 + 92, by2 - 300, 44, 5.15, -4.4);
+  // 遠方的雙開門:站在一圈綠色新年輪上,被樹枝指向
+  const dx = 612, dTop = 268, dBase = 452, dw = 76; // 門中心/頂/底/半寬
+  const dlx = dx - dw, drx = dx + dw;
+  const dMid = (dTop + dBase) / 2 + 20;
+  const doorGround = etchRings(dx, dBase + 10, t.color, [56, 96], 5.2, .3);
+  const doorFrame = `<path class="draw" d="M${dlx},${dBase} L${dlx},${dTop + 62}
+      Q${dlx},${dTop} ${dx},${dTop} Q${drx},${dTop} ${drx},${dTop + 62} L${drx},${dBase}"
+    stroke="${C.ink}" stroke-width="6" fill="none" stroke-linecap="round" style="--d:5.6s"/>`;
+  // 門內的未來之光(開門後露出)
+  const doorLight = `
+    <ellipse class="etch" cx="${dx}" cy="${dMid}" rx="50" ry="82" fill="${t.color}" fill-opacity=".13" stroke="none"
+      style="--org:${dx}px ${dMid}px;--d:7.6s"/>
+    <circle class="lightdot" cx="${dx}" cy="${dMid - 14}" r="6.5"
+      fill="${t.color}" style="--org:${dx}px ${dMid - 14}px;--d:8.2s"/>
+    <ellipse class="riser" cx="${dx}" cy="${dBase - 8}" rx="26" ry="${Math.round(26 * RY)}"
+      stroke="${t.color}" stroke-width="2.2" fill="none"
+      style="--org:${dx}px ${dBase - 8}px;--d:8.6s;--dur:4.2s;--rise:-120px"/>`;
+  // 雙開門扇:自中央向兩側緩緩推開
+  const leafL = `M${dlx + 5},${dBase} L${dlx + 5},${dTop + 62} Q${dlx + 5},${dTop + 6} ${dx},${dTop + 6} L${dx},${dBase} Z`;
+  const leafR = `M${drx - 5},${dBase} L${drx - 5},${dTop + 62} Q${drx - 5},${dTop + 6} ${dx},${dTop + 6} L${dx},${dBase} Z`;
+  const doorLeaves = `
+    <g class="doorleaf" style="--org:${dlx + 5}px ${dMid}px;--show:6.8s;--d:7.0s">
+      <path d="${leafL}" fill="#eceade" stroke="${C.ink}" stroke-width="3.4"/>
+      <circle cx="${dx - 16}" cy="${dMid}" r="4.5" fill="${C.ink}"/>
+    </g>
+    <g class="doorleaf" style="--org:${drx - 5}px ${dMid}px;--show:6.8s;--d:7.15s">
+      <path d="${leafR}" fill="#eceade" stroke="${C.ink}" stroke-width="3.4"/>
+      <circle cx="${dx + 16}" cy="${dMid}" r="4.5" fill="${C.ink}"/>
+    </g>`;
   return `
-    ${ringsA}
-    ${departPulse}
-    ${dot}
-    ${landPulse}
-    ${ringsB}
-    ${liveWaves}
+    ${base}
+    ${tree}
+    ${crowns}
+    ${doorGround}
+    ${doorLight}
+    ${doorFrame}
+    ${doorLeaves}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
-const STAGE_ICONS = ["起聲", "相和", "疊層", "帶回"];
+const STAGE_ICONS = ["起聲", "相和", "疊層", "未來"];
 
 /* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
