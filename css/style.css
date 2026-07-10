@@ -313,6 +313,19 @@ aside.panel {
 }
 .meetup-intro li b { color: var(--ink); margin-right: 8px; }
 
+.more-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 2px;
+  margin: 2px 0 10px;
+}
+.more-link:hover { opacity: .7; }
+
 /* 工作坊卡片 */
 .ws-card {
   border-radius: 16px;

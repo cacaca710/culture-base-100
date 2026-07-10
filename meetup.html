@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交流會｜山海匯聚 — 中臺灣百頁共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .meet-stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 55%) minmax(0, 45%);
+    gap: 24px;
+    align-items: start;
+    padding: 10px 1vw 24px;
+  }
+
+  /* 左:介紹 */
+  .meet-info .kicker { font-size: 13px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 8px; }
+  .meet-info h2 {
+    font-size: clamp(28px, 3vw, 42px); font-weight: 900; letter-spacing: .14em;
+    line-height: 1.3; margin-bottom: 18px;
+  }
+  .meet-info .lead {
+    font-size: 15px; line-height: 2.05; letter-spacing: .05em; color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .goals { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .goal {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px 18px;
+  }
+  .goal .no {
+    display: inline-grid; place-items: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--ink); color: #fff; font-size: 12px; font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .goal h4 { font-size: 15px; font-weight: 900; letter-spacing: .08em; margin-bottom: 6px; }
+  .goal p { font-size: 13px; line-height: 1.9; letter-spacing: .04em; color: var(--ink-soft); }
+
+  .sessions { display: grid; gap: 10px; }
+
+  /* 右:地圖 */
+  .meet-map { position: sticky; top: 12px; }
+  #taiwan-map { height: min(74vh, 720px); }
+  .map-hint {
+    text-align: center; font-size: 13px; letter-spacing: .12em; color: var(--ink-soft);
+    margin-top: 4px;
+  }
+  .county-tag {
+    font-weight: 900; letter-spacing: .1em;
+    paint-order: stroke; stroke: var(--paper); stroke-width: 5px;
+  }
+  .county-tag .date { font-weight: 700; }
+
+  @media (max-width: 1000px) {
+    .meet-stage { grid-template-columns: 1fr; }
+    .goals { grid-template-columns: 1fr; }
+    #taiwan-map { height: 60vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="index.html">百大基地地圖</a>
+      <a href="echo.html">地方回聲</a>
+      <a href="meetup.html" class="active">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="meet-stage">
+    <section class="meet-info">
+      <div class="kicker">地方議事桌</div>
+      <h2>中臺灣文化基地交流會</h2>
+      <p class="lead" id="meet-lead"></p>
+      <div class="goals" id="meet-goals"></div>
+      <div class="section-title">交流會場次</div>
+      <div class="sessions" id="meet-sessions"></div>
+    </section>
+
+    <aside class="meet-map">
+      <div id="taiwan-map" aria-label="交流會地點:彰化與雲林"></div>
+      <div class="map-hint">交流會場次｜雲林・彰化　點擊縣市查看文化基地</div>
+    </aside>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+    <span><b>協辦單位</b>｜中央書局、富興工廠1962</span>
+  </footer>
+</div>
+
+<script src="js/taiwan-map.js"></script>
+<script src="js/data.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ── 文字內容 ── */
+  document.getElementById("meet-lead").textContent = MEETUP_INTRO.lead;
+  document.getElementById("meet-goals").innerHTML = MEETUP_INTRO.goals.map((g, i) => `
+    <div class="goal">
+      <span class="no">${i + 1}</span>
+      <h4>${g.title}</h4>
+      <p>${g.text}</p>
+    </div>`).join("");
+
+  document.getElementById("meet-sessions").innerHTML = MEETUPS.map(m => {
+    const county = m.counties[0];
+    const c = COUNTIES[county].color;
+    return `<div class="ws-card" style="border-left-color:${c}">
+      <div class="row1">
+        <span class="badge" style="background:${c}">交流會・${m.session}</span>
+        <span class="date">${m.date}(${m.weekday})</span>
+        <span class="tag">${COUNTIES[county].label}場</span>
+      </div>
+      <h4>${m.title}</h4>
+      <div class="venue">📍 ${m.venue}</div>
+    </div>`;
+  }).join("");
+
+  /* ── 地圖:只亮彰化、雲林 ── */
+  const host = document.getElementById("taiwan-map");
+  host.innerHTML = TAIWAN_SVG;
+  const svg = host.querySelector("svg");
+  const paths = Array.from(svg.querySelectorAll("path.land"));
+  const OUTLYING = ["TW-KIN", "TW-LIE"];
+
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  paths.forEach(p => {
+    if (OUTLYING.includes(p.id)) { p.style.display = "none"; return; }
+    const b = p.getBBox();
+    x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y);
+    x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height);
+  });
+  const PAD = 26;
+  svg.setAttribute("viewBox", `${x0 - PAD} ${y0 - PAD} ${x1 - x0 + PAD * 2} ${y1 - y0 + PAD * 2}`);
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  const LIT = { "TW-CHA": "彰化縣", "TW-YUN": "雲林縣" };
+  const ns = "http://www.w3.org/2000/svg";
+  paths.forEach(p => {
+    const county = LIT[p.id];
+    if (!county) { p.style.cursor = "default"; return; }
+    const info = COUNTIES[county];
+    p.classList.add("focus");
+    p.style.fill = info.color;
+    p.style.setProperty("--glow", info.color);
+    p.addEventListener("click", () => (location.href = `index.html?county=${encodeURIComponent(county)}`));
+
+    // 縣市標籤 + 場次日期
+    const m = MEETUPS.find(x => x.counties.includes(county));
+    const b = p.getBBox();
+    const label = document.createElementNS(ns, "text");
+    label.setAttribute("x", b.x + b.width / 2 - 60);
+    label.setAttribute("y", b.y + b.height / 2 + 6);
+    label.setAttribute("text-anchor", "end");
+    label.setAttribute("class", "county-tag");
+    label.setAttribute("font-size", "17");
+    label.setAttribute("fill", info.color);
+    label.innerHTML = `${info.label}場 <tspan class="date" font-size="13" fill="#6f6d66">${m.date}(${m.weekday})</tspan>`;
+    svg.appendChild(label);
+
+    const line = document.createElementNS(ns, "path");
+    line.setAttribute("d", `M${b.x + b.width / 2 - 56},${b.y + b.height / 2 + 2} L${b.x + b.width / 2 - 8},${b.y + b.height / 2}`);
+    line.setAttribute("stroke", info.color);
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("stroke-dasharray", "4 4");
+    svg.appendChild(line);
+  });
+})();
+</script>
+</body>
+</html>

@@ -154,7 +154,8 @@
     }).join("");
 
     const ws = WORKSHOPS.map(w => wsCard(w, "工作坊")).join("");
-    const mt = meetupIntro() + MEETUPS.map(m => wsCard({ ...m, tag: "交流會", time: "" }, "交流會")).join("");
+    const mt = MEETUPS.map(m => wsCard({ ...m, tag: "交流會", time: "" }, "交流會")).join("") +
+      `<a class="more-link" href="meetup.html">認識「地方議事桌」交流會 →</a>`;
 
     panelBody.innerHTML = `
       <div class="overview">
@@ -202,8 +203,8 @@
       }
       if (mt.length) {
         html += `<div class="section-title">交流會</div>`;
-        html += meetupIntro();
         html += mt.map(m => wsCard({ ...m, tag: "交流會", time: "" }, "交流會", color)).join("");
+        html += `<a class="more-link" href="meetup.html">認識「地方議事桌」交流會 →</a>`;
       }
       if (EXPO.counties.includes(county)) {
         html += `<div class="section-title">共創展</div>${expoCard(color)}`;
@@ -222,13 +223,6 @@
   }
 
   /* ── 卡片模板 ───────────────────── */
-  function meetupIntro() {
-    return `<div class="meetup-intro">
-      <p>${MEETUP_INTRO.lead}</p>
-      <ol>${MEETUP_INTRO.goals.map(g => `<li><b>${g.title}</b>${g.text}</li>`).join("")}</ol>
-    </div>`;
-  }
-
   function wsCard(w, badge, color) {
     const c = color || "#3b3a36";
     return `<div class="ws-card" style="border-left-color:${c}">
