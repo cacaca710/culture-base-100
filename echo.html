@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地方回聲｜山海匯聚 — 中臺灣百頁共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .echo-stage { flex: 1; display: flex; flex-direction: column; gap: 26px; padding: 12px 2vw 28px; }
+
+  /* 前言 */
+  .echo-intro { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; max-width: 1240px; }
+  .echo-intro .ring-title { flex: 0 0 auto; }
+  .echo-intro h2 {
+    font-size: clamp(34px, 3.6vw, 52px); font-weight: 900; letter-spacing: .18em;
+    writing-mode: horizontal-tb; margin-bottom: 8px;
+  }
+  .echo-intro .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 14px; }
+  .echo-intro p { font-size: 15.5px; line-height: 2; letter-spacing: .05em; color: var(--ink); max-width: 62em; }
+  .echo-intro p + p { margin-top: 8px; }
+  .echo-intro .note {
+    margin-top: 14px; font-size: 13px; color: var(--ink-soft); line-height: 1.9;
+    border-left: 3px solid var(--line); padding-left: 14px;
+  }
+
+  /* 四子題卡 */
+  .echo-grid {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px;
+  }
+  .echo-card {
+    border: none; cursor: pointer; text-align: center; font-family: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 18px 22px; position: relative; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .echo-card:hover { transform: translateY(-5px); box-shadow: 0 16px 34px rgba(59,58,54,.14); }
+  .echo-card svg { width: min(56%, 150px); aspect-ratio: 1; display: block; margin: 0 auto 14px; }
+  .echo-card .no {
+    font-size: 12px; font-weight: 900; letter-spacing: .3em; color: var(--ink-soft); display: block; margin-bottom: 6px;
+  }
+  .echo-card h3 { font-size: clamp(19px, 1.7vw, 24px); font-weight: 900; letter-spacing: .18em; margin-bottom: 8px; }
+  .echo-card .sub { font-size: 13px; color: var(--ink-soft); letter-spacing: .06em; line-height: 1.7; }
+  .echo-card .go {
+    display: inline-block; margin-top: 14px; font-size: 12.5px; font-weight: 700; letter-spacing: .16em;
+    color: var(--ink); border-bottom: 2px solid currentColor; padding-bottom: 2px;
+  }
+
+  /* 結尾 CTA */
+  .echo-outro {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    position: relative; overflow: hidden;
+  }
+  .echo-outro::before {
+    content: ""; position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
+    width: 260px; height: 260px; border-radius: 50%;
+    background: repeating-radial-gradient(circle at 50% 50%,
+      rgba(59,58,54,.08) 0 2px, transparent 2px 10px);
+  }
+  .echo-outro h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .16em; white-space: nowrap; }
+  .echo-outro p { flex: 1; min-width: 260px; font-size: 14.5px; line-height: 2; letter-spacing: .04em; color: var(--ink-soft); }
+  .echo-outro a {
+    position: relative; z-index: 1;
+    text-decoration: none; font-weight: 900; font-size: 15px; letter-spacing: .12em;
+    color: var(--paper); background: var(--ink); border-radius: 999px; padding: 12px 26px;
+    transition: opacity .2s;
+  }
+  .echo-outro a:hover { opacity: .82; }
+
+  /* 子題詳情覆蓋層 */
+  .echo-modal {
+    position: fixed; inset: 0; z-index: 100; display: none;
+    align-items: center; justify-content: center; padding: 4vh 4vw;
+    background: rgba(59,58,54,.45); backdrop-filter: blur(3px);
+  }
+  .echo-modal.on { display: flex; }
+  .echo-dialog {
+    background: var(--paper); border-radius: 26px; max-width: 880px; width: 100%;
+    max-height: 92vh; overflow-y: auto; position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,.3);
+  }
+  .echo-dialog .dlg-head {
+    padding: 30px 40px 22px; position: relative; overflow: hidden;
+  }
+  .echo-dialog .dlg-head .ring-bg {
+    position: absolute; right: -70px; top: -70px; width: 280px; height: 280px; opacity: .5; pointer-events: none;
+  }
+  .echo-dialog .dlg-head .no { font-size: 13px; font-weight: 900; letter-spacing: .3em; margin-bottom: 6px; display: block; }
+  .echo-dialog .dlg-head h3 { font-size: clamp(26px, 3vw, 36px); font-weight: 900; letter-spacing: .2em; }
+  .echo-dialog .dlg-head .sub { font-size: 15px; font-weight: 700; letter-spacing: .1em; margin-top: 8px; }
+  .echo-dialog .dlg-body { padding: 24px 40px 36px; }
+  .echo-dialog .dlg-body p { font-size: 15.5px; line-height: 2.1; letter-spacing: .05em; margin-bottom: 14px; }
+  .echo-dialog .dirs-title { font-size: 13px; font-weight: 900; letter-spacing: .22em; color: var(--ink-soft); margin: 18px 0 10px; }
+  .echo-dialog .dirs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .echo-dialog .dirs span {
+    font-size: 13.5px; font-weight: 700; letter-spacing: .08em;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px;
+  }
+  .echo-dialog .tip {
+    margin-top: 22px; border-radius: 14px; padding: 14px 20px;
+    font-size: 14.5px; font-weight: 700; letter-spacing: .06em; line-height: 1.8;
+  }
+  .echo-dialog .tip b { letter-spacing: .22em; margin-right: 10px; }
+  .echo-dialog .dlg-close {
+    position: absolute; right: 20px; top: 20px; z-index: 2;
+    width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--paper); color: var(--ink); font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  }
+  .echo-dialog .dlg-nav {
+    display: flex; justify-content: space-between; padding: 0 40px 30px; gap: 10px;
+  }
+  .echo-dialog .dlg-nav button {
+    font-family: inherit; font-size: 13.5px; font-weight: 700; letter-spacing: .1em;
+    border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    border-radius: 999px; padding: 8px 18px; cursor: pointer;
+  }
+  .echo-dialog .dlg-nav button:hover { background: var(--ink); color: var(--paper); }
+  .echo-dialog .dlg-nav button:disabled { opacity: .25; pointer-events: none; }
+
+  @media (max-width: 1100px) {
+    .echo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .echo-intro { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="index.html">百大基地地圖</a>
+      <a href="echo.html" class="active">地方回聲</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="echo-stage">
+    <section class="echo-intro">
+      <div class="ring-title">
+        <svg width="190" height="190" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#3b3a36">
+            <circle cx="100" cy="100" r="16" stroke-width="2.4" stroke-dasharray="40 6"/>
+            <circle cx="100" cy="100" r="34" stroke-width="2"   stroke-dasharray="80 8 40 8"/>
+            <circle cx="100" cy="100" r="52" stroke-width="2.4" stroke-dasharray="130 10 70 8"/>
+            <circle cx="100" cy="100" r="70" stroke-width="2"   stroke-dasharray="180 10 100 10"/>
+            <circle cx="100" cy="100" r="88" stroke-width="2.4" stroke-dasharray="240 12 140 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <h2>地方回聲</h2>
+        <div class="en">ECHOES OF PLACE</div>
+        <p>地方帶給人的感受，往往藏在細節裡。可能是一個停留的畫面、一句聽見的話、一段被喚起的經驗，也可能是一個尚未成形的合作想法。</p>
+        <p>「地方回聲」以四個方向，引導夥伴們整理參訪與交流過程中的觀察、觀點、連結與行動想像。這裡沒有標準答案，不需要完整書寫；一個關鍵字、一句話、一個符號或一小段記錄，都能成為地方經驗的一部分。</p>
+        <div class="note">山海匯聚・濁水沃土——回應中臺灣多元地景與地方文化的交會，也讓基地故事、參與經驗與文化實務者的觀點，在活動中彼此留下回聲。</div>
+      </div>
+    </section>
+
+    <section class="echo-grid" id="echo-grid"></section>
+
+    <section class="echo-outro">
+      <h3>從地方回聲<br>走向共創</h3>
+      <p>完成四個方向的記錄後，請回頭看看自己留下的文字與想法。從中挑出一個最想保留的畫面、一句話、一段經驗或一個行動方向，轉化為「打開地方的一種方式」——可以使用文字、線條、符號、印章、紙膠帶或拼貼完成，成為共創展的一部分。每一則記錄，都是地方留下的一道回聲；當不同回聲彼此相遇，便可能打開下一個行動。</p>
+      <a href="exhibition.html">前往共創展｜打開地方未來式 →</a>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+    <span><b>協辦單位</b>｜中央書局、富興工廠1962</span>
+  </footer>
+</div>
+
+<!-- 子題詳情 -->
+<div class="echo-modal" id="echo-modal">
+  <div class="echo-dialog" role="dialog" aria-modal="true">
+    <button class="dlg-close" id="dlg-close" title="關閉">✕</button>
+    <div class="dlg-head" id="dlg-head"></div>
+    <div class="dlg-body" id="dlg-body"></div>
+    <div class="dlg-nav">
+      <button id="dlg-prev">← 上一個子題</button>
+      <button id="dlg-next">下一個子題 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOPICS = [
+  {
+    no: "01", title: "參訪觀察", sub: "從眼前的細節開始認識地方",
+    color: "#3fb6cd", soft: "#d3eef4",
+    paras: [
+      "一個場域如何被使用、被感受，也如何留下地方的生活痕跡？請回想參訪過程中，最先吸引你注意的場景、物件、人物、材料、聲音或空間氛圍。",
+      "這些看似細微的觀察，可能正是理解地方故事的重要線索，也能進一步轉化為展覽文字、導覽內容或視覺素材。"
+    ],
+    dirsTitle: "可以從這些地方開始",
+    dirs: ["場景", "物件", "空間", "人群", "材料", "聲音", "氣味", "動線與停留方式"],
+    tip: "記下讓你停下來觀看的地方細節。"
+  },
+  {
+    no: "02", title: "交流筆記", sub: "留下一句值得反覆思考的話",
+    color: "#ef9b84", soft: "#fbe6df",
+    paras: [
+      "在導覽、基地分享與現場交流中，有些話會讓人重新理解一個場域，也可能帶來新的經營方法、合作方向或文化觀點。",
+      "請記錄今天聽見的重要句子、案例與觀點。它可以來自講者、基地經營者、同行參與者，也可以是對話過程中突然形成的想法。"
+    ],
+    dirsTitle: "可以從這些方向開始",
+    dirs: ["場域經營", "基地營運", "文化轉譯", "空間再生", "品牌合作", "公共交流"],
+    tip: "留下今天最想帶走的話。"
+  },
+  {
+    no: "03", title: "文化經驗", sub: "讓今天的地方，與過去的經驗相遇",
+    color: "#eecb2f", soft: "#faf0c4",
+    paras: [
+      "接觸一個新的場域時，常會讓人想起曾經參與過的活動、看過的展覽、合作過的單位，或正在關注與經營的地方。",
+      "請從自身經驗出發，找出今天的參訪與過往文化經驗之間的連結。它們可能有相似的做法，也可能因場域、對象或經營條件不同，而呈現完全不同的樣貌。",
+      "透過比較，可以更清楚看見哪些經驗值得借鏡，又有哪些方法需要因地調整。"
+    ],
+    dirsTitle: "可以從這三個方向整理",
+    dirs: ["這次參訪讓我想到什麼？", "它們有哪些相似之處？", "又有哪些不同之處？"],
+    tip: "今天的地方，有沒有讓你想起了哪一段文化經驗。"
+  },
+  {
+    no: "04", title: "場域迴響", sub: "把感受往前推進一步",
+    color: "#84bf41", soft: "#e4f1d3",
+    paras: [
+      "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
+      "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
+    ],
+    dirsTitle: "可以從這三個方向開始",
+    dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
+    tip: "寫下你願意帶回去繼續發展的想法。"
+  }
+];
+
+function ringSVG(color, size) {
+  return `<svg viewBox="0 0 200 200" width="${size}" height="${size}" aria-hidden="true">
+    <g fill="none" stroke="${color}">
+      <circle cx="100" cy="100" r="16" stroke-width="3"   stroke-dasharray="40 6"/>
+      <circle cx="100" cy="100" r="34" stroke-width="2.4" stroke-dasharray="80 8 40 8"/>
+      <circle cx="100" cy="100" r="52" stroke-width="3"   stroke-dasharray="130 10 70 8"/>
+      <circle cx="100" cy="100" r="70" stroke-width="2.4" stroke-dasharray="180 10 100 10"/>
+      <circle cx="100" cy="100" r="88" stroke-width="3"   stroke-dasharray="240 12 140 10"/>
+    </g>
+    <circle cx="100" cy="100" r="94" fill="${color}" opacity=".08"/>
+  </svg>`;
+}
+
+const grid = document.getElementById("echo-grid");
+grid.innerHTML = TOPICS.map((t, i) => `
+  <button class="echo-card" data-i="${i}">
+    ${ringSVG(t.color, 150)}
+    <span class="no" style="color:${t.color}">地方回聲 ${t.no}</span>
+    <h3>${t.title}</h3>
+    <div class="sub">${t.sub}</div>
+    <span class="go" style="color:${t.color}">閱讀子題 →</span>
+  </button>`).join("");
+
+const modal = document.getElementById("echo-modal");
+const dlgHead = document.getElementById("dlg-head");
+const dlgBody = document.getElementById("dlg-body");
+const btnPrev = document.getElementById("dlg-prev");
+const btnNext = document.getElementById("dlg-next");
+let cur = 0;
+
+function openTopic(i) {
+  cur = i;
+  const t = TOPICS[i];
+  dlgHead.style.background = t.soft;
+  dlgHead.innerHTML = `
+    <div class="ring-bg">${ringSVG(t.color, 280)}</div>
+    <span class="no" style="color:${t.color}">地方回聲 ${t.no}</span>
+    <h3>${t.title}</h3>
+    <div class="sub">${t.sub}</div>`;
+  dlgBody.innerHTML =
+    t.paras.map(p => `<p>${p}</p>`).join("") +
+    `<div class="dirs-title">${t.dirsTitle}</div>` +
+    `<div class="dirs">${t.dirs.map(d => `<span>${d}</span>`).join("")}</div>` +
+    `<div class="tip" style="background:${t.soft}"><b style="color:${t.color}">提示</b>${t.tip}</div>`;
+  btnPrev.disabled = i === 0;
+  btnNext.disabled = i === TOPICS.length - 1;
+  modal.classList.add("on");
+}
+
+grid.querySelectorAll(".echo-card").forEach(c =>
+  c.addEventListener("click", () => openTopic(+c.dataset.i)));
+btnPrev.addEventListener("click", () => openTopic(cur - 1));
+btnNext.addEventListener("click", () => openTopic(cur + 1));
+document.getElementById("dlg-close").addEventListener("click", () => modal.classList.remove("on"));
+modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("on"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("on"); });
+
+// 深連結:echo.html#1 ~ #4 直接開啟對應子題
+const hash = parseInt(location.hash.slice(1), 10);
+if (hash >= 1 && hash <= TOPICS.length) openTopic(hash - 1);
+</script>
+</body>
+</html>
