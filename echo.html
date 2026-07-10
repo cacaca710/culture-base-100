@@ -178,6 +178,20 @@
     100% { transform: scale(1); opacity: 0; }
   }
 
+  /* 紙頁緩緩覆上 */
+  .paper-in { opacity: 0; }
+  .play .paper-in { animation: paperIn 1.2s ease var(--d, 0s) forwards; }
+  @keyframes paperIn {
+    from { opacity: 0; transform: translateY(-26px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* 印記慢慢浮現(轉印) */
+  .imprint { opacity: 0; }
+  .play .imprint { animation: fadeIn 1.8s ease var(--d, 0s) forwards; }
+  /* 紙頁被帶往右側 */
+  .play .paper-move { animation: paperMove 1.8s cubic-bezier(.55,.05,.4,1) var(--d, 0s) forwards; }
+  @keyframes paperMove { to { transform: translate(196px, -44px); } }
+
   /* 一圈圈往外送的回聲 */
   .ewave { fill: none; transform-origin: var(--org); transform: scale(.1); opacity: 0; }
   .play .ewave { animation: echoLoop var(--dur, 3.4s) ease-out var(--d, 0s) infinite; }
@@ -365,7 +379,7 @@ const TOPICS = [
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "年輪長出樹苗", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "地方印記被帶回", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -373,7 +387,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "把今天的回聲帶回地方，長成新的行動"
+    note: "把地方留下的印記，帶回下一個行動"
   }
 ];
 
@@ -487,44 +501,47 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 長芽:樹苗從年輪中心長出,分三枝,依序展開三片葉子(帶回/合作/嘗試)
+// 04 帶回:紙頁覆上年輪,一圈印記轉印到紙上,被帶往下一個行動
 function sceneFour(t) {
-  const cx = 400, cy = 500;
+  const cx = 300, cy = 460; // 年輪中心(偏左,留出右側空間)
   // 淡灰年輪:地方經驗與時間的累積
-  const rings = etchRings(cx, cy, "#b9b3a2", [30, 62, 96, 132, 170, 208], .9, .26);
-  // 莖:從年輪中心向上生長(細線、圓潤,粗細與年輪一致)
-  const stem = `<path class="draw" d="M${cx},${cy - 4} C${cx + 3},${cy - 46} ${cx - 7},${cy - 84} ${cx - 2},${cy - 122}"
-    stroke="${t.color}" stroke-width="3.2" style="--d:2.8s"/>`;
-  // 三個枝條:左、上、右
-  const branches = `
-    <path class="draw" d="M${cx - 2},${cy - 118} C${cx - 16},${cy - 140} ${cx - 32},${cy - 154} ${cx - 50},${cy - 164}"
-      stroke="${t.color}" stroke-width="2.6" style="--d:4.1s"/>
-    <path class="draw" d="M${cx - 2},${cy - 120} C${cx},${cy - 140} ${cx - 2},${cy - 156} ${cx - 1},${cy - 172}"
-      stroke="${t.color}" stroke-width="2.6" style="--d:4.35s"/>
-    <path class="draw" d="M${cx - 2},${cy - 116} C${cx + 14},${cy - 138} ${cx + 32},${cy - 152} ${cx + 52},${cy - 162}"
-      stroke="${t.color}" stroke-width="2.6" style="--d:4.6s"/>`;
-  // 三片葉子依序展開:可以帶回、可以合作、可以嘗試
-  const lx = cx - 50, ly = cy - 164, tx = cx - 1, ty = cy - 172, rx = cx + 52, ry = cy - 162;
-  const leaves = `
-    <path class="leafpop" d="M${lx},${ly} C${lx - 20},${ly - 2} ${lx - 32},${ly - 22} ${lx - 27},${ly - 38} C${lx - 8},${ly - 32} ${lx + 2},${ly - 16} ${lx},${ly} Z"
-      fill="${t.color}" style="--org:${lx}px ${ly}px;--d:5.1s"/>
-    <path class="leafpop" d="M${tx},${ty} C${tx - 13},${ty - 18} ${tx - 12},${ty - 38} ${tx - 1},${ty - 50} C${tx + 10},${ty - 38} ${tx + 11},${ty - 18} ${tx},${ty} Z"
-      fill="${t.color}" style="--org:${tx}px ${ty}px;--d:5.5s"/>
-    <path class="leafpop" d="M${rx},${ry} C${rx + 20},${ry - 2} ${rx + 32},${ry - 22} ${rx + 27},${ry - 38} C${rx + 8},${ry - 32} ${rx - 2},${ry - 16} ${rx},${ry} Z"
-      fill="${t.color}" style="--org:${rx}px ${ry}px;--d:5.9s"/>`;
-  // 年輪輕微擴散一次:地方接住了帶回來的回聲
-  const pulse = `<ellipse class="pulse1" cx="${cx}" cy="${cy}" rx="235" ry="${Math.round(235 * RY)}"
-    stroke="${t.color}" stroke-width="2.2" style="--org:${cx}px ${cy}px;--d:6.7s"/>`;
+  const rings = etchRings(cx, cy, "#b9b3a2", [30, 60, 92, 126, 162], .9, .26);
+  // 半透明紙頁緩緩覆上年輪;一圈年輪轉印成單一彩色印記(與紙同群組,之後一起被帶走)
+  const pw = 212, ph = 258;
+  const paper1 = `
+    <g class="paper-move" style="--d:5.4s">
+      <g class="paper-in" style="--d:2.4s">
+        <g transform="rotate(-5 ${cx} ${cy})">
+          <rect x="${cx - pw / 2}" y="${cy - ph / 2}" width="${pw}" height="${ph}" rx="14"
+            fill="rgba(255,255,255,.82)" stroke="#dcd9d0" stroke-width="2"/>
+        </g>
+        <ellipse class="imprint" cx="${cx}" cy="${cy}" rx="78" ry="38"
+          fill="none" stroke="${t.color}" stroke-width="3"
+          stroke-dasharray="150 9 86 7" transform="rotate(-8 ${cx} ${cy})" style="--d:3.4s"/>
+      </g>
+    </g>`;
+  // 另一張空白紙頁,在右側出現
+  const p2x = 688, p2y = 390, p2w = 140, p2h = 176;
+  const paper2 = `
+    <g class="paper-in" style="--d:7.3s">
+      <g transform="rotate(4 ${p2x} ${p2y})">
+        <rect x="${p2x - p2w / 2}" y="${p2y - p2h / 2}" width="${p2w}" height="${p2h}" rx="12"
+          fill="rgba(255,255,255,.82)" stroke="#dcd9d0" stroke-width="2"/>
+      </g>
+    </g>`;
+  // 印記延伸出一小段細線,連向新的紙頁
+  // (紙頁移動後印記中心約在 (496,416),右緣約 (574,417);新紙頁左緣約 (620,398))
+  const link = `<path class="draw" d="M574,417 C592,413 606,405 618,398"
+    stroke="${t.color}" stroke-width="2.4" style="--d:8.1s"/>`;
   return `
     ${rings}
-    ${stem}
-    ${branches}
-    ${leaves}
-    ${pulse}
+    ${paper1}
+    ${paper2}
+    ${link}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
-const STAGE_ICONS = ["起聲", "相和", "疊層", "長芽"];
+const STAGE_ICONS = ["起聲", "相和", "疊層", "帶回"];
 
 /* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
