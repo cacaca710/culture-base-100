@@ -199,6 +199,21 @@
     50% { opacity: .28; transform: scale(1.05); }
   }
 
+  /* 往上浮升的回聲圈(立體感) */
+  .riser { fill: none; transform-origin: var(--org); opacity: 0; }
+  .play .riser { animation: riseLoop var(--dur, 3.6s) linear var(--d, 0s) infinite; }
+  @keyframes riseLoop {
+    0% { transform: translateY(0) scale(.4); opacity: 0; }
+    18% { opacity: .85; }
+    100% { transform: translateY(var(--rise, -200px)) scale(1.05); opacity: 0; }
+  }
+
+  /* 空中凝成的共鳴年輪 */
+  .halo { transform-origin: var(--org); transform: scale(0); }
+  .play .halo { animation: pop .9s cubic-bezier(.3,1.5,.45,1) var(--d, 0s) forwards; }
+  .halo-bob { transform-origin: var(--org); animation: bob 4.6s ease-in-out var(--d, 0s) infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
   .scene-note { font-size: 15px; letter-spacing: .32em; fill: var(--ink-soft); opacity: 0; }
   .play .scene-note { animation: fadeIn 1.2s ease 1.6s forwards; }
   @keyframes fadeIn { to { opacity: 1; } }
@@ -454,31 +469,58 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 串聯:四方回聲彼此相連,匯聚成共鳴
+// 04 串聯:四方回聲升起,在空中匯聚成一枚四色共鳴年輪
 function sceneFour(t) {
+  // [x, y, 透視縮放] 近大遠小
   const P = {
-    tc: [352, 388],  // 台中
-    ch: [232, 500],  // 彰化
-    nt: [548, 452],  // 南投
-    yl: [366, 568]   // 雲林
+    tc: [346, 396, .78],  // 台中(遠)
+    ch: [222, 496, .95],  // 彰化(左)
+    nt: [556, 468, .88],  // 南投(右)
+    yl: [378, 574, 1.1]   // 雲林(近)
   };
-  const order = [["tc", .9], ["ch", 1.25], ["yl", 1.6], ["nt", 1.95]];
+  const cx = 378, cy = 482, hy = 212; // 匯聚中心與空中年輪高度
+  const order = [["tc", .9], ["ch", 1.2], ["yl", 1.5], ["nt", 1.8]];
   let src = "";
   order.forEach(([k, d]) => {
-    src += srcDot(P[k][0], P[k][1], C[k], d, 10);
-    src += etchRings(P[k][0], P[k][1], C[k], [34, 60], d + .2);
-    src += eWaves(P[k][0], P[k][1], C[k], 150, d + .9, 3.8, 2, 2.2);
+    const [x, y, s] = P[k];
+    src += srcDot(x, y, C[k], d, Math.round(10 * s));
+    src += etchRings(x, y, C[k], [Math.round(30 * s), Math.round(52 * s)], d + .2);
+    src += eWaves(x, y, C[k], Math.round(115 * s), d + .8, 3.8, 2, 2);
+    // 每個聲源往上浮升的回聲圈
+    for (let r = 0; r < 2; r++) {
+      src += `<ellipse class="riser" cx="${x}" cy="${y}" rx="${Math.round(24 * s)}" ry="${Math.round(24 * s * RY)}"
+        stroke="${C[k]}" stroke-width="2.4"
+        style="--org:${x}px ${y}px;--d:${(d + 1.4 + r * 1.8).toFixed(2)}s;--dur:3.6s;--rise:-${Math.round(96 * s)}px"/>`;
+    }
   });
-  const cx = 378, cy = 478;
+  // 中央往空中送的聲流
+  let column = "";
+  const colColors = [C.tc, C.ch, C.yl, C.nt];
+  colColors.forEach((c, i) => {
+    column += `<ellipse class="riser" cx="${cx}" cy="${cy - 14}" rx="42" ry="${Math.round(42 * RY)}"
+      stroke="${c}" stroke-width="2.8"
+      style="--org:${cx}px ${cy - 14}px;--d:${(3.4 + i * .8).toFixed(2)}s;--dur:3.2s;--rise:-${cy - 14 - hy - 14}px"/>`;
+  });
+  // 空中的四色共鳴年輪
+  const haloRings = [[24, C.nt, "40 6"], [42, C.yl, "80 8 40 8"], [60, C.ch, "130 10 70 8"], [78, C.tc, "180 10 100 10"]]
+    .map(([rx, c, dash], i) =>
+      `<ellipse cx="${cx}" cy="${hy}" rx="${rx}" ry="${Math.round(rx * .38)}" fill="none"
+        stroke="${c}" stroke-width="${i % 2 ? 2.6 : 3.2}" stroke-dasharray="${dash}"/>`).join("");
   return `
-    <ellipse class="glow" cx="${cx}" cy="${cy}" rx="268" ry="130" fill="${t.color}" style="--org:${cx}px ${cy}px;--d:4.4s"/>
+    ${groundRings(400, 545)}
+    <ellipse class="glow" cx="${cx}" cy="${cy}" rx="250" ry="118" fill="${t.color}" style="--org:${cx}px ${cy}px;--d:3.8s"/>
     ${src}
-    ${linkLine(P.tc[0], P.tc[1], P.ch[0], P.ch[1], C.tc, 2.7)}
-    ${linkLine(P.ch[0], P.ch[1], P.yl[0], P.yl[1], C.ch, 2.95)}
-    ${linkLine(P.yl[0], P.yl[1], P.nt[0], P.nt[1], C.yl, 3.2)}
-    ${linkLine(P.nt[0], P.nt[1], P.tc[0], P.tc[1], C.nt, 3.45)}
-    ${etchRings(cx, cy, "#b9b3a2", [252], 4.2)}
-    ${eWaves(cx, cy, t.color, 300, 4.8, 4.6, 2, 2)}
+    ${linkLine(P.tc[0], P.tc[1], P.ch[0], P.ch[1], C.tc, 2.4)}
+    ${linkLine(P.ch[0], P.ch[1], P.yl[0], P.yl[1], C.ch, 2.6)}
+    ${linkLine(P.yl[0], P.yl[1], P.nt[0], P.nt[1], C.yl, 2.8)}
+    ${linkLine(P.nt[0], P.nt[1], P.tc[0], P.tc[1], C.nt, 3.0)}
+    <path class="linkline" d="M${cx},${cy - 26} L${cx},${hy + 40}" stroke="${t.color}" stroke-width="3" style="--d:3.6s"/>
+    <g class="halo" style="--org:${cx}px ${hy}px;--d:4.8s">
+      <g class="halo-bob" style="--org:${cx}px ${hy}px;--d:5.7s">
+        <ellipse cx="${cx}" cy="${hy}" rx="86" ry="33" fill="${t.color}" opacity=".08"/>
+        ${haloRings}
+      </g>
+    </g>
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
