@@ -178,19 +178,17 @@
     100% { transform: scale(1); opacity: 0; }
   }
 
-  /* 紙頁緩緩覆上 */
-  .paper-in { opacity: 0; }
-  .play .paper-in { animation: paperIn 1.2s ease var(--d, 0s) forwards; }
-  @keyframes paperIn {
-    from { opacity: 0; transform: translateY(-26px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* 一道回聲從 A 被帶到 B(輕輕的弧線移動) */
+  .travel { opacity: 0; }
+  .play .travel { animation: travelArc 2.3s cubic-bezier(.5,.08,.42,1) var(--d, 0s) forwards; }
+  @keyframes travelArc {
+    0%   { opacity: 0; transform: translate(0, 0) scale(.4); }
+    12%  { opacity: 1; transform: translate(28px, -44px) scale(1); }
+    55%  { transform: translate(150px, -104px); }
+    88%  { transform: translate(276px, -30px); }
+    94%  { transform: translate(290px, -14px) scale(1.18, .8); }
+    100% { opacity: 1; transform: translate(290px, -14px) scale(1); }
   }
-  /* 印記慢慢浮現(轉印) */
-  .imprint { opacity: 0; }
-  .play .imprint { animation: fadeIn 1.8s ease var(--d, 0s) forwards; }
-  /* 紙頁被帶往右側 */
-  .play .paper-move { animation: paperMove 1.8s cubic-bezier(.55,.05,.4,1) var(--d, 0s) forwards; }
-  @keyframes paperMove { to { transform: translate(196px, -44px); } }
 
   /* 一圈圈往外送的回聲 */
   .ewave { fill: none; transform-origin: var(--org); transform: scale(.1); opacity: 0; }
@@ -379,7 +377,7 @@ const TOPICS = [
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "地方印記被帶回", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "回聲落在自己的場域", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -387,7 +385,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "把地方留下的印記，帶回下一個行動"
+    note: "今天獲得的想法，被帶回自己的場域，成為新的開始"
   }
 ];
 
@@ -501,43 +499,35 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 帶回:紙頁覆上年輪,一圈印記轉印到紙上,被帶往下一個行動
+// 04 帶回:一道回聲離開今天的場域,落在自己的地方,產生新的迴響
 function sceneFour(t) {
-  const cx = 300, cy = 460; // 年輪中心(偏左,留出右側空間)
-  // 淡灰年輪:地方經驗與時間的累積
-  const rings = etchRings(cx, cy, "#b9b3a2", [30, 60, 92, 126, 162], .9, .26);
-  // 半透明紙頁緩緩覆上年輪;一圈年輪轉印成單一彩色印記(與紙同群組,之後一起被帶走)
-  const pw = 212, ph = 258;
-  const paper1 = `
-    <g class="paper-move" style="--d:5.4s">
-      <g class="paper-in" style="--d:2.4s">
-        <g transform="rotate(-5 ${cx} ${cy})">
-          <rect x="${cx - pw / 2}" y="${cy - ph / 2}" width="${pw}" height="${ph}" rx="14"
-            fill="rgba(255,255,255,.82)" stroke="#dcd9d0" stroke-width="2"/>
-        </g>
-        <ellipse class="imprint" cx="${cx}" cy="${cy}" rx="78" ry="38"
-          fill="none" stroke="${t.color}" stroke-width="3"
-          stroke-dasharray="150 9 86 7" transform="rotate(-8 ${cx} ${cy})" style="--d:3.4s"/>
-      </g>
-    </g>`;
-  // 另一張空白紙頁,在右側出現
-  const p2x = 688, p2y = 390, p2w = 140, p2h = 176;
-  const paper2 = `
-    <g class="paper-in" style="--d:7.3s">
-      <g transform="rotate(4 ${p2x} ${p2y})">
-        <rect x="${p2x - p2w / 2}" y="${p2y - p2h / 2}" width="${p2w}" height="${p2h}" rx="12"
-          fill="rgba(255,255,255,.82)" stroke="#dcd9d0" stroke-width="2"/>
-      </g>
-    </g>`;
-  // 印記延伸出一小段細線,連向新的紙頁
-  // (紙頁移動後印記中心約在 (496,416),右緣約 (574,417);新紙頁左緣約 (620,398))
-  const link = `<path class="draw" d="M574,417 C592,413 606,405 618,398"
-    stroke="${t.color}" stroke-width="2.4" style="--d:8.1s"/>`;
+  const ax = 255, ay = 468;  // A:今天參訪的場域(灰年輪)
+  const bx = ax + 290, by = ay - 14;  // B:自己的場域(原本安靜的空白)
+  // A:今天的場域,經驗與時間的年輪
+  const ringsA = etchRings(ax, ay, "#b9b3a2", [28, 56, 86, 118, 150], .9, .26);
+  // 回聲離開 A 時,A 輕輕泛起一圈
+  const departPulse = `<ellipse class="pulse1" cx="${ax}" cy="${ay}" rx="170" ry="${Math.round(170 * RY)}"
+    stroke="#b9b3a2" stroke-width="2" style="--org:${ax}px ${ay}px;--d:2.9s"/>`;
+  // 一道回聲:彩色小圓點,從 A 的中心被帶往 B(輕輕的弧線)
+  const dot = `<g class="travel" style="--d:3.2s">
+    <ellipse cx="${ax}" cy="${ay}" rx="9" ry="6" fill="${t.color}"/>
+  </g>`;
+  // 落下的瞬間:B 產生一道新的回聲(擴散兩次)
+  const landPulse = `
+    <ellipse class="pulse1" cx="${bx}" cy="${by}" rx="90" ry="${Math.round(90 * RY)}"
+      stroke="${t.color}" stroke-width="2.6" style="--org:${bx}px ${by}px;--d:5.5s"/>
+    <ellipse class="pulse1" cx="${bx}" cy="${by}" rx="140" ry="${Math.round(140 * RY)}"
+      stroke="${t.color}" stroke-width="2.2" style="--org:${bx}px ${by}px;--d:5.85s"/>`;
+  // 新的開始:B 刻下第一圈小小的年輪,回聲繼續輕輕擴散
+  const ringsB = etchRings(bx, by, t.color, [20, 42], 6.3, .3);
+  const liveWaves = eWaves(bx, by, t.color, 120, 7.2, 4.8, 2, 2);
   return `
-    ${rings}
-    ${paper1}
-    ${paper2}
-    ${link}
+    ${ringsA}
+    ${departPulse}
+    ${dot}
+    ${landPulse}
+    ${ringsB}
+    ${liveWaves}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
