@@ -487,8 +487,8 @@ function sceneThree(t) {
 }
 // 04 打開:四色回聲匯入年輪,年輪長成一扇門,門被推開——打開地方的未來式
 function sceneFour(t) {
-  const cx = 400, cy = 488;            // 年輪中心(也是門的落點)
-  const doorW = 74, doorTop = 268, doorBase = cy - 6; // 門框幾何
+  const cx = 400, cy = 492;            // 年輪中心(也是門的落點)
+  const doorW = 112, doorTop = 200, doorBase = cy - 6; // 門框幾何(大型雙開門)
   const lx = cx - doorW, rx2 = cx + doorW;
   const midY = (doorTop + doorBase) / 2 + 26;
   // 四方的回聲:小色點+虛線,把四色匯入中央
@@ -504,40 +504,47 @@ function sceneFour(t) {
     inflow += linkLine(x, y, cx, cy, c, d + .9);
   });
   // 中央年輪:四色由內而外疊圈——回聲的顏色在這裡匯集
-  const core = [[36, C.tc], [66, C.ch], [98, C.yl], [132, C.nt]]
+  const core = [[42, C.tc], [76, C.ch], [112, C.yl], [150, C.nt]]
     .map(([rx, c], i) =>
       `<ellipse class="etch" cx="${cx}" cy="${cy}" rx="${rx}" ry="${Math.round(rx * RY)}"
         stroke="${c}" stroke-width="${i % 2 ? 2.4 : 2.8}"
         stroke-dasharray="${Math.round(rx * 2.2)} ${8 + i} ${Math.round(rx * 1.1)} ${6 + i}"
         style="--org:${cx}px ${cy}px;--d:${(2.4 + i * .35).toFixed(2)}s"/>`).join("");
-  // 年輪的線條往兩側展開、向上長成門框(拱門一筆完成)
-  const frame = `<path class="draw" d="M${lx},${doorBase} L${lx},${doorTop + 66}
-      Q${lx},${doorTop} ${cx},${doorTop} Q${rx2},${doorTop} ${rx2},${doorTop + 66} L${rx2},${doorBase}"
-    stroke="${C.ink}" stroke-width="7" style="--d:3.9s"/>`;
+  // 年輪的線條往兩側展開、向上長成門框(大拱門一筆完成)
+  const frame = `<path class="draw" d="M${lx},${doorBase} L${lx},${doorTop + 90}
+      Q${lx},${doorTop} ${cx},${doorTop} Q${rx2},${doorTop} ${rx2},${doorTop + 90} L${rx2},${doorBase}"
+    stroke="${C.ink}" stroke-width="8" style="--d:3.9s"/>`;
   // 門內:光暈、呼吸的小亮點、升起的回聲(先被門扇遮住,開門後露出)
   const inside = `
-    <ellipse class="etch" cx="${cx}" cy="${midY}" rx="46" ry="96" fill="${t.color}" fill-opacity=".12" stroke="none"
-      style="--org:${cx}px ${midY}px;--d:6.0s"/>
-    <circle class="lightdot" cx="${cx}" cy="${midY - 16}" r="7"
-      fill="${t.color}" style="--org:${cx}px ${midY - 16}px;--d:6.6s"/>
-    <ellipse class="riser" cx="${cx}" cy="${doorBase - 12}" rx="30" ry="${Math.round(30 * RY)}"
-      stroke="${t.color}" stroke-width="2.2"
-      style="--org:${cx}px ${doorBase - 12}px;--d:7.2s;--dur:4.4s;--rise:-130px"/>`;
-  // 門扇:先關著蓋住門洞,再以左門柱為軸慢慢推開
-  const leafPath = `M${lx + 5},${doorBase} L${lx + 5},${doorTop + 68}
-      Q${lx + 5},${doorTop + 7} ${cx},${doorTop + 7} Q${rx2 - 5},${doorTop + 7} ${rx2 - 5},${doorTop + 68} L${rx2 - 5},${doorBase} Z`;
-  const leaf = `<g class="doorleaf" style="--org:${lx + 5}px ${cy}px;--show:5.3s;--d:5.4s">
-    <path d="${leafPath}" fill="#eceade" stroke="${C.ink}" stroke-width="4"/>
-    <circle cx="${rx2 - 26}" cy="${midY}" r="5.5" fill="${C.ink}"/>
-  </g>`;
+    <ellipse class="etch" cx="${cx}" cy="${midY}" rx="74" ry="130" fill="${t.color}" fill-opacity=".12" stroke="none"
+      style="--org:${cx}px ${midY}px;--d:6.2s"/>
+    <circle class="lightdot" cx="${cx}" cy="${midY - 24}" r="8.5"
+      fill="${t.color}" style="--org:${cx}px ${midY - 24}px;--d:6.8s"/>
+    <ellipse class="riser" cx="${cx}" cy="${doorBase - 12}" rx="42" ry="${Math.round(42 * RY)}"
+      stroke="${t.color}" stroke-width="2.4"
+      style="--org:${cx}px ${doorBase - 12}px;--d:7.4s;--dur:4.4s;--rise:-170px"/>`;
+  // 雙開門扇:先關著蓋住門洞,再各以左右門柱為軸同時往外推開
+  const leafL = `M${lx + 6},${doorBase} L${lx + 6},${doorTop + 90}
+      Q${lx + 6},${doorTop + 8} ${cx},${doorTop + 8} L${cx},${doorBase} Z`;
+  const leafR = `M${rx2 - 6},${doorBase} L${rx2 - 6},${doorTop + 90}
+      Q${rx2 - 6},${doorTop + 8} ${cx},${doorTop + 8} L${cx},${doorBase} Z`;
+  const leaves = `
+    <g class="doorleaf" style="--org:${lx + 6}px ${cy}px;--show:5.3s;--d:5.4s">
+      <path d="${leafL}" fill="#eceade" stroke="${C.ink}" stroke-width="4"/>
+      <circle cx="${cx - 22}" cy="${midY}" r="5.5" fill="${C.ink}"/>
+    </g>
+    <g class="doorleaf" style="--org:${rx2 - 6}px ${cy}px;--show:5.3s;--d:5.55s">
+      <path d="${leafR}" fill="#eceade" stroke="${C.ink}" stroke-width="4"/>
+      <circle cx="${cx + 22}" cy="${midY}" r="5.5" fill="${C.ink}"/>
+    </g>`;
   return `
     ${groundRings(GX, GY)}
     ${inflow}
     ${core}
-    ${eWaves(cx, cy, t.color, 200, 3.4, 4.6, 2, 2)}
+    ${eWaves(cx, cy, t.color, 215, 3.4, 4.6, 2, 2)}
     ${inside}
     ${frame}
-    ${leaf}
+    ${leaves}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
