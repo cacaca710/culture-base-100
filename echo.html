@@ -164,9 +164,19 @@
     88% { transform: translateY(0) scale(1.25, .7); }
     100% { transform: translateY(0) scale(1, 1); opacity: 1; }
   }
-  .srcdot { transform-origin: var(--org); transform: scale(0); }
+  .srcdot, .leafpop { transform-origin: var(--org); transform: scale(0); }
   .play .srcdot { animation: pop .6s cubic-bezier(.3,1.6,.5,1) var(--d, 0s) forwards; }
+  .play .leafpop { animation: pop .8s cubic-bezier(.3,1.5,.5,1) var(--d, 0s) forwards; }
   @keyframes pop { to { transform: scale(1); } }
+
+  /* 年輪的單次輕微擴散 */
+  .pulse1 { fill: none; transform-origin: var(--org); transform: scale(.3); opacity: 0; }
+  .play .pulse1 { animation: pulseOnce 2.4s ease-out var(--d, 0s) forwards; }
+  @keyframes pulseOnce {
+    0% { transform: scale(.3); opacity: 0; }
+    20% { opacity: .6; }
+    100% { transform: scale(1); opacity: 0; }
+  }
 
   /* 一圈圈往外送的回聲 */
   .ewave { fill: none; transform-origin: var(--org); transform: scale(.1); opacity: 0; }
@@ -355,7 +365,7 @@ const TOPICS = [
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "延伸成下一步", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "年輪長出樹苗", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -363,7 +373,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "回聲從地方出發，延伸成下一步"
+    note: "把今天的回聲帶回地方，長成新的行動"
   }
 ];
 
@@ -477,29 +487,44 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 延伸:年輪最外圈開了一個缺口,一端緩緩向外延伸,末端亮起一個小點
+// 04 長芽:樹苗從年輪中心長出,分三枝,依序展開三片葉子(帶回/合作/嘗試)
 function sceneFour(t) {
-  const cx = 400, cy = 470;
-  // 淡灰年輪:安靜的疊圈
-  const rings = etchRings(cx, cy, "#b9b3a2", [30, 62, 96, 132, 170], .9, .28);
-  // 最外圈:留一個缺口的弧(rx 210, 缺口在右上 -60°~-20°)
-  const outer = `<path class="draw" d="M597.3,458.4 A210,63 0 1 1 505,425.4"
-    stroke="#b9b3a2" stroke-width="2.6" style="--d:2.6s"/>`;
-  // 缺口的一端,緩緩向外延伸成一條柔和的路徑
-  const extend = `<path class="draw" d="M505,425.4 C560,398 606,362 650,312"
-    stroke="${t.color}" stroke-width="2.8" style="--d:4.4s"/>`;
-  // 路徑末端:一個小點,象徵經驗被帶回、延伸成新的行動
-  const enddot = `<circle class="lightdot" cx="650" cy="312" r="7"
-    fill="${t.color}" style="--org:650px 312px;--d:6.2s"/>`;
+  const cx = 400, cy = 500;
+  // 淡灰年輪:地方經驗與時間的累積
+  const rings = etchRings(cx, cy, "#b9b3a2", [30, 62, 96, 132, 170, 208], .9, .26);
+  // 莖:從年輪中心向上生長(細線、圓潤,粗細與年輪一致)
+  const stem = `<path class="draw" d="M${cx},${cy - 4} C${cx + 3},${cy - 46} ${cx - 7},${cy - 84} ${cx - 2},${cy - 122}"
+    stroke="${t.color}" stroke-width="3.2" style="--d:2.8s"/>`;
+  // 三個枝條:左、上、右
+  const branches = `
+    <path class="draw" d="M${cx - 2},${cy - 118} C${cx - 16},${cy - 140} ${cx - 32},${cy - 154} ${cx - 50},${cy - 164}"
+      stroke="${t.color}" stroke-width="2.6" style="--d:4.1s"/>
+    <path class="draw" d="M${cx - 2},${cy - 120} C${cx},${cy - 140} ${cx - 2},${cy - 156} ${cx - 1},${cy - 172}"
+      stroke="${t.color}" stroke-width="2.6" style="--d:4.35s"/>
+    <path class="draw" d="M${cx - 2},${cy - 116} C${cx + 14},${cy - 138} ${cx + 32},${cy - 152} ${cx + 52},${cy - 162}"
+      stroke="${t.color}" stroke-width="2.6" style="--d:4.6s"/>`;
+  // 三片葉子依序展開:可以帶回、可以合作、可以嘗試
+  const lx = cx - 50, ly = cy - 164, tx = cx - 1, ty = cy - 172, rx = cx + 52, ry = cy - 162;
+  const leaves = `
+    <path class="leafpop" d="M${lx},${ly} C${lx - 20},${ly - 2} ${lx - 32},${ly - 22} ${lx - 27},${ly - 38} C${lx - 8},${ly - 32} ${lx + 2},${ly - 16} ${lx},${ly} Z"
+      fill="${t.color}" style="--org:${lx}px ${ly}px;--d:5.1s"/>
+    <path class="leafpop" d="M${tx},${ty} C${tx - 13},${ty - 18} ${tx - 12},${ty - 38} ${tx - 1},${ty - 50} C${tx + 10},${ty - 38} ${tx + 11},${ty - 18} ${tx},${ty} Z"
+      fill="${t.color}" style="--org:${tx}px ${ty}px;--d:5.5s"/>
+    <path class="leafpop" d="M${rx},${ry} C${rx + 20},${ry - 2} ${rx + 32},${ry - 22} ${rx + 27},${ry - 38} C${rx + 8},${ry - 32} ${rx - 2},${ry - 16} ${rx},${ry} Z"
+      fill="${t.color}" style="--org:${rx}px ${ry}px;--d:5.9s"/>`;
+  // 年輪輕微擴散一次:地方接住了帶回來的回聲
+  const pulse = `<ellipse class="pulse1" cx="${cx}" cy="${cy}" rx="235" ry="${Math.round(235 * RY)}"
+    stroke="${t.color}" stroke-width="2.2" style="--org:${cx}px ${cy}px;--d:6.7s"/>`;
   return `
     ${rings}
-    ${outer}
-    ${extend}
-    ${enddot}
+    ${stem}
+    ${branches}
+    ${leaves}
+    ${pulse}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
-const STAGE_ICONS = ["起聲", "相和", "疊層", "延伸"];
+const STAGE_ICONS = ["起聲", "相和", "疊層", "長芽"];
 
 /* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
