@@ -221,6 +221,15 @@
   }
   @keyframes lightPulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 
+  /* 門扇打開(以門柱為軸的透視旋轉) */
+  .doorleaf { transform-origin: var(--org); opacity: 0; }
+  .play .doorleaf {
+    animation: leafShow .01s linear var(--show, 2.5s) forwards,
+               doorOpen 2.4s cubic-bezier(.65,.05,.3,1) var(--d, 5s) forwards;
+  }
+  @keyframes leafShow { to { opacity: 1; } }
+  @keyframes doorOpen { from { transform: scaleX(1); } to { transform: scaleX(-.42); } }
+
   .scene-note { font-size: 15px; letter-spacing: .32em; fill: var(--ink-soft); opacity: 0; }
   .play .scene-note { animation: fadeIn 1.2s ease 1.6s forwards; }
   @keyframes fadeIn { to { opacity: 1; } }
@@ -476,41 +485,59 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 打開:中央年輪收束,長成一扇打開的門——打開地方的未來式
+// 04 打開:四色回聲匯入年輪,年輪長成一扇門,門被推開——打開地方的未來式
 function sceneFour(t) {
   const cx = 400, cy = 488;            // 年輪中心(也是門的落點)
   const doorW = 74, doorTop = 268, doorBase = cy - 6; // 門框幾何
   const lx = cx - doorW, rx2 = cx + doorW;
-  // 中央年輪:安靜的灰綠疊圈,慢慢收束穩定
-  const core = [[36, "#b9b3a2"], [68, t.color], [102, "#b9b3a2"], [138, t.color]]
+  const midY = (doorTop + doorBase) / 2 + 26;
+  // 四方的回聲:小色點+虛線,把四色匯入中央
+  const P = [
+    [222, 398, C.tc, .9],
+    [586, 414, C.ch, 1.1],
+    [252, 582, C.yl, 1.3],
+    [566, 570, C.nt, 1.5]
+  ];
+  let inflow = "";
+  P.forEach(([x, y, c, d]) => {
+    inflow += srcDot(x, y, c, d, 7);
+    inflow += linkLine(x, y, cx, cy, c, d + .9);
+  });
+  // 中央年輪:四色由內而外疊圈——回聲的顏色在這裡匯集
+  const core = [[36, C.tc], [66, C.ch], [98, C.yl], [132, C.nt]]
     .map(([rx, c], i) =>
       `<ellipse class="etch" cx="${cx}" cy="${cy}" rx="${rx}" ry="${Math.round(rx * RY)}"
-        stroke="${c}" stroke-width="${i % 2 ? 2.2 : 2.6}"
+        stroke="${c}" stroke-width="${i % 2 ? 2.4 : 2.8}"
         stroke-dasharray="${Math.round(rx * 2.2)} ${8 + i} ${Math.round(rx * 1.1)} ${6 + i}"
-        style="--org:${cx}px ${cy}px;--d:${(.9 + i * .35).toFixed(2)}s"/>`).join("");
+        style="--org:${cx}px ${cy}px;--d:${(2.4 + i * .35).toFixed(2)}s"/>`).join("");
   // 年輪的線條往兩側展開、向上長成門框(拱門一筆完成)
   const frame = `<path class="draw" d="M${lx},${doorBase} L${lx},${doorTop + 66}
       Q${lx},${doorTop} ${cx},${doorTop} Q${rx2},${doorTop} ${rx2},${doorTop + 66} L${rx2},${doorBase}"
-    stroke="${C.ink}" stroke-width="7" style="--d:2.9s"/>`;
-  // 微微打開的門縫:一道淡淡的光從門內透出
-  const seam = `<path class="draw" d="M${cx - 22},${doorTop + 36} L${cx - 22},${doorBase - 4}"
-    stroke="${t.color}" stroke-width="3.2" opacity=".65" style="--d:4.1s"/>`;
-  // 門內:淡淡的光暈、一個呼吸的小亮點、一圈慢慢升起的回聲
+    stroke="${C.ink}" stroke-width="7" style="--d:3.9s"/>`;
+  // 門內:光暈、呼吸的小亮點、升起的回聲(先被門扇遮住,開門後露出)
   const inside = `
-    <ellipse class="etch" cx="${cx}" cy="${(doorTop + doorBase) / 2 + 34}" rx="42" ry="90"
-      fill="${t.color}" fill-opacity=".09" stroke="none" style="--org:${cx}px ${cy}px;--d:4.7s"/>
-    <circle class="lightdot" cx="${cx - 22}" cy="${(doorTop + doorBase) / 2 + 8}" r="7"
-      fill="${t.color}" style="--org:${cx - 22}px ${(doorTop + doorBase) / 2 + 8}px;--d:5.2s"/>
+    <ellipse class="etch" cx="${cx}" cy="${midY}" rx="46" ry="96" fill="${t.color}" fill-opacity=".12" stroke="none"
+      style="--org:${cx}px ${midY}px;--d:6.0s"/>
+    <circle class="lightdot" cx="${cx}" cy="${midY - 16}" r="7"
+      fill="${t.color}" style="--org:${cx}px ${midY - 16}px;--d:6.6s"/>
     <ellipse class="riser" cx="${cx}" cy="${doorBase - 12}" rx="30" ry="${Math.round(30 * RY)}"
       stroke="${t.color}" stroke-width="2.2"
-      style="--org:${cx}px ${doorBase - 12}px;--d:5.8s;--dur:4.4s;--rise:-130px"/>`;
+      style="--org:${cx}px ${doorBase - 12}px;--d:7.2s;--dur:4.4s;--rise:-130px"/>`;
+  // 門扇:先關著蓋住門洞,再以左門柱為軸慢慢推開
+  const leafPath = `M${lx + 5},${doorBase} L${lx + 5},${doorTop + 68}
+      Q${lx + 5},${doorTop + 7} ${cx},${doorTop + 7} Q${rx2 - 5},${doorTop + 7} ${rx2 - 5},${doorTop + 68} L${rx2 - 5},${doorBase} Z`;
+  const leaf = `<g class="doorleaf" style="--org:${lx + 5}px ${cy}px;--show:5.3s;--d:5.4s">
+    <path d="${leafPath}" fill="#eceade" stroke="${C.ink}" stroke-width="4"/>
+    <circle cx="${rx2 - 26}" cy="${midY}" r="5.5" fill="${C.ink}"/>
+  </g>`;
   return `
     ${groundRings(GX, GY)}
+    ${inflow}
     ${core}
-    ${eWaves(cx, cy, t.color, 200, 2.2, 4.6, 2, 2)}
-    ${frame}
-    ${seam}
+    ${eWaves(cx, cy, t.color, 200, 3.4, 4.6, 2, 2)}
     ${inside}
+    ${frame}
+    ${leaf}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
