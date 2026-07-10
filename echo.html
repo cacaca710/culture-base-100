@@ -14,13 +14,9 @@
 
   .echo-stage { flex: 1; display: flex; flex-direction: column; gap: 26px; padding: 12px 2vw 28px; }
 
-  /* 前言 */
+  /* ── 前言 ── */
   .echo-intro { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; max-width: 1240px; }
-  .echo-intro .ring-title { flex: 0 0 auto; }
-  .echo-intro h2 {
-    font-size: clamp(34px, 3.6vw, 52px); font-weight: 900; letter-spacing: .18em;
-    writing-mode: horizontal-tb; margin-bottom: 8px;
-  }
+  .echo-intro h2 { font-size: clamp(34px, 3.6vw, 52px); font-weight: 900; letter-spacing: .18em; margin-bottom: 8px; }
   .echo-intro .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 14px; }
   .echo-intro p { font-size: 15.5px; line-height: 2; letter-spacing: .05em; color: var(--ink); max-width: 62em; }
   .echo-intro p + p { margin-top: 8px; }
@@ -29,10 +25,8 @@
     border-left: 3px solid var(--line); padding-left: 14px;
   }
 
-  /* 四子題卡 */
-  .echo-grid {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px;
-  }
+  /* ── 四子題卡 ── */
+  .echo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
   .echo-card {
     border: none; cursor: pointer; text-align: center; font-family: inherit;
     background: var(--card); border: 1px solid var(--line); border-radius: 22px;
@@ -41,9 +35,7 @@
   }
   .echo-card:hover { transform: translateY(-5px); box-shadow: 0 16px 34px rgba(59,58,54,.14); }
   .echo-card svg { width: min(56%, 150px); aspect-ratio: 1; display: block; margin: 0 auto 14px; }
-  .echo-card .no {
-    font-size: 12px; font-weight: 900; letter-spacing: .3em; color: var(--ink-soft); display: block; margin-bottom: 6px;
-  }
+  .echo-card .no { font-size: 12px; font-weight: 900; letter-spacing: .3em; color: var(--ink-soft); display: block; margin-bottom: 6px; }
   .echo-card h3 { font-size: clamp(19px, 1.7vw, 24px); font-weight: 900; letter-spacing: .18em; margin-bottom: 8px; }
   .echo-card .sub { font-size: 13px; color: var(--ink-soft); letter-spacing: .06em; line-height: 1.7; }
   .echo-card .go {
@@ -51,7 +43,7 @@
     color: var(--ink); border-bottom: 2px solid currentColor; padding-bottom: 2px;
   }
 
-  /* 結尾 CTA */
+  /* ── 結尾 CTA ── */
   .echo-outro {
     background: var(--card); border: 1px solid var(--line); border-radius: 22px;
     padding: 26px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
@@ -60,72 +52,162 @@
   .echo-outro::before {
     content: ""; position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
     width: 260px; height: 260px; border-radius: 50%;
-    background: repeating-radial-gradient(circle at 50% 50%,
-      rgba(59,58,54,.08) 0 2px, transparent 2px 10px);
+    background: repeating-radial-gradient(circle at 50% 50%, rgba(59,58,54,.08) 0 2px, transparent 2px 10px);
   }
   .echo-outro h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .16em; white-space: nowrap; }
   .echo-outro p { flex: 1; min-width: 260px; font-size: 14.5px; line-height: 2; letter-spacing: .04em; color: var(--ink-soft); }
   .echo-outro a {
-    position: relative; z-index: 1;
-    text-decoration: none; font-weight: 900; font-size: 15px; letter-spacing: .12em;
-    color: var(--paper); background: var(--ink); border-radius: 999px; padding: 12px 26px;
-    transition: opacity .2s;
+    position: relative; z-index: 1; text-decoration: none; font-weight: 900; font-size: 15px; letter-spacing: .12em;
+    color: var(--paper); background: var(--ink); border-radius: 999px; padding: 12px 26px; transition: opacity .2s;
   }
   .echo-outro a:hover { opacity: .82; }
 
-  /* 子題詳情覆蓋層 */
-  .echo-modal {
-    position: fixed; inset: 0; z-index: 100; display: none;
-    align-items: center; justify-content: center; padding: 4vh 4vw;
-    background: rgba(59,58,54,.45); backdrop-filter: blur(3px);
+  /* ══ 子題全頁 ══ */
+  #topic-view {
+    position: fixed; inset: 0; z-index: 90; display: none;
+    background: var(--paper); overflow: hidden;
   }
-  .echo-modal.on { display: flex; }
-  .echo-dialog {
-    background: var(--paper); border-radius: 26px; max-width: 880px; width: 100%;
-    max-height: 92vh; overflow-y: auto; position: relative;
-    box-shadow: 0 30px 80px rgba(0,0,0,.3);
+  #topic-view.on { display: flex; flex-direction: column; }
+  #topic-view .tv-rings {
+    position: absolute; border-radius: 50%; pointer-events: none; opacity: .45;
   }
-  .echo-dialog .dlg-head {
-    padding: 30px 40px 22px; position: relative; overflow: hidden;
-  }
-  .echo-dialog .dlg-head .ring-bg {
-    position: absolute; right: -70px; top: -70px; width: 280px; height: 280px; opacity: .5; pointer-events: none;
-  }
-  .echo-dialog .dlg-head .no { font-size: 13px; font-weight: 900; letter-spacing: .3em; margin-bottom: 6px; display: block; }
-  .echo-dialog .dlg-head h3 { font-size: clamp(26px, 3vw, 36px); font-weight: 900; letter-spacing: .2em; }
-  .echo-dialog .dlg-head .sub { font-size: 15px; font-weight: 700; letter-spacing: .1em; margin-top: 8px; }
-  .echo-dialog .dlg-body { padding: 24px 40px 36px; }
-  .echo-dialog .dlg-body p { font-size: 15.5px; line-height: 2.1; letter-spacing: .05em; margin-bottom: 14px; }
-  .echo-dialog .dirs-title { font-size: 13px; font-weight: 900; letter-spacing: .22em; color: var(--ink-soft); margin: 18px 0 10px; }
-  .echo-dialog .dirs { display: flex; flex-wrap: wrap; gap: 8px; }
-  .echo-dialog .dirs span {
-    font-size: 13.5px; font-weight: 700; letter-spacing: .08em;
-    background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px;
-  }
-  .echo-dialog .tip {
-    margin-top: 22px; border-radius: 14px; padding: 14px 20px;
-    font-size: 14.5px; font-weight: 700; letter-spacing: .06em; line-height: 1.8;
-  }
-  .echo-dialog .tip b { letter-spacing: .22em; margin-right: 10px; }
-  .echo-dialog .dlg-close {
-    position: absolute; right: 20px; top: 20px; z-index: 2;
-    width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
-    background: var(--paper); color: var(--ink); font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,.15);
-  }
-  .echo-dialog .dlg-nav {
-    display: flex; justify-content: space-between; padding: 0 40px 30px; gap: 10px;
-  }
-  .echo-dialog .dlg-nav button {
-    font-family: inherit; font-size: 13.5px; font-weight: 700; letter-spacing: .1em;
-    border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
-    border-radius: 999px; padding: 8px 18px; cursor: pointer;
-  }
-  .echo-dialog .dlg-nav button:hover { background: var(--ink); color: var(--paper); }
-  .echo-dialog .dlg-nav button:disabled { opacity: .25; pointer-events: none; }
+  #topic-view .tv-rings.a { width: 42vw; height: 42vw; left: -14vw; bottom: -18vw; }
+  #topic-view .tv-rings.b { width: 24vw; height: 24vw; right: -8vw; top: -9vw; }
 
-  @media (max-width: 1100px) {
+  .tv-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 30px 6px; position: relative; z-index: 2; gap: 16px; flex-wrap: wrap;
+  }
+  .tv-back {
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: .1em;
+    border: 2px solid var(--ink); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 8px 20px; cursor: pointer; transition: all .2s;
+  }
+  .tv-back:hover { background: var(--ink); color: var(--paper); }
+
+  /* 進度(種子→樹) */
+  .tv-steps { display: flex; align-items: center; gap: 0; }
+  .tv-step { display: flex; align-items: center; }
+  .tv-step button {
+    font-family: inherit; cursor: pointer; border: none; background: transparent;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 2px 12px; color: var(--ink-soft);
+  }
+  .tv-step .dot {
+    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid var(--line); background: var(--card); font-size: 15px; transition: all .2s;
+  }
+  .tv-step small { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .tv-step.cur .dot { border-color: var(--step-c); background: var(--step-c); color: #fff; transform: scale(1.12); }
+  .tv-step.cur small, .tv-step.cur button { color: var(--ink); }
+  .tv-step .link { width: 26px; height: 2px; background: var(--line); }
+
+  .tv-main {
+    flex: 1; min-height: 0; position: relative; z-index: 1;
+    display: grid; grid-template-columns: minmax(0, 52%) minmax(0, 48%);
+    align-items: stretch; gap: 0; padding: 0 30px 18px;
+  }
+  .tv-scene { min-height: 0; display: flex; align-items: flex-end; justify-content: center; }
+  .tv-scene svg { width: 100%; height: 100%; max-height: 78vh; }
+
+  .tv-article { min-height: 0; overflow-y: auto; padding: 1vh 1vw 2vh 2vw; scrollbar-width: thin; }
+  .tv-article .no { font-size: 14px; font-weight: 900; letter-spacing: .34em; display: block; margin-bottom: 8px; }
+  .tv-article h3 { font-size: clamp(36px, 4vw, 56px); font-weight: 900; letter-spacing: .2em; line-height: 1.2; }
+  .tv-article .sub {
+    font-size: clamp(15px, 1.4vw, 19px); font-weight: 700; letter-spacing: .12em;
+    margin: 12px 0 6px; padding-bottom: 14px;
+  }
+  .tv-article .stage-tag {
+    display: inline-block; font-size: 12.5px; font-weight: 900; letter-spacing: .2em;
+    color: #fff; border-radius: 999px; padding: 5px 16px; margin-bottom: 16px;
+  }
+  .tv-article p { font-size: clamp(15px, 1.15vw, 17px); line-height: 2.15; letter-spacing: .05em; margin-bottom: 14px; }
+  .tv-article .dirs-title { font-size: 13px; font-weight: 900; letter-spacing: .24em; color: var(--ink-soft); margin: 20px 0 10px; }
+  .tv-article .dirs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tv-article .dirs span {
+    font-size: 14px; font-weight: 700; letter-spacing: .08em;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 18px;
+  }
+  .tv-article .tip {
+    margin-top: 24px; border-radius: 16px; padding: 16px 22px;
+    font-size: 15px; font-weight: 700; letter-spacing: .06em; line-height: 1.9;
+  }
+  .tv-article .tip b { letter-spacing: .24em; margin-right: 12px; }
+  .tv-nav { display: flex; gap: 10px; margin-top: 26px; }
+  .tv-nav button {
+    font-family: inherit; font-size: 14.5px; font-weight: 700; letter-spacing: .1em;
+    border: 2px solid var(--ink); background: transparent; color: var(--ink);
+    border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: all .2s;
+  }
+  .tv-nav button:hover { background: var(--ink); color: var(--paper); }
+  .tv-nav button:disabled { opacity: .22; pointer-events: none; }
+  .tv-nav .to-expo {
+    background: var(--ink); color: var(--paper);
+  }
+  .tv-nav .to-expo:hover { opacity: .82; }
+
+  /* ── 生長動畫 ── */
+  .g-rings ellipse {
+    fill: none; stroke: #b9b3a2;
+    transform-origin: var(--org); transform: scale(0); opacity: 0;
+  }
+  .play .g-rings ellipse { animation: ringGrow 1s cubic-bezier(.2,.75,.35,1.1) forwards; }
+  @keyframes ringGrow { to { transform: scale(1); opacity: 1; } }
+
+  .seed {
+    transform-origin: var(--org);
+    transform: translateY(-56vh) rotate(-30deg); opacity: 0;
+  }
+  .play .seed { animation: seedFall 1.1s cubic-bezier(.35,0,.3,1.15) .9s forwards; }
+  @keyframes seedFall {
+    0% { transform: translateY(-56vh) rotate(-30deg); opacity: 0; }
+    12% { opacity: 1; }
+    82% { transform: translateY(0) rotate(0deg); }
+    90% { transform: translateY(0) scale(1.12, .82); }
+    100% { transform: translateY(0) scale(1, 1); opacity: 1; }
+  }
+  .ripple {
+    fill: none; transform-origin: var(--org); transform: scale(.2); opacity: 0;
+  }
+  .play .ripple { animation: rippleOut 1.6s ease-out forwards; }
+  @keyframes rippleOut {
+    0% { transform: scale(.2); opacity: 0; }
+    25% { opacity: .85; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+  .sparkle { opacity: 0; transform-origin: var(--org); }
+  .play .sparkle { animation: sparklePop 1s ease-out forwards; }
+  @keyframes sparklePop {
+    0% { opacity: 0; transform: scale(.2); }
+    40% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.25); }
+  }
+
+  .stem { fill: none; stroke: #5d5b53; stroke-linecap: round; stroke-dasharray: 1200; stroke-dashoffset: 1200; }
+  .play .stem { animation: draw 1.6s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .leaf { transform-origin: var(--org); transform: scale(0); }
+  .play .leaf { animation: pop .6s cubic-bezier(.3,1.6,.5,1) forwards; }
+  @keyframes pop { to { transform: scale(1); } }
+
+  .crown { transform-origin: var(--org); transform: scale(0); }
+  .play .crown { animation: pop .8s cubic-bezier(.3,1.5,.45,1) forwards; }
+  .crown-sway { transform-origin: var(--org); animation: sway 5.5s ease-in-out infinite; }
+  @keyframes sway { 0%,100% { transform: rotate(-1.3deg); } 50% { transform: rotate(1.3deg); } }
+  .crown circle { fill: none; }
+  .crown .disc { stroke: none; opacity: .15; }
+
+  .scene-note { font-size: 15px; letter-spacing: .32em; fill: var(--ink-soft); opacity: 0; }
+  .play .scene-note { animation: fadeIn 1.2s ease 1.6s forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  @media (max-aspect-ratio: 1/1) {
     .echo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .echo-intro { grid-template-columns: 1fr; }
+    #topic-view { overflow-y: auto; }
+    .tv-main { grid-template-columns: 1fr; }
+    .tv-scene svg { max-height: 44vh; }
   }
 </style>
 </head>
@@ -192,46 +274,51 @@
   </footer>
 </div>
 
-<!-- 子題詳情 -->
-<div class="echo-modal" id="echo-modal">
-  <div class="echo-dialog" role="dialog" aria-modal="true">
-    <button class="dlg-close" id="dlg-close" title="關閉">✕</button>
-    <div class="dlg-head" id="dlg-head"></div>
-    <div class="dlg-body" id="dlg-body"></div>
-    <div class="dlg-nav">
-      <button id="dlg-prev">← 上一個子題</button>
-      <button id="dlg-next">下一個子題 →</button>
-    </div>
+<!-- ══ 子題全頁 ══ -->
+<div id="topic-view">
+  <div class="tv-rings a"></div>
+  <div class="tv-rings b"></div>
+  <div class="tv-top">
+    <button class="tv-back" id="tv-back">← 回地方回聲</button>
+    <div class="tv-steps" id="tv-steps"></div>
+  </div>
+  <div class="tv-main">
+    <div class="tv-scene" id="tv-scene"></div>
+    <article class="tv-article" id="tv-article"></article>
   </div>
 </div>
 
 <script>
+const C = { tc: "#3fb6cd", ch: "#ef9b84", yl: "#eecb2f", nt: "#84bf41", ink: "#3b3a36" };
+
 const TOPICS = [
   {
     no: "01", title: "參訪觀察", sub: "從眼前的細節開始認識地方",
-    color: "#3fb6cd", soft: "#d3eef4",
+    color: C.tc, soft: "#d3eef4", stage: "種下一顆種子", icon: "●",
     paras: [
       "一個場域如何被使用、被感受，也如何留下地方的生活痕跡？請回想參訪過程中，最先吸引你注意的場景、物件、人物、材料、聲音或空間氛圍。",
       "這些看似細微的觀察，可能正是理解地方故事的重要線索，也能進一步轉化為展覽文字、導覽內容或視覺素材。"
     ],
     dirsTitle: "可以從這些地方開始",
     dirs: ["場景", "物件", "空間", "人群", "材料", "聲音", "氣味", "動線與停留方式"],
-    tip: "記下讓你停下來觀看的地方細節。"
+    tip: "記下讓你停下來觀看的地方細節。",
+    note: "每一次停下來的觀看，都是種進土裡的一顆種子"
   },
   {
     no: "02", title: "交流筆記", sub: "留下一句值得反覆思考的話",
-    color: "#ef9b84", soft: "#fbe6df",
+    color: C.ch, soft: "#fbe6df", stage: "種子發了芽", icon: "❋",
     paras: [
       "在導覽、基地分享與現場交流中，有些話會讓人重新理解一個場域，也可能帶來新的經營方法、合作方向或文化觀點。",
       "請記錄今天聽見的重要句子、案例與觀點。它可以來自講者、基地經營者、同行參與者，也可以是對話過程中突然形成的想法。"
     ],
     dirsTitle: "可以從這些方向開始",
     dirs: ["場域經營", "基地營運", "文化轉譯", "空間再生", "品牌合作", "公共交流"],
-    tip: "留下今天最想帶走的話。"
+    tip: "留下今天最想帶走的話。",
+    note: "一句對話落了土，種子便探出新芽"
   },
   {
     no: "03", title: "文化經驗", sub: "讓今天的地方，與過去的經驗相遇",
-    color: "#eecb2f", soft: "#faf0c4",
+    color: C.yl, soft: "#faf0c4", stage: "抽枝、長出新葉", icon: "❊",
     paras: [
       "接觸一個新的場域時，常會讓人想起曾經參與過的活動、看過的展覽、合作過的單位，或正在關注與經營的地方。",
       "請從自身經驗出發，找出今天的參訪與過往文化經驗之間的連結。它們可能有相似的做法，也可能因場域、對象或經營條件不同，而呈現完全不同的樣貌。",
@@ -239,21 +326,24 @@ const TOPICS = [
     ],
     dirsTitle: "可以從這三個方向整理",
     dirs: ["這次參訪讓我想到什麼？", "它們有哪些相似之處？", "又有哪些不同之處？"],
-    tip: "今天的地方，有沒有讓你想起了哪一段文化經驗。"
+    tip: "今天的地方，有沒有讓你想起了哪一段文化經驗。",
+    note: "過去與現在的經驗交會，枝枒便伸向更遠的地方"
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: "#84bf41", soft: "#e4f1d3",
+    color: C.nt, soft: "#e4f1d3", stage: "長成一棵年輪之樹", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
     ],
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
-    tip: "寫下你願意帶回去繼續發展的想法。"
+    tip: "寫下你願意帶回去繼續發展的想法。",
+    note: "四道回聲匯聚，長成屬於地方的年輪之樹"
   }
 ];
 
+/* ── 小工具 ── */
 function ringSVG(color, size) {
   return `<svg viewBox="0 0 200 200" width="${size}" height="${size}" aria-hidden="true">
     <g fill="none" stroke="${color}">
@@ -266,7 +356,89 @@ function ringSVG(color, size) {
     <circle cx="100" cy="100" r="94" fill="${color}" opacity=".08"/>
   </svg>`;
 }
+function crown(color, cx, cy, maxR, delay, swayDelay) {
+  const rs = [0.19, 0.4, 0.6, 0.79, 0.96].map(f => Math.round(maxR * f));
+  const circles = rs.map((r, i) =>
+    `<circle cx="${cx}" cy="${cy}" r="${r}" stroke="${color}" stroke-width="${i % 2 ? 2.2 : 2.8}"
+      stroke-dasharray="${Math.round(r*2.6)} ${8+i} ${Math.round(r*1.4)} ${6+i}"/>`).join("");
+  return `<g class="crown" style="--org:${cx}px ${cy}px;animation-delay:${delay}s">
+    <g class="crown-sway" style="--org:${cx}px ${cy}px;animation-delay:${swayDelay}s">
+      <circle class="disc" cx="${cx}" cy="${cy}" r="${maxR}" fill="${color}"/>${circles}
+    </g></g>`;
+}
+function groundRings(cx, cy) {
+  const rows = [
+    [252, 60, 2,   "180 14 90 10", 0],
+    [210, 50, 2.4, "150 10 120 8", .12],
+    [170, 40, 2,   "120 12 80 8",  .24],
+    [131, 31, 2.6, "90 10 70 8",   .36],
+    [94,  22, 2,   "80 8 50 8",    .48],
+    [60,  14, 2.4, "50 8 40 6",    .6],
+    [30,  7.5, 2,  "",             .72]
+  ];
+  return `<g class="g-rings">` + rows.map(([rx, ry, w, dash, d]) =>
+    `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" stroke-width="${w}"
+      ${dash ? `stroke-dasharray="${dash}"` : ""} style="--org:${cx}px ${cy}px;animation-delay:${d}s"/>`).join("") + `</g>`;
+}
 
+/* ── 四階段場景 ── */
+const GX = 400, GY = 545; // 地面中心
+function sceneSeed(t) {
+  return `
+    ${groundRings(GX, GY)}
+    <g class="seed" style="--org:${GX}px ${GY}px">
+      <ellipse cx="${GX}" cy="${GY - 10}" rx="17" ry="24" fill="${t.color}" transform="rotate(14 ${GX} ${GY - 10})"/>
+      <path d="M${GX - 3},${GY - 30} Q${GX + 3},${GY - 38} ${GX + 10},${GY - 34}" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+    <circle class="ripple" cx="${GX}" cy="${GY}" r="66" stroke="${t.color}" stroke-width="3" style="--org:${GX}px ${GY}px;animation-delay:1.9s"/>
+    <circle class="ripple" cx="${GX}" cy="${GY}" r="104" stroke="${t.color}" stroke-width="2.2" style="--org:${GX}px ${GY}px;animation-delay:2.15s"/>
+    <g class="sparkle" style="--org:${GX}px ${GY - 60}px;animation-delay:2.05s" stroke="${t.color}" stroke-width="3" stroke-linecap="round">
+      <path d="M${GX - 52},${GY - 66} l-12,-12 M${GX + 52},${GY - 66} l12,-12 M${GX},${GY - 92} l0,-17"/>
+    </g>
+    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+}
+function sceneSprout(t) {
+  return `
+    ${groundRings(GX, GY)}
+    <path class="stem" d="M${GX},${GY - 2} C${GX + 2},${GY - 42} ${GX - 10},${GY - 62} ${GX - 2},${GY - 96}" stroke-width="8" style="animation-delay:.9s"/>
+    <path class="leaf" d="M${GX - 2},${GY - 86} C${GX - 30},${GY - 90} ${GX - 42},${GY - 114} ${GX - 36},${GY - 132} C${GX - 12},${GY - 128} ${GX},${GY - 108} ${GX - 2},${GY - 86} Z"
+      fill="${C.nt}" style="--org:${GX - 2}px ${GY - 86}px;animation-delay:1.9s"/>
+    <path class="leaf" d="M${GX - 2},${GY - 92} C${GX + 24},${GY - 100} ${GX + 32},${GY - 124} ${GX + 24},${GY - 140} C${GX + 2},${GY - 134} ${GX - 8},${GY - 112} ${GX - 2},${GY - 92} Z"
+      fill="${t.color}" style="--org:${GX - 2}px ${GY - 92}px;animation-delay:2.15s"/>
+    <circle class="ripple" cx="${GX}" cy="${GY}" r="80" stroke="${t.color}" stroke-width="2.6" style="--org:${GX}px ${GY}px;animation-delay:2.5s"/>
+    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+}
+function sceneSapling(t) {
+  return `
+    ${groundRings(GX, GY)}
+    <path class="stem" d="M${GX},${GY} C${GX + 3},${GY - 70} ${GX - 8},${GY - 130} ${GX - 2},${GY - 200} C${GX + 1},${GY - 240} ${GX - 4},${GY - 262} ${GX - 1},${GY - 286}" stroke-width="10" style="animation-delay:.9s"/>
+    <path class="stem" d="M${GX - 2},${GY - 150} C${GX - 40},${GY - 176} ${GX - 66},${GY - 184} ${GX - 96},${GY - 188}" stroke-width="6" style="animation-delay:1.9s"/>
+    <path class="stem" d="M${GX - 1},${GY - 200} C${GX + 34},${GY - 226} ${GX + 60},${GY - 236} ${GX + 92},${GY - 240}" stroke-width="6" style="animation-delay:2.1s"/>
+    ${crown(C.tc, GX - 118, GY - 216, 44, 2.5, -1.2)}
+    ${crown(C.ch, GX + 116, GY - 268, 48, 2.75, -3.1)}
+    ${crown(t.color, GX - 10, GY - 322, 34, 3.0, -4.4)}
+    <path class="leaf" d="M${GX - 1},${GY - 246} C${GX + 20},${GY - 252} ${GX + 27},${GY - 271} ${GX + 21},${GY - 284} C${GX + 3},${GY - 279} ${GX - 6},${GY - 262} ${GX - 1},${GY - 246} Z"
+      fill="${C.nt}" style="--org:${GX - 1}px ${GY - 246}px;animation-delay:2.9s"/>
+    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+}
+function sceneTree(t) {
+  return `
+    ${groundRings(GX, GY)}
+    <path class="stem" d="M${GX - 1},${GY} C${GX + 1},${GY - 60} ${GX - 12},${GY - 130} ${GX - 4},${GY - 196} C${GX},${GY - 240} ${GX - 6},${GY - 270} ${GX - 2},${GY - 300}" stroke-width="13" style="animation-delay:.8s"/>
+    <path class="stem" d="M${GX - 3},${GY - 170} C${GX - 40},${GY - 200} ${GX - 72},${GY - 212} ${GX - 108},${GY - 220}" stroke-width="7" style="animation-delay:1.7s"/>
+    <path class="stem" d="M${GX - 3},${GY - 220} C${GX + 40},${GY - 250} ${GX + 76},${GY - 260} ${GX + 116},${GY - 264}" stroke-width="7" style="animation-delay:1.9s"/>
+    <path class="stem" d="M${GX - 2},${GY - 280} C${GX - 28},${GY - 314} ${GX - 50},${GY - 328} ${GX - 76},${GY - 338}" stroke-width="6" style="animation-delay:2.1s"/>
+    <path class="stem" d="M${GX - 2},${GY - 300} C${GX + 20},${GY - 338} ${GX + 42},${GY - 354} ${GX + 72},${GY - 364}" stroke-width="6" style="animation-delay:2.3s"/>
+    ${crown(C.tc, GX - 128, GY - 232, 74, 2.2, 0)}
+    ${crown(C.ch, GX + 138, GY - 278, 80, 2.45, -1.6)}
+    ${crown(C.yl, GX - 92, GY - 362, 70, 2.7, -3.2)}
+    ${crown(C.nt, GX + 80, GY - 414, 86, 2.95, -4.5)}
+    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+}
+const SCENES = [sceneSeed, sceneSprout, sceneSapling, sceneTree];
+const STAGE_ICONS = ["種子", "發芽", "抽枝", "成樹"];
+
+/* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
 grid.innerHTML = TOPICS.map((t, i) => `
   <button class="echo-card" data-i="${i}">
@@ -274,44 +446,81 @@ grid.innerHTML = TOPICS.map((t, i) => `
     <span class="no" style="color:${t.color}">地方回聲 ${t.no}</span>
     <h3>${t.title}</h3>
     <div class="sub">${t.sub}</div>
-    <span class="go" style="color:${t.color}">閱讀子題 →</span>
+    <span class="go" style="color:${t.color}">進入子題 →</span>
   </button>`).join("");
+grid.querySelectorAll(".echo-card").forEach(c =>
+  c.addEventListener("click", () => openTopic(+c.dataset.i)));
 
-const modal = document.getElementById("echo-modal");
-const dlgHead = document.getElementById("dlg-head");
-const dlgBody = document.getElementById("dlg-body");
-const btnPrev = document.getElementById("dlg-prev");
-const btnNext = document.getElementById("dlg-next");
+/* ── 全頁子題 ── */
+const view = document.getElementById("topic-view");
+const sceneHost = document.getElementById("tv-scene");
+const articleHost = document.getElementById("tv-article");
+const stepsHost = document.getElementById("tv-steps");
 let cur = 0;
 
 function openTopic(i) {
   cur = i;
   const t = TOPICS[i];
-  dlgHead.style.background = t.soft;
-  dlgHead.innerHTML = `
-    <div class="ring-bg">${ringSVG(t.color, 280)}</div>
-    <span class="no" style="color:${t.color}">地方回聲 ${t.no}</span>
+
+  view.querySelector(".tv-rings.a").style.background =
+    `repeating-radial-gradient(circle at 50% 50%, ${t.color}22 0 2px, transparent 2px 11px, ${t.color}14 11px 13px, transparent 13px 26px)`;
+  view.querySelector(".tv-rings.b").style.background =
+    `repeating-radial-gradient(circle at 50% 50%, ${t.color}26 0 2px, transparent 2px 9px)`;
+
+  stepsHost.innerHTML = TOPICS.map((s, j) => `
+    <div class="tv-step ${j === i ? "cur" : ""}" style="--step-c:${s.color}">
+      <button data-j="${j}" title="${s.title}">
+        <span class="dot">${s.no}</span><small>${STAGE_ICONS[j]}</small>
+      </button>
+    </div>${j < TOPICS.length - 1 ? '<div class="tv-step"><span class="link"></span></div>' : ""}`).join("");
+  stepsHost.querySelectorAll("button[data-j]").forEach(b =>
+    b.addEventListener("click", () => openTopic(+b.dataset.j)));
+
+  articleHost.innerHTML = `
+    <span class="no" style="color:${t.color}">地方回聲 ${t.no}／04</span>
     <h3>${t.title}</h3>
-    <div class="sub">${t.sub}</div>`;
-  dlgBody.innerHTML =
-    t.paras.map(p => `<p>${p}</p>`).join("") +
-    `<div class="dirs-title">${t.dirsTitle}</div>` +
-    `<div class="dirs">${t.dirs.map(d => `<span>${d}</span>`).join("")}</div>` +
-    `<div class="tip" style="background:${t.soft}"><b style="color:${t.color}">提示</b>${t.tip}</div>`;
-  btnPrev.disabled = i === 0;
-  btnNext.disabled = i === TOPICS.length - 1;
-  modal.classList.add("on");
+    <div class="sub" style="border-bottom:3px solid ${t.color}">${t.sub}</div>
+    <span class="stage-tag" style="background:${t.color}">生長階段｜${t.stage}</span>
+    ${t.paras.map(p => `<p>${p}</p>`).join("")}
+    <div class="dirs-title">${t.dirsTitle}</div>
+    <div class="dirs">${t.dirs.map(d => `<span>${d}</span>`).join("")}</div>
+    <div class="tip" style="background:${t.soft}"><b style="color:${t.color}">提示</b>${t.tip}</div>
+    <div class="tv-nav">
+      <button id="tv-prev" ${i === 0 ? "disabled" : ""}>← ${i > 0 ? TOPICS[i-1].no + " " + TOPICS[i-1].title : "上一個"}</button>
+      ${i < TOPICS.length - 1
+        ? `<button id="tv-next">${TOPICS[i+1].no} ${TOPICS[i+1].title} →</button>`
+        : `<button class="to-expo" id="tv-expo">走向共創｜打開地方未來式 →</button>`}
+    </div>`;
+  const prev = document.getElementById("tv-prev");
+  if (prev) prev.addEventListener("click", () => openTopic(cur - 1));
+  const next = document.getElementById("tv-next");
+  if (next) next.addEventListener("click", () => openTopic(cur + 1));
+  const expo = document.getElementById("tv-expo");
+  if (expo) expo.addEventListener("click", () => (location.href = "exhibition.html"));
+  articleHost.scrollTop = 0;
+
+  sceneHost.innerHTML = `<svg viewBox="0 0 800 660" aria-label="${t.stage}動畫">${SCENES[i](t)}</svg>`;
+  view.classList.add("on");
+  document.body.style.overflow = "hidden";
+  sceneHost.classList.remove("play");
+  requestAnimationFrame(() => requestAnimationFrame(() => sceneHost.classList.add("play")));
+  history.replaceState(null, "", "#" + (i + 1));
 }
 
-grid.querySelectorAll(".echo-card").forEach(c =>
-  c.addEventListener("click", () => openTopic(+c.dataset.i)));
-btnPrev.addEventListener("click", () => openTopic(cur - 1));
-btnNext.addEventListener("click", () => openTopic(cur + 1));
-document.getElementById("dlg-close").addEventListener("click", () => modal.classList.remove("on"));
-modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("on"); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("on"); });
+function closeTopic() {
+  view.classList.remove("on");
+  document.body.style.overflow = "";
+  history.replaceState(null, "", location.pathname);
+}
+document.getElementById("tv-back").addEventListener("click", closeTopic);
+document.addEventListener("keydown", e => {
+  if (!view.classList.contains("on")) return;
+  if (e.key === "Escape") closeTopic();
+  if (e.key === "ArrowRight" && cur < TOPICS.length - 1) openTopic(cur + 1);
+  if (e.key === "ArrowLeft" && cur > 0) openTopic(cur - 1);
+});
 
-// 深連結:echo.html#1 ~ #4 直接開啟對應子題
+// 深連結:echo.html#1 ~ #4
 const hash = parseInt(location.hash.slice(1), 10);
 if (hash >= 1 && hash <= TOPICS.length) openTopic(hash - 1);
 </script>
