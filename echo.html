@@ -146,7 +146,7 @@
   }
   .tv-nav .to-expo:hover { opacity: .82; }
 
-  /* ── 生長動畫 ── */
+  /* ── 回聲動畫 ── */
   .g-rings ellipse {
     fill: none; stroke: #b9b3a2;
     transform-origin: var(--org); transform: scale(0); opacity: 0;
@@ -154,49 +154,50 @@
   .play .g-rings ellipse { animation: ringGrow 1s cubic-bezier(.2,.75,.35,1.1) forwards; }
   @keyframes ringGrow { to { transform: scale(1); opacity: 1; } }
 
-  .seed {
-    transform-origin: var(--org);
-    transform: translateY(-56vh) rotate(-30deg); opacity: 0;
-  }
-  .play .seed { animation: seedFall 1.1s cubic-bezier(.35,0,.3,1.15) .9s forwards; }
-  @keyframes seedFall {
-    0% { transform: translateY(-56vh) rotate(-30deg); opacity: 0; }
-    12% { opacity: 1; }
-    82% { transform: translateY(0) rotate(0deg); }
-    90% { transform: translateY(0) scale(1.12, .82); }
+  /* 聲音落下 */
+  .drop { transform-origin: var(--org); transform: translateY(-52vh); opacity: 0; }
+  .play .drop { animation: dropIn 1s cubic-bezier(.35,0,.3,1.15) var(--d, .8s) forwards; }
+  @keyframes dropIn {
+    0% { transform: translateY(-52vh); opacity: 0; }
+    15% { opacity: 1; }
+    80% { transform: translateY(0); }
+    88% { transform: translateY(0) scale(1.25, .7); }
     100% { transform: translateY(0) scale(1, 1); opacity: 1; }
   }
-  .ripple {
-    fill: none; transform-origin: var(--org); transform: scale(.2); opacity: 0;
-  }
-  .play .ripple { animation: rippleOut 1.6s ease-out forwards; }
-  @keyframes rippleOut {
-    0% { transform: scale(.2); opacity: 0; }
-    25% { opacity: .85; }
-    100% { transform: scale(1); opacity: 0; }
-  }
-  .sparkle { opacity: 0; transform-origin: var(--org); }
-  .play .sparkle { animation: sparklePop 1s ease-out forwards; }
-  @keyframes sparklePop {
-    0% { opacity: 0; transform: scale(.2); }
-    40% { opacity: 1; }
-    100% { opacity: 0; transform: scale(1.25); }
-  }
-
-  .stem { fill: none; stroke: #5d5b53; stroke-linecap: round; stroke-dasharray: 1200; stroke-dashoffset: 1200; }
-  .play .stem { animation: draw 1.6s ease-out forwards; }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-
-  .leaf { transform-origin: var(--org); transform: scale(0); }
-  .play .leaf { animation: pop .6s cubic-bezier(.3,1.6,.5,1) forwards; }
+  .srcdot { transform-origin: var(--org); transform: scale(0); }
+  .play .srcdot { animation: pop .6s cubic-bezier(.3,1.6,.5,1) var(--d, 0s) forwards; }
   @keyframes pop { to { transform: scale(1); } }
 
-  .crown { transform-origin: var(--org); transform: scale(0); }
-  .play .crown { animation: pop .8s cubic-bezier(.3,1.5,.45,1) forwards; }
-  .crown-sway { transform-origin: var(--org); animation: sway 5.5s ease-in-out infinite; }
-  @keyframes sway { 0%,100% { transform: rotate(-1.3deg); } 50% { transform: rotate(1.3deg); } }
-  .crown circle { fill: none; }
-  .crown .disc { stroke: none; opacity: .15; }
+  /* 一圈圈往外送的回聲 */
+  .ewave { fill: none; transform-origin: var(--org); transform: scale(.1); opacity: 0; }
+  .play .ewave { animation: echoLoop var(--dur, 3.4s) ease-out var(--d, 0s) infinite; }
+  @keyframes echoLoop {
+    0% { transform: scale(.1); opacity: 0; }
+    12% { opacity: .9; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  /* 刻下來的回聲紋(年輪) */
+  .etch { fill: none; transform-origin: var(--org); transform: scale(0); opacity: 0; }
+  .play .etch { animation: etchIn .9s cubic-bezier(.2,.75,.35,1.1) var(--d, 0s) forwards; }
+  @keyframes etchIn { to { transform: scale(1); opacity: 1; } }
+
+  /* 串聯的流動連線 */
+  .linkline { fill: none; opacity: 0; stroke-dasharray: 3 14; stroke-linecap: round; }
+  .play .linkline {
+    animation: linkFade .8s ease var(--d, 0s) forwards,
+               dashFlow 1.5s linear var(--d, 0s) infinite;
+  }
+  @keyframes linkFade { to { opacity: 1; } }
+  @keyframes dashFlow { to { stroke-dashoffset: -34; } }
+
+  /* 匯聚的共鳴光暈 */
+  .glow { transform-origin: var(--org); opacity: 0; }
+  .play .glow { animation: glowPulse 3.6s ease-in-out var(--d, 0s) infinite; }
+  @keyframes glowPulse {
+    0%, 100% { opacity: .1; transform: scale(.92); }
+    50% { opacity: .28; transform: scale(1.05); }
+  }
 
   .scene-note { font-size: 15px; letter-spacing: .32em; fill: var(--ink-soft); opacity: 0; }
   .play .scene-note { animation: fadeIn 1.2s ease 1.6s forwards; }
@@ -294,7 +295,7 @@ const C = { tc: "#3fb6cd", ch: "#ef9b84", yl: "#eecb2f", nt: "#84bf41", ink: "#3
 const TOPICS = [
   {
     no: "01", title: "參訪觀察", sub: "從眼前的細節開始認識地方",
-    color: C.tc, soft: "#d3eef4", stage: "種下一顆種子", icon: "●",
+    color: C.tc, soft: "#d3eef4", stage: "落下第一道回聲", icon: "●",
     paras: [
       "一個場域如何被使用、被感受，也如何留下地方的生活痕跡？請回想參訪過程中，最先吸引你注意的場景、物件、人物、材料、聲音或空間氛圍。",
       "這些看似細微的觀察，可能正是理解地方故事的重要線索，也能進一步轉化為展覽文字、導覽內容或視覺素材。"
@@ -302,11 +303,11 @@ const TOPICS = [
     dirsTitle: "可以從這些地方開始",
     dirs: ["場景", "物件", "空間", "人群", "材料", "聲音", "氣味", "動線與停留方式"],
     tip: "記下讓你停下來觀看的地方細節。",
-    note: "每一次停下來的觀看，都是種進土裡的一顆種子"
+    note: "一次停下的觀察，落成地方的第一道回聲"
   },
   {
     no: "02", title: "交流筆記", sub: "留下一句值得反覆思考的話",
-    color: C.ch, soft: "#fbe6df", stage: "種子發了芽", icon: "❋",
+    color: C.ch, soft: "#fbe6df", stage: "兩聲相和", icon: "❋",
     paras: [
       "在導覽、基地分享與現場交流中，有些話會讓人重新理解一個場域，也可能帶來新的經營方法、合作方向或文化觀點。",
       "請記錄今天聽見的重要句子、案例與觀點。它可以來自講者、基地經營者、同行參與者，也可以是對話過程中突然形成的想法。"
@@ -314,11 +315,11 @@ const TOPICS = [
     dirsTitle: "可以從這些方向開始",
     dirs: ["場域經營", "基地營運", "文化轉譯", "空間再生", "品牌合作", "公共交流"],
     tip: "留下今天最想帶走的話。",
-    note: "一句對話落了土，種子便探出新芽"
+    note: "一句對話相和，回聲便有了方向"
   },
   {
     no: "03", title: "文化經驗", sub: "讓今天的地方，與過去的經驗相遇",
-    color: C.yl, soft: "#faf0c4", stage: "抽枝、長出新葉", icon: "❊",
+    color: C.yl, soft: "#faf0c4", stage: "回聲疊層", icon: "❊",
     paras: [
       "接觸一個新的場域時，常會讓人想起曾經參與過的活動、看過的展覽、合作過的單位，或正在關注與經營的地方。",
       "請從自身經驗出發，找出今天的參訪與過往文化經驗之間的連結。它們可能有相似的做法，也可能因場域、對象或經營條件不同，而呈現完全不同的樣貌。",
@@ -327,11 +328,11 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向整理",
     dirs: ["這次參訪讓我想到什麼？", "它們有哪些相似之處？", "又有哪些不同之處？"],
     tip: "今天的地方，有沒有讓你想起了哪一段文化經驗。",
-    note: "過去與現在的經驗交會，枝枒便伸向更遠的地方"
+    note: "經驗與經驗相疊，回聲刻成年輪"
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "長成一棵年輪之樹", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "四方串聯", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -339,7 +340,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "四道回聲匯聚，長成屬於地方的年輪之樹"
+    note: "四方回聲串聯，匯聚成地方的共鳴"
   }
 ];
 
@@ -356,16 +357,6 @@ function ringSVG(color, size) {
     <circle cx="100" cy="100" r="94" fill="${color}" opacity=".08"/>
   </svg>`;
 }
-function crown(color, cx, cy, maxR, delay, swayDelay) {
-  const rs = [0.19, 0.4, 0.6, 0.79, 0.96].map(f => Math.round(maxR * f));
-  const circles = rs.map((r, i) =>
-    `<circle cx="${cx}" cy="${cy}" r="${r}" stroke="${color}" stroke-width="${i % 2 ? 2.2 : 2.8}"
-      stroke-dasharray="${Math.round(r*2.6)} ${8+i} ${Math.round(r*1.4)} ${6+i}"/>`).join("");
-  return `<g class="crown" style="--org:${cx}px ${cy}px;animation-delay:${delay}s">
-    <g class="crown-sway" style="--org:${cx}px ${cy}px;animation-delay:${swayDelay}s">
-      <circle class="disc" cx="${cx}" cy="${cy}" r="${maxR}" fill="${color}"/>${circles}
-    </g></g>`;
-}
 function groundRings(cx, cy) {
   const rows = [
     [252, 60, 2,   "180 14 90 10", 0],
@@ -381,62 +372,117 @@ function groundRings(cx, cy) {
       ${dash ? `stroke-dasharray="${dash}"` : ""} style="--org:${cx}px ${cy}px;animation-delay:${d}s"/>`).join("") + `</g>`;
 }
 
-/* ── 四階段場景 ── */
-const GX = 400, GY = 545; // 地面中心
-function sceneSeed(t) {
+/* ── 四階段回聲場景 ── */
+const GX = 400, GY = 520; // 波面中心
+const RY = 0.3;           // 橢圓透視比
+
+// 一圈圈往外送的回聲(無限循環)
+function eWaves(cx, cy, color, maxRx, startDelay, dur = 3.4, n = 3, w = 2.6) {
+  let out = "";
+  for (let k = 0; k < n; k++) {
+    out += `<ellipse class="ewave" cx="${cx}" cy="${cy}" rx="${maxRx}" ry="${Math.round(maxRx * RY)}"
+      stroke="${color}" stroke-width="${w}"
+      style="--org:${cx}px ${cy}px;--d:${(startDelay + k * dur / n).toFixed(2)}s;--dur:${dur}s"/>`;
+  }
+  return out;
+}
+// 刻下來的回聲紋(留在地上的年輪)
+function etchRings(cx, cy, color, radii, baseDelay, step = 0.22) {
+  return radii.map((rx, i) =>
+    `<ellipse class="etch" cx="${cx}" cy="${cy}" rx="${rx}" ry="${Math.round(rx * RY)}"
+      stroke="${color}" stroke-width="${i % 2 ? 2 : 2.6}"
+      stroke-dasharray="${Math.round(rx * 2.2)} ${8 + i} ${Math.round(rx * 1.1)} ${6 + i}"
+      style="--org:${cx}px ${cy}px;--d:${(baseDelay + i * step).toFixed(2)}s"/>`).join("");
+}
+// 聲源(落下的點)
+function dropDot(cx, cy, color, delay, r = 13) {
+  return `<g class="drop" style="--org:${cx}px ${cy}px;--d:${delay}s">
+    <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${Math.round(r * .62)}" fill="${color}"/></g>`;
+}
+function srcDot(cx, cy, color, delay, r = 11) {
+  return `<g class="srcdot" style="--org:${cx}px ${cy}px;--d:${delay}s">
+    <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${Math.round(r * .62)}" fill="${color}"/></g>`;
+}
+// 串聯的流動連線
+function linkLine(x1, y1, x2, y2, color, delay) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2 - 46;
+  return `<path class="linkline" d="M${x1},${y1} Q${mx},${my} ${x2},${y2}"
+    stroke="${color}" stroke-width="3.4" style="--d:${delay}s"/>`;
+}
+function sceneNote(t) {
+  return `<text class="scene-note" x="${GX}" y="640" text-anchor="middle">${t.note}</text>`;
+}
+
+// 01 起聲:一個觀察落下,激起第一道回聲
+function sceneOne(t) {
   return `
     ${groundRings(GX, GY)}
-    <g class="seed" style="--org:${GX}px ${GY}px">
-      <ellipse cx="${GX}" cy="${GY - 10}" rx="17" ry="24" fill="${t.color}" transform="rotate(14 ${GX} ${GY - 10})"/>
-      <path d="M${GX - 3},${GY - 30} Q${GX + 3},${GY - 38} ${GX + 10},${GY - 34}" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
-    </g>
-    <circle class="ripple" cx="${GX}" cy="${GY}" r="66" stroke="${t.color}" stroke-width="3" style="--org:${GX}px ${GY}px;animation-delay:1.9s"/>
-    <circle class="ripple" cx="${GX}" cy="${GY}" r="104" stroke="${t.color}" stroke-width="2.2" style="--org:${GX}px ${GY}px;animation-delay:2.15s"/>
-    <g class="sparkle" style="--org:${GX}px ${GY - 60}px;animation-delay:2.05s" stroke="${t.color}" stroke-width="3" stroke-linecap="round">
-      <path d="M${GX - 52},${GY - 66} l-12,-12 M${GX + 52},${GY - 66} l12,-12 M${GX},${GY - 92} l0,-17"/>
-    </g>
-    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+    ${dropDot(GX, GY, t.color, .9)}
+    ${etchRings(GX, GY, t.color, [42, 74, 106], 2.0)}
+    ${eWaves(GX, GY, t.color, 240, 2.6)}
+    ${sceneNote(t)}`;
 }
-function sceneSprout(t) {
+// 02 相和:另一個聲音落下,兩道回聲相遇
+function sceneTwo(t) {
+  const A = [278, 505], B = [522, 478];
   return `
     ${groundRings(GX, GY)}
-    <path class="stem" d="M${GX},${GY - 2} C${GX + 2},${GY - 42} ${GX - 10},${GY - 62} ${GX - 2},${GY - 96}" stroke-width="8" style="animation-delay:.9s"/>
-    <path class="leaf" d="M${GX - 2},${GY - 86} C${GX - 30},${GY - 90} ${GX - 42},${GY - 114} ${GX - 36},${GY - 132} C${GX - 12},${GY - 128} ${GX},${GY - 108} ${GX - 2},${GY - 86} Z"
-      fill="${C.nt}" style="--org:${GX - 2}px ${GY - 86}px;animation-delay:1.9s"/>
-    <path class="leaf" d="M${GX - 2},${GY - 92} C${GX + 24},${GY - 100} ${GX + 32},${GY - 124} ${GX + 24},${GY - 140} C${GX + 2},${GY - 134} ${GX - 8},${GY - 112} ${GX - 2},${GY - 92} Z"
-      fill="${t.color}" style="--org:${GX - 2}px ${GY - 92}px;animation-delay:2.15s"/>
-    <circle class="ripple" cx="${GX}" cy="${GY}" r="80" stroke="${t.color}" stroke-width="2.6" style="--org:${GX}px ${GY}px;animation-delay:2.5s"/>
-    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+    ${srcDot(A[0], A[1], C.tc, .9)}
+    ${etchRings(A[0], A[1], C.tc, [36, 62], 1.1)}
+    ${eWaves(A[0], A[1], C.tc, 175, 1.7)}
+    ${dropDot(B[0], B[1], t.color, 1.6)}
+    ${etchRings(B[0], B[1], t.color, [36, 62], 2.7)}
+    ${eWaves(B[0], B[1], t.color, 175, 3.2)}
+    ${linkLine(A[0], A[1], B[0], B[1], t.color, 3.8)}
+    ${sceneNote(t)}`;
 }
-function sceneSapling(t) {
+// 03 疊層:回聲與經驗相疊,一圈圈刻成年輪
+function sceneThree(t) {
+  const A = [252, 528], B = [552, 500], Cc = [402, 452];
   return `
     ${groundRings(GX, GY)}
-    <path class="stem" d="M${GX},${GY} C${GX + 3},${GY - 70} ${GX - 8},${GY - 130} ${GX - 2},${GY - 200} C${GX + 1},${GY - 240} ${GX - 4},${GY - 262} ${GX - 1},${GY - 286}" stroke-width="10" style="animation-delay:.9s"/>
-    <path class="stem" d="M${GX - 2},${GY - 150} C${GX - 40},${GY - 176} ${GX - 66},${GY - 184} ${GX - 96},${GY - 188}" stroke-width="6" style="animation-delay:1.9s"/>
-    <path class="stem" d="M${GX - 1},${GY - 200} C${GX + 34},${GY - 226} ${GX + 60},${GY - 236} ${GX + 92},${GY - 240}" stroke-width="6" style="animation-delay:2.1s"/>
-    ${crown(C.tc, GX - 118, GY - 216, 44, 2.5, -1.2)}
-    ${crown(C.ch, GX + 116, GY - 268, 48, 2.75, -3.1)}
-    ${crown(t.color, GX - 10, GY - 322, 34, 3.0, -4.4)}
-    <path class="leaf" d="M${GX - 1},${GY - 246} C${GX + 20},${GY - 252} ${GX + 27},${GY - 271} ${GX + 21},${GY - 284} C${GX + 3},${GY - 279} ${GX - 6},${GY - 262} ${GX - 1},${GY - 246} Z"
-      fill="${C.nt}" style="--org:${GX - 1}px ${GY - 246}px;animation-delay:2.9s"/>
-    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+    ${srcDot(A[0], A[1], C.tc, .9, 9)}
+    ${etchRings(A[0], A[1], C.tc, [32, 56], 1.0)}
+    ${eWaves(A[0], A[1], C.tc, 140, 1.5, 3.8, 2, 2.2)}
+    ${srcDot(B[0], B[1], C.ch, 1.2, 9)}
+    ${etchRings(B[0], B[1], C.ch, [32, 56], 1.3)}
+    ${eWaves(B[0], B[1], C.ch, 140, 1.9, 3.8, 2, 2.2)}
+    ${dropDot(Cc[0], Cc[1], t.color, 1.9)}
+    ${etchRings(Cc[0], Cc[1], t.color, [30, 54, 78, 102, 126], 2.9, .3)}
+    ${eWaves(Cc[0], Cc[1], t.color, 235, 4.4)}
+    ${linkLine(A[0], A[1], Cc[0], Cc[1], C.tc, 4.6)}
+    ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
+    ${sceneNote(t)}`;
 }
-function sceneTree(t) {
+// 04 串聯:四方回聲彼此相連,匯聚成共鳴
+function sceneFour(t) {
+  const P = {
+    tc: [352, 388],  // 台中
+    ch: [232, 500],  // 彰化
+    nt: [548, 452],  // 南投
+    yl: [366, 568]   // 雲林
+  };
+  const order = [["tc", .9], ["ch", 1.25], ["yl", 1.6], ["nt", 1.95]];
+  let src = "";
+  order.forEach(([k, d]) => {
+    src += srcDot(P[k][0], P[k][1], C[k], d, 10);
+    src += etchRings(P[k][0], P[k][1], C[k], [34, 60], d + .2);
+    src += eWaves(P[k][0], P[k][1], C[k], 150, d + .9, 3.8, 2, 2.2);
+  });
+  const cx = 378, cy = 478;
   return `
-    ${groundRings(GX, GY)}
-    <path class="stem" d="M${GX - 1},${GY} C${GX + 1},${GY - 60} ${GX - 12},${GY - 130} ${GX - 4},${GY - 196} C${GX},${GY - 240} ${GX - 6},${GY - 270} ${GX - 2},${GY - 300}" stroke-width="13" style="animation-delay:.8s"/>
-    <path class="stem" d="M${GX - 3},${GY - 170} C${GX - 40},${GY - 200} ${GX - 72},${GY - 212} ${GX - 108},${GY - 220}" stroke-width="7" style="animation-delay:1.7s"/>
-    <path class="stem" d="M${GX - 3},${GY - 220} C${GX + 40},${GY - 250} ${GX + 76},${GY - 260} ${GX + 116},${GY - 264}" stroke-width="7" style="animation-delay:1.9s"/>
-    <path class="stem" d="M${GX - 2},${GY - 280} C${GX - 28},${GY - 314} ${GX - 50},${GY - 328} ${GX - 76},${GY - 338}" stroke-width="6" style="animation-delay:2.1s"/>
-    <path class="stem" d="M${GX - 2},${GY - 300} C${GX + 20},${GY - 338} ${GX + 42},${GY - 354} ${GX + 72},${GY - 364}" stroke-width="6" style="animation-delay:2.3s"/>
-    ${crown(C.tc, GX - 128, GY - 232, 74, 2.2, 0)}
-    ${crown(C.ch, GX + 138, GY - 278, 80, 2.45, -1.6)}
-    ${crown(C.yl, GX - 92, GY - 362, 70, 2.7, -3.2)}
-    ${crown(C.nt, GX + 80, GY - 414, 86, 2.95, -4.5)}
-    <text class="scene-note" x="${GX}" y="632" text-anchor="middle">${t.note}</text>`;
+    <ellipse class="glow" cx="${cx}" cy="${cy}" rx="268" ry="130" fill="${t.color}" style="--org:${cx}px ${cy}px;--d:4.4s"/>
+    ${src}
+    ${linkLine(P.tc[0], P.tc[1], P.ch[0], P.ch[1], C.tc, 2.7)}
+    ${linkLine(P.ch[0], P.ch[1], P.yl[0], P.yl[1], C.ch, 2.95)}
+    ${linkLine(P.yl[0], P.yl[1], P.nt[0], P.nt[1], C.yl, 3.2)}
+    ${linkLine(P.nt[0], P.nt[1], P.tc[0], P.tc[1], C.nt, 3.45)}
+    ${etchRings(cx, cy, "#b9b3a2", [252], 4.2)}
+    ${eWaves(cx, cy, t.color, 300, 4.8, 4.6, 2, 2)}
+    ${sceneNote(t)}`;
 }
-const SCENES = [sceneSeed, sceneSprout, sceneSapling, sceneTree];
-const STAGE_ICONS = ["種子", "發芽", "抽枝", "成樹"];
+const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
+const STAGE_ICONS = ["起聲", "相和", "疊層", "串聯"];
 
 /* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
@@ -480,7 +526,7 @@ function openTopic(i) {
     <span class="no" style="color:${t.color}">地方回聲 ${t.no}／04</span>
     <h3>${t.title}</h3>
     <div class="sub" style="border-bottom:3px solid ${t.color}">${t.sub}</div>
-    <span class="stage-tag" style="background:${t.color}">生長階段｜${t.stage}</span>
+    <span class="stage-tag" style="background:${t.color}">回聲階段｜${t.stage}</span>
     ${t.paras.map(p => `<p>${p}</p>`).join("")}
     <div class="dirs-title">${t.dirsTitle}</div>
     <div class="dirs">${t.dirs.map(d => `<span>${d}</span>`).join("")}</div>
