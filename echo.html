@@ -455,8 +455,8 @@ function linkLine(x1, y1, x2, y2, color, delay) {
   return `<path class="linkline" d="M${x1},${y1} Q${mx},${my} ${x2},${y2}"
     stroke="${color}" stroke-width="3.4" style="--d:${delay}s"/>`;
 }
-function sceneNote(t) {
-  return `<text class="scene-note" x="${GX}" y="640" text-anchor="middle">${t.note}</text>`;
+function sceneNote(t, y = 640) {
+  return `<text class="scene-note" x="${GX}" y="${y}" text-anchor="middle">${t.note}</text>`;
 }
 
 // 01 起聲:一個觀察落下,激起第一道回聲
@@ -500,43 +500,45 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 百頁:一本攤開的大書,書頁中長出一棵四色年輪樹
+// 04 百頁:一本攤開的大書,書頁中長出一棵四色年輪樹(滿版構圖)
 function sceneFour(t) {
   const gx = 400;                 // 書溝(中線)
-  const topY = 470, botY = 556;   // 書頁上/下緣(書溝處)
-  // 攤開的書:左右兩頁 + 封底 + 頁緣線(百頁的厚度)
+  const topY = 498, botY = 600;   // 書頁上/下緣(書溝處)
+  // 攤開的大書:左右兩頁 + 書溝 + 頁緣線(百頁的厚度)
   const book = `
-    <path class="etch" d="M${gx},${topY + 8} C348,${topY - 12} 292,${topY - 24} 236,${topY - 26} L230,${botY - 34} C290,${botY - 32} 348,${botY - 20} ${gx},${botY} Z"
+    <path class="etch" d="M${gx},${topY + 8} C330,${topY - 14} 246,${topY - 26} 162,${topY - 28} L154,${botY - 20} C240,${botY - 18} 330,${botY - 8} ${gx},${botY + 14} Z"
       fill="#fbfaf5" stroke="none" style="--org:${gx}px ${topY}px;--d:.9s"/>
-    <path class="etch" d="M${gx},${topY + 8} C452,${topY - 12} 508,${topY - 24} 564,${topY - 26} L570,${botY - 34} C510,${botY - 32} 452,${botY - 20} ${gx},${botY} Z"
+    <path class="etch" d="M${gx},${topY + 8} C470,${topY - 14} 554,${topY - 26} 638,${topY - 28} L646,${botY - 20} C560,${botY - 18} 470,${botY - 8} ${gx},${botY + 14} Z"
       fill="#fbfaf5" stroke="none" style="--org:${gx}px ${topY}px;--d:.9s"/>
-    <path class="draw" d="M${gx},${topY + 8} C348,${topY - 12} 292,${topY - 24} 236,${topY - 26} L230,${botY - 34} C290,${botY - 32} 348,${botY - 20} ${gx},${botY} C452,${botY - 20} 510,${botY - 32} 570,${botY - 34} L564,${topY - 26} C508,${topY - 24} 452,${topY - 12} ${gx},${topY + 8}"
-      stroke="${C.ink}" stroke-width="3.4" fill="none" stroke-linecap="round" style="--d:1.1s"/>
-    <path class="draw" d="M${gx},${topY + 8} L${gx},${botY}"
-      stroke="${C.ink}" stroke-width="2.6" style="--d:2.2s"/>
-    <path class="draw" d="M230,${botY - 26} C290,${botY - 24} 348,${botY - 12} ${gx},${botY + 8} C452,${botY - 12} 510,${botY - 24} 570,${botY - 26}"
-      stroke="#cfcabc" stroke-width="2.2" fill="none" style="--d:2.5s"/>
-    <path class="draw" d="M232,${botY - 18} C292,${botY - 16} 350,${botY - 4} ${gx},${botY + 16} C450,${botY - 4} 508,${botY - 16} 568,${botY - 18}"
+    <path class="draw" d="M${gx},${topY + 8} C330,${topY - 14} 246,${topY - 26} 162,${topY - 28} L154,${botY - 20} C240,${botY - 18} 330,${botY - 8} ${gx},${botY + 14} C470,${botY - 8} 560,${botY - 18} 646,${botY - 20} L638,${topY - 28} C554,${topY - 26} 470,${topY - 14} ${gx},${topY + 8}"
+      stroke="${C.ink}" stroke-width="3.6" fill="none" stroke-linecap="round" style="--d:1.1s"/>
+    <path class="draw" d="M${gx},${topY + 8} L${gx},${botY + 14}"
+      stroke="${C.ink}" stroke-width="2.8" style="--d:2.2s"/>
+    <path class="draw" d="M154,${botY - 12} C240,${botY - 10} 332,${botY} ${gx},${botY + 22} C468,${botY} 560,${botY - 10} 646,${botY - 12}"
+      stroke="#cfcabc" stroke-width="2.4" fill="none" style="--d:2.5s"/>
+    <path class="draw" d="M158,${botY - 4} C244,${botY - 2} 334,${botY + 8} ${gx},${botY + 30} C466,${botY + 8} 556,${botY - 2} 642,${botY - 4}"
       stroke="#cfcabc" stroke-width="2" fill="none" style="--d:2.7s"/>`;
   // 頁面上的字句(百頁裡的記錄)
   const textLines = `
-    <path class="draw" d="M286,${topY + 8} C316,${topY + 2} 342,${topY - 2} 366,${topY - 4}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:2.9s"/>
-    <path class="draw" d="M278,${topY + 26} C310,${topY + 20} 338,${topY + 16} 368,${topY + 14}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:3.05s"/>
-    <path class="draw" d="M296,${topY + 44} C322,${topY + 39} 344,${topY + 36} 364,${topY + 34}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:3.2s"/>
-    <path class="draw" d="M434,${topY - 4} C458,${topY - 2} 484,${topY + 2} 514,${topY + 8}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:3.05s"/>
-    <path class="draw" d="M432,${topY + 14} C462,${topY + 16} 490,${topY + 20} 522,${topY + 26}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:3.2s"/>
-    <path class="draw" d="M436,${topY + 34} C456,${topY + 36} 478,${topY + 39} 504,${topY + 44}" stroke="#cfcabc" stroke-width="3" stroke-linecap="round" style="--d:3.35s"/>`;
-  // 樹:從書溝長出
+    <path class="draw" d="M216,${topY + 6} C260,${topY - 4} 300,${topY - 10} 344,${topY - 13}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:2.9s"/>
+    <path class="draw" d="M206,${topY + 26} C254,${topY + 16} 300,${topY + 9} 350,${topY + 5}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:3.05s"/>
+    <path class="draw" d="M224,${topY + 46} C264,${topY + 38} 302,${topY + 32} 340,${topY + 28}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:3.2s"/>
+    <path class="draw" d="M456,${topY - 13} C500,${topY - 10} 540,${topY - 4} 584,${topY + 6}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:3.05s"/>
+    <path class="draw" d="M450,${topY + 5} C496,${topY + 9} 546,${topY + 16} 594,${topY + 26}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:3.2s"/>
+    <path class="draw" d="M460,${topY + 28} C498,${topY + 32} 536,${topY + 38} 576,${topY + 46}" stroke="#cfcabc" stroke-width="3.2" stroke-linecap="round" style="--d:3.35s"/>`;
+  // 樹:從書溝長出(粗壯的主幹)
   const tree = `
-    <path class="draw" d="M${gx},${topY + 4} C${gx + 3},${topY - 44} ${gx - 9},${topY - 92} ${gx - 2},${topY - 140} C${gx},${topY - 168} ${gx - 4},${topY - 188} ${gx - 2},${topY - 208}"
-      stroke="#5d5b53" stroke-width="9" fill="none" stroke-linecap="round" style="--d:3.6s"/>
-    <path class="draw" d="M${gx - 2},${topY - 116} C${gx - 30},${topY - 142} ${gx - 56},${topY - 156} ${gx - 88},${topY - 164}"
-      stroke="#5d5b53" stroke-width="5.5" fill="none" stroke-linecap="round" style="--d:4.7s"/>
-    <path class="draw" d="M${gx - 2},${topY - 148} C${gx + 26},${topY - 176} ${gx + 52},${topY - 190} ${gx + 86},${topY - 198}"
-      stroke="#5d5b53" stroke-width="5.5" fill="none" stroke-linecap="round" style="--d:4.9s"/>
-    <path class="draw" d="M${gx - 2},${topY - 188} C${gx - 20},${topY - 214} ${gx - 36},${topY - 226} ${gx - 56},${topY - 234}"
-      stroke="#5d5b53" stroke-width="4.5" fill="none" stroke-linecap="round" style="--d:5.1s"/>`;
-  // 四色年輪樹冠
+    <path class="draw" d="M${gx},${topY + 4} C${gx + 6},${topY - 62} ${gx - 14},${topY - 124} ${gx - 5},${topY - 184} C${gx - 2},${topY - 226} ${gx - 8},${topY - 266} ${gx - 5},${topY - 302}"
+      stroke="#5d5b53" stroke-width="14" fill="none" stroke-linecap="round" style="--d:3.6s"/>
+    <path class="draw" d="M${gx - 5},${topY - 136} C${gx - 44},${topY - 154} ${gx - 85},${topY - 164} ${gx - 128},${topY - 168}"
+      stroke="#5d5b53" stroke-width="8" fill="none" stroke-linecap="round" style="--d:4.7s"/>
+    <path class="draw" d="M${gx - 4},${topY - 172} C${gx + 42},${topY - 184} ${gx + 92},${topY - 194} ${gx + 132},${topY - 198}"
+      stroke="#5d5b53" stroke-width="8" fill="none" stroke-linecap="round" style="--d:4.9s"/>
+    <path class="draw" d="M${gx - 5},${topY - 240} C${gx - 24},${topY - 260} ${gx - 42},${topY - 274} ${gx - 58},${topY - 284}"
+      stroke="#5d5b53" stroke-width="6" fill="none" stroke-linecap="round" style="--d:5.1s"/>
+    <path class="draw" d="M${gx - 5},${topY - 290} C${gx + 10},${topY - 306} ${gx + 28},${topY - 318} ${gx + 46},${topY - 326}"
+      stroke="#5d5b53" stroke-width="7" fill="none" stroke-linecap="round" style="--d:5.25s"/>`;
+  // 四色年輪樹冠(有大有小、有高有低)
   function crown(color, cx, cy, maxR, d, sd) {
     const rs = [.22, .45, .68, .9].map(f => Math.round(maxR * f));
     const cir = rs.map((r, i) =>
@@ -548,25 +550,25 @@ function sceneFour(t) {
       </g></g>`;
   }
   const crowns =
-    crown(C.tc, gx - 112, topY - 186, 54, 5.4, 0) +
-    crown(C.ch, gx + 112, topY - 220, 58, 5.65, -1.8) +
-    crown(C.yl, gx - 66, topY - 268, 50, 5.9, -3.2) +
-    crown(C.nt, gx + 22, topY - 252, 56, 6.15, -4.4);
+    crown(C.tc, gx - 150, topY - 162, 66, 5.4, 0) +        // 藍:左側,中高,中大
+    crown(C.ch, gx + 152, topY - 194, 54, 5.65, -1.8) +    // 粉:右側,較高,中
+    crown(C.yl, gx - 72, topY - 292, 40, 5.9, -3.2) +      // 黃:左上,高,小
+    crown(C.nt, gx + 62, topY - 336, 86, 6.15, -4.4);      // 綠:頂端,最高,最大
   // 書頁的回聲,輕輕往樹上送
   const rise = `
-    <ellipse class="riser" cx="${gx - 92}" cy="${topY + 14}" rx="20" ry="6"
+    <ellipse class="riser" cx="${gx - 130}" cy="${topY + 12}" rx="22" ry="7"
       stroke="${C.tc}" stroke-width="2" fill="none"
-      style="--org:${gx - 92}px ${topY + 14}px;--d:6.8s;--dur:4.6s;--rise:-110px"/>
-    <ellipse class="riser" cx="${gx + 96}" cy="${topY + 16}" rx="20" ry="6"
+      style="--org:${gx - 130}px ${topY + 12}px;--d:6.8s;--dur:4.6s;--rise:-130px"/>
+    <ellipse class="riser" cx="${gx + 134}" cy="${topY + 14}" rx="22" ry="7"
       stroke="${C.ch}" stroke-width="2" fill="none"
-      style="--org:${gx + 96}px ${topY + 16}px;--d:7.6s;--dur:4.6s;--rise:-110px"/>`;
+      style="--org:${gx + 134}px ${topY + 14}px;--d:7.6s;--dur:4.6s;--rise:-130px"/>`;
   return `
     ${book}
     ${textLines}
     ${tree}
     ${crowns}
     ${rise}
-    ${sceneNote(t)}`;
+    ${sceneNote(t, 654)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
 const STAGE_ICONS = ["起聲", "相和", "疊層", "成樹"];
