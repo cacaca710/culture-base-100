@@ -347,7 +347,7 @@ const TOPICS = [
   },
   {
     no: "04", title: "場域迴響", sub: "把感受往前推進一步",
-    color: C.nt, soft: "#e4f1d3", stage: "四方串聯", icon: "❁",
+    color: C.nt, soft: "#e4f1d3", stage: "回聲落地，長出下一步", icon: "❁",
     paras: [
       "參訪與交流結束後，有哪些想法可以帶回自己的工作、場域或日常實踐？哪些人可能成為合作夥伴？又有哪些做法值得進一步嘗試？",
       "「場域迴響」邀請你把今天累積的觀察與感受，轉化為一個可能的行動方向。它不需要是一份完整計畫，可以只是一個聯繫、一場活動、一種展示方式，或一次合作的起點。"
@@ -355,7 +355,7 @@ const TOPICS = [
     dirsTitle: "可以從這三個方向開始",
     dirs: ["有什麼可以帶回？", "有什麼可以合作？", "有什麼可以嘗試？"],
     tip: "寫下你願意帶回去繼續發展的想法。",
-    note: "四方回聲串聯，匯聚成地方的共鳴"
+    note: "今天留下的回聲，會在地方長出新的年輪"
   }
 ];
 
@@ -469,62 +469,59 @@ function sceneThree(t) {
     ${linkLine(B[0], B[1], Cc[0], Cc[1], C.ch, 4.85)}
     ${sceneNote(t)}`;
 }
-// 04 串聯:四方回聲升起,在空中匯聚成一枚四色共鳴年輪
+// 04 落地:四方回聲匯入中央年輪,長出新的一圈,再向外伸出下一步
 function sceneFour(t) {
-  // [x, y, 透視縮放] 近大遠小
-  const P = {
-    tc: [346, 396, .78],  // 台中(遠)
-    ch: [222, 496, .95],  // 彰化(左)
-    nt: [556, 468, .88],  // 南投(右)
-    yl: [378, 574, 1.1]   // 雲林(近)
-  };
-  const cx = 378, cy = 482, hy = 212; // 匯聚中心與空中年輪高度
-  const order = [["tc", .9], ["ch", 1.2], ["yl", 1.5], ["nt", 1.8]];
-  let src = "";
-  order.forEach(([k, d]) => {
-    const [x, y, s] = P[k];
-    src += srcDot(x, y, C[k], d, Math.round(10 * s));
-    src += etchRings(x, y, C[k], [Math.round(30 * s), Math.round(52 * s)], d + .2);
-    src += eWaves(x, y, C[k], Math.round(115 * s), d + .8, 3.8, 2, 2);
-    // 每個聲源往上浮升的回聲圈
-    for (let r = 0; r < 2; r++) {
-      src += `<ellipse class="riser" cx="${x}" cy="${y}" rx="${Math.round(24 * s)}" ry="${Math.round(24 * s * RY)}"
-        stroke="${C[k]}" stroke-width="2.4"
-        style="--org:${x}px ${y}px;--d:${(d + 1.4 + r * 1.8).toFixed(2)}s;--dur:3.6s;--rise:-${Math.round(96 * s)}px"/>`;
-    }
+  const cx = 400, cy = 470; // 中央年輪(延續第三張的構圖)
+  // 四方聲源:小點+一圈回聲紋,由外往中央匯入
+  const P = [
+    [214, 396, C.tc, .9],
+    [590, 416, C.ch, 1.1],
+    [246, 584, C.yl, 1.3],
+    [572, 572, C.nt, 1.5]
+  ];
+  let src = "", inflow = "";
+  P.forEach(([x, y, c, d]) => {
+    src += srcDot(x, y, c, d, 8);
+    src += etchRings(x, y, c, [26], d + .2);
+    inflow += linkLine(x, y, cx, cy, c, d + 1.1);
   });
-  // 中央往空中送的聲流
-  let column = "";
-  const colColors = [C.tc, C.ch, C.yl, C.nt];
-  colColors.forEach((c, i) => {
-    column += `<ellipse class="riser" cx="${cx}" cy="${cy - 14}" rx="42" ry="${Math.round(42 * RY)}"
-      stroke="${c}" stroke-width="2.8"
-      style="--org:${cx}px ${cy - 14}px;--d:${(3.4 + i * .8).toFixed(2)}s;--dur:3.2s;--rise:-${cy - 14 - hy - 14}px"/>`;
+  // 中央年輪:四色回聲一圈圈疊上,然後穩定
+  const core = [[34, C.tc], [64, C.ch], [94, C.yl], [124, C.nt]]
+    .map(([rx, c], i) =>
+      `<ellipse class="etch" cx="${cx}" cy="${cy}" rx="${rx}" ry="${Math.round(rx * RY)}"
+        stroke="${c}" stroke-width="${i % 2 ? 2.2 : 2.8}"
+        stroke-dasharray="${Math.round(rx * 2.2)} ${8 + i} ${Math.round(rx * 1.1)} ${6 + i}"
+        style="--org:${cx}px ${cy}px;--d:${(2.9 + i * .35).toFixed(2)}s"/>`).join("");
+  // 長出新的一圈年輪(下一步的開始)
+  const newRing = `<ellipse class="etch" cx="${cx}" cy="${cy}" rx="158" ry="${Math.round(158 * RY)}"
+    stroke="${t.color}" stroke-width="3.4"
+    stroke-dasharray="340 12 180 10"
+    style="--org:${cx}px ${cy}px;--d:4.6s"/>`;
+  // 由新年輪向外伸出的下一步:細線+末端亮起的小點+小回聲
+  const nexts = [
+    [252, 330, 5.2],   // 帶回
+    [430, 272, 5.5],   // 合作
+    [586, 356, 5.8]    // 嘗試
+  ];
+  let grow = "";
+  nexts.forEach(([x, y, d]) => {
+    grow += `<path class="linkline" d="M${cx},${cy - Math.round(158 * RY) - 6} Q${(cx + x) / 2},${(cy + y) / 2 - 40} ${x},${y}"
+      stroke="${t.color}" stroke-width="2.6" style="--d:${d}s"/>`;
+    grow += srcDot(x, y, t.color, d + .5, 7);
+    grow += etchRings(x, y, t.color, [18], d + .8);
   });
-  // 空中的四色共鳴年輪
-  const haloRings = [[24, C.nt, "40 6"], [42, C.yl, "80 8 40 8"], [60, C.ch, "130 10 70 8"], [78, C.tc, "180 10 100 10"]]
-    .map(([rx, c, dash], i) =>
-      `<ellipse cx="${cx}" cy="${hy}" rx="${rx}" ry="${Math.round(rx * .38)}" fill="none"
-        stroke="${c}" stroke-width="${i % 2 ? 2.6 : 3.2}" stroke-dasharray="${dash}"/>`).join("");
   return `
-    ${groundRings(400, 545)}
-    <ellipse class="glow" cx="${cx}" cy="${cy}" rx="250" ry="118" fill="${t.color}" style="--org:${cx}px ${cy}px;--d:3.8s"/>
+    ${groundRings(GX, GY)}
     ${src}
-    ${linkLine(P.tc[0], P.tc[1], P.ch[0], P.ch[1], C.tc, 2.4)}
-    ${linkLine(P.ch[0], P.ch[1], P.yl[0], P.yl[1], C.ch, 2.6)}
-    ${linkLine(P.yl[0], P.yl[1], P.nt[0], P.nt[1], C.yl, 2.8)}
-    ${linkLine(P.nt[0], P.nt[1], P.tc[0], P.tc[1], C.nt, 3.0)}
-    <path class="linkline" d="M${cx},${cy - 26} L${cx},${hy + 40}" stroke="${t.color}" stroke-width="3" style="--d:3.6s"/>
-    <g class="halo" style="--org:${cx}px ${hy}px;--d:4.8s">
-      <g class="halo-bob" style="--org:${cx}px ${hy}px;--d:5.7s">
-        <ellipse cx="${cx}" cy="${hy}" rx="86" ry="33" fill="${t.color}" opacity=".08"/>
-        ${haloRings}
-      </g>
-    </g>
+    ${inflow}
+    ${core}
+    ${eWaves(cx, cy, t.color, 205, 4.9, 4.4, 2, 2)}
+    ${newRing}
+    ${grow}
     ${sceneNote(t)}`;
 }
 const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
-const STAGE_ICONS = ["起聲", "相和", "疊層", "串聯"];
+const STAGE_ICONS = ["起聲", "相和", "疊層", "落地"];
 
 /* ── 總覽卡片 ── */
 const grid = document.getElementById("echo-grid");
