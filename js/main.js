@@ -250,6 +250,10 @@
   }
 
   function baseCard(b) {
+    const officialLabel = b.link && b.link.type === "facebook" ? "Facebook 粉絲頁" : "官方網站";
+    const official = b.link && b.link.url
+      ? `<a class="gmap-link official" target="_blank" rel="noopener" href="${b.link.url}">${officialLabel} ↗</a>`
+      : "";
     return `<div class="base-card" data-q="${encodeURIComponent(b.name + " " + b.county)}">
       <button class="head">
         <span class="txt">
@@ -259,9 +263,12 @@
       </button>
       <div class="base-detail">
         <div class="map-slot"></div>
-        <a class="gmap-link" target="_blank" rel="noopener"
-           href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + " " + b.county)}">
-          在 Google 地圖開啟 ↗</a>
+        <div class="link-row">
+          <a class="gmap-link" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + " " + b.county)}">
+            在 Google 地圖開啟 ↗</a>
+          ${official}
+        </div>
       </div>
     </div>`;
   }
