@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>認識百大文化基地｜山海匯聚 — 中臺灣百頁共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .about-stage { flex: 1; display: flex; flex-direction: column; gap: 26px; padding: 10px 1vw 28px; max-width: 1280px; margin: 0 auto; width: 100%; }
+
+  .about-hero { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; }
+  .about-hero .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 10px; }
+  .about-hero h2 { font-size: clamp(30px, 3.4vw, 48px); font-weight: 900; letter-spacing: .16em; margin-bottom: 14px; line-height: 1.3; }
+  .about-hero p { font-size: 15.5px; line-height: 2.1; letter-spacing: .05em; color: var(--ink); }
+  .about-hero p + p { margin-top: 8px; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat-row .stat b { font-size: 26px; }
+
+  .section-block {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 32px;
+  }
+  .section-block h3 {
+    font-size: 18px; font-weight: 900; letter-spacing: .14em; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-block h3 .no {
+    display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--ink); color: #fff; font-size: 14px; flex: 0 0 auto;
+  }
+  .section-block p, .section-block li { font-size: 14.5px; line-height: 2; letter-spacing: .04em; color: var(--ink-soft); }
+  .section-block p + p { margin-top: 8px; }
+  .section-block b { color: var(--ink); font-weight: 700; }
+
+  .region-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;
+  }
+  .region-card {
+    border-radius: 16px; padding: 16px 18px; border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .region-card.focus { border: 2px solid var(--nt); background: var(--e4f1d3, #e4f1d3); }
+  .region-card .zone { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--ink-soft); margin-bottom: 4px; }
+  .region-card .theme { font-size: 18px; font-weight: 900; letter-spacing: .12em; }
+  .region-card.focus .theme { color: var(--nt); }
+
+  .effect-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .effect-stats .es { background: var(--paper); border-radius: 14px; padding: 14px 16px; text-align: center; }
+  .effect-stats .es b { display: block; font-size: 26px; font-weight: 900; }
+  .effect-stats .es span { font-size: 12.5px; color: var(--ink-soft); letter-spacing: .06em; }
+
+  .about-cta {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 24px 30px;
+  }
+  .about-cta p { flex: 1; min-width: 240px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.9; }
+  .about-cta .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .about-cta a.primary {
+    text-decoration: none; font-weight: 900; font-size: 15px; letter-spacing: .12em;
+    color: var(--paper); background: var(--ink); border-radius: 999px; padding: 12px 26px;
+    transition: opacity .2s;
+  }
+  .about-cta a.primary:hover { opacity: .82; }
+  .about-cta a.secondary {
+    text-decoration: none; font-weight: 700; font-size: 14px; letter-spacing: .1em;
+    color: var(--ink); border: 2px solid var(--ink); border-radius: 999px; padding: 10px 24px;
+    transition: all .2s;
+  }
+  .about-cta a.secondary:hover { background: var(--ink); color: var(--paper); }
+
+  .src-note { font-size: 12px; color: var(--ink-soft); letter-spacing: .04em; }
+  .src-note a { color: var(--ink-soft); }
+
+  @media (max-width: 900px) {
+    .about-hero { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .region-grid { grid-template-columns: 1fr 1fr; }
+    .effect-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="about.html" class="active">認識百大文化基地</a>
+      <a href="index.html">百大基地地圖</a>
+      <a href="echo.html">地方回聲</a>
+      <a href="meetup.html">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="about-stage">
+    <section class="about-hero">
+      <div class="ring-title">
+        <svg width="170" height="170" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#3b3a36">
+            <circle cx="100" cy="100" r="16" stroke-width="2.4" stroke-dasharray="40 6"/>
+            <circle cx="100" cy="100" r="34" stroke-width="2"   stroke-dasharray="80 8 40 8"/>
+            <circle cx="100" cy="100" r="52" stroke-width="2.4" stroke-dasharray="130 10 70 8"/>
+            <circle cx="100" cy="100" r="70" stroke-width="2"   stroke-dasharray="180 10 100 10"/>
+            <circle cx="100" cy="100" r="88" stroke-width="2.4" stroke-dasharray="240 12 140 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <div class="en">MINISTRY OF CULTURE · TAIWAN CULTURE BASE</div>
+        <h2>2025 第一屆百大文化基地</h2>
+        <p>臺灣民間社會長期的蹲點深耕，經各部會長期於社造、地創、再造歷史現場投入與整合資源，匯流成就百大文化基地點亮臺灣。臺灣民眾、國際旅人隨處可感受文化脈絡的溫度，讓臺灣「日日都是文化日，人人都是文化人」。</p>
+        <p>百大基地是世界認識臺灣的另一道門窗，是民間與政府共同努力的成果，更是臺灣爭取國際觀光的重要利基，瞭解臺灣從文化基地開始。「百大文化基地」政策亦邀請中央部會及全國各縣市政府共同參與推動，期盼透過爬梳各地的文化歷史脈絡及特色故事，發展各類文化主題，並加強推廣，讓民眾認識全臺各地歷史文化多元樣貌，進而強化臺灣文化主體性。</p>
+      </div>
+    </section>
+
+    <section class="stat-row">
+      <div class="stat"><b>1,026</b><span>件申請案</span></div>
+      <div class="stat"><b>21</b><span>位評審委員</span></div>
+      <div class="stat"><b>110</b><span>處獲選基地</span></div>
+      <div class="stat"><b>6</b><span>大區域文化主題</span></div>
+    </section>
+
+    <section class="section-block">
+      <h3><span class="no">1</span>辦理「第一屆百大文化基地徵選」</h3>
+      <p>自 113 年 12 月 3 日至 114 年 1 月 15 日開放線上申請，計有 1,026 件申請案。類別包含<b>「文創聚落或工藝據點」、「視覺藝術、表演藝術等藝文展演據點」、「獨立書店、雜誌社或出版社」、「博物館或地方文化館」、「社區營造或地方創生點」、「古蹟、聚落或文化路徑點」、「影視據點」</b>。</p>
+    </section>
+
+    <section class="section-block">
+      <h3><span class="no">2</span>文化基地評選過程</h3>
+      <p>經過 21 位各文化領域類別專家學者組成評審委員會嚴謹審查，文化部於 114 年 3 月 31 日對外公告「第一屆百大文化基地」遴選結果，計有 110 處獲選基地，並納入文化地圖網站及推廣活動共同宣傳行銷。</p>
+    </section>
+
+    <section class="section-block">
+      <h3><span class="no">3</span>文化基地六大區域主題</h3>
+      <p>文化基地對應行政院均衡臺灣「六大區域產業及生活圈」政策，定調區域主題名稱。期待透過文化路徑、河流等串連臺灣各地不同的地理、生態，看見臺灣的文化多樣性及旺盛生命力，未來將以基地為中心，進一步串連當地社區組織、藝文資源、各級學校等，擴增文化基地量能及豐富多元體驗。</p>
+      <div class="region-grid">
+        <div class="region-card"><div class="zone">北北基宜</div><div class="theme">淡蘭新都</div></div>
+        <div class="region-card"><div class="zone">桃竹竹苗</div><div class="theme">浪漫智城</div></div>
+        <div class="region-card focus"><div class="zone">中彰投雲</div><div class="theme">濁水沃土</div></div>
+        <div class="region-card"><div class="zone">嘉嘉南高屏</div><div class="theme">南國創域</div></div>
+        <div class="region-card"><div class="zone">花東</div><div class="theme">黑潮原鄉</div></div>
+        <div class="region-card"><div class="zone">連金澎</div><div class="theme">鯤洋跳島</div></div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h3><span class="no">4</span>政策效益</h3>
+      <p>各基地於第一屆百大文化基地期程內，持續依所提參選內容經營維運基地，深化與周遭文化資源及學校之串聯，辦理創新文化體驗服務，期提升地方文化能見度，形成文化聚落，深化地方文化主體性，落實文化扎根。</p>
+      <p>除了由文化部整合串聯、獲選基地持續深化在地文化及文化體驗，地方政府更將扮演樞紐平臺角色，成立文化基地平臺樞紐，整合規劃主題串聯路徑，並串聯地方其他重要文化據點。由點至線到面，推動基地與公有場館、非基地間的跨域合作，持續發展地方歷史脈絡及文化內涵。</p>
+      <div class="effect-stats">
+        <div class="es"><b>49</b><span>處文化基地平臺樞紐</span></div>
+        <div class="es"><b>83</b><span>條主題串聯路徑</span></div>
+        <div class="es"><b>142</b><span>處串聯其他文化據點</span></div>
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <p><b>「山海匯聚」</b>即以濁水沃土區域(中彰投雲)的文化基地為主軸，透過走讀工作坊、地方議事桌交流會與共創展，讓百大文化基地的精神在中臺灣具體發生。</p>
+      <div class="btns">
+        <a class="primary" href="index.html">看百大基地地圖 →</a>
+        <a class="secondary" href="https://www.moc.gov.tw/cp.aspx?n=9212" target="_blank" rel="noopener">前往文化部官網 ↗</a>
+      </div>
+    </section>
+
+    <p class="src-note">資料來源｜中華民國文化部「百大文化基地」<a href="https://www.moc.gov.tw/cp.aspx?n=9212" target="_blank" rel="noopener">www.moc.gov.tw/cp.aspx?n=9212</a></p>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+    <span><b>協辦單位</b>｜中央書局、富興工廠1962</span>
+  </footer>
+</div>
+</body>
+</html>
