@@ -50,6 +50,18 @@
   }
 
   /* ── 結尾 ── */
+  /* ── 現場紀錄 ── */
+  .fu-photos { display: flex; flex-direction: column; gap: 14px; }
+  .fu-photos h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .14em; }
+  .fu-photos > p { font-size: 15.5px; line-height: 1.95; color: var(--ink-soft); letter-spacing: .04em; max-width: 60em; }
+  .fu-gallery { display: flex; flex-wrap: wrap; gap: 14px; }
+  .fu-gallery .g { flex: 1 1 280px; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .fu-gallery .g img {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+    border-radius: 18px; border: 1px solid var(--line);
+  }
+  .fu-gallery figcaption { font-size: 13.5px; letter-spacing: .05em; color: var(--ink-soft); line-height: 1.7; }
+
   .fu-outro {
     background: var(--card); border: 1px solid var(--line); border-radius: 22px;
     padding: 26px 32px; position: relative; overflow: hidden;
@@ -174,6 +186,7 @@
   @media (max-aspect-ratio: 1/1) {
     .fu-hero { grid-template-columns: 1fr; }
     .fu-why { grid-template-columns: 1fr; }
+    .fu-gallery .g { flex-basis: calc(50% - 7px); }
     #topic-view { overflow-y: auto; }
     .tv-main { grid-template-columns: 1fr; }
     .tv-scene svg { max-height: 44vh; }
@@ -238,6 +251,29 @@
     </section>
 
     <section class="fu-grid" id="fu-grid"></section>
+
+    <section class="fu-photos">
+      <h3>現場紀錄</h3>
+      <p>基地工作者在交流工作坊現場，用蠟筆畫下自己基地的年輪，在缺口處留下提問，也在彼此的圖上留下回應。</p>
+      <div class="fu-gallery">
+        <figure class="g">
+          <img src="assets/futures/futures-ring-drawing.jpg" alt="參與者用蠟筆畫下基地的第一圈年輪" loading="lazy">
+          <figcaption>01 看見自己｜畫下第一圈年輪</figcaption>
+        </figure>
+        <figure class="g">
+          <img src="assets/futures/futures-rings-four.jpg" alt="桌面上並置四張不同顏色的年輪圖" loading="lazy">
+          <figcaption>每個基地的年輪，疏密與形狀都不同</figcaption>
+        </figure>
+        <figure class="g">
+          <img src="assets/futures/futures-ring-notes.jpg" alt="年輪圖上貼著手寫關鍵字便條" loading="lazy">
+          <figcaption>02 允許對話｜在年輪上標記成長的階段</figcaption>
+        </figure>
+        <figure class="g">
+          <img src="assets/futures/futures-cocreate.jpg" alt="參與者以蠟筆共同繪製彩色圖像" loading="lazy">
+          <figcaption>04 共同創造｜把經驗畫進同一張圖</figcaption>
+        </figure>
+      </div>
+    </section>
 
     <section class="fu-outro">
       <h3>一張年輪，留下的不只是基地的過去</h3>
