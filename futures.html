@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打開地方未來式｜山海匯聚 — 中臺灣百頁共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .fu-stage { flex: 1; display: flex; flex-direction: column; gap: 26px; padding: 12px 2vw 28px; }
+
+  /* ── Hero ── */
+  .fu-hero { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; max-width: 1240px; }
+  .fu-hero h2 { font-size: clamp(34px, 3.6vw, 52px); font-weight: 900; letter-spacing: .18em; margin-bottom: 8px; }
+  .fu-hero .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 14px; }
+  .fu-hero .lead-line { font-size: 16px; font-weight: 700; letter-spacing: .06em; color: var(--ink); }
+
+  /* ── 為什麼是年輪 ── */
+  .fu-why {
+    display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 60%); gap: 30px; align-items: center;
+    background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 20px 30px;
+  }
+  .fu-why .ring-wrap { display: flex; align-items: center; justify-content: center; }
+  .fu-why .ring-wrap svg { width: 100%; max-width: 320px; height: auto; }
+  .fu-why h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .14em; margin-bottom: 12px; }
+  .fu-why p { font-size: 15px; line-height: 2.05; letter-spacing: .05em; color: var(--ink); margin-bottom: 10px; }
+  .fu-why p:last-child { margin-bottom: 0; }
+
+  /* ── 四階段卡 ── */
+  .fu-grid { display: flex; flex-wrap: wrap; gap: 18px; }
+  .fu-card {
+    flex: 1 1 260px; border: none; cursor: pointer; text-align: center; font-family: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 18px 22px; position: relative; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .fu-card:hover { transform: translateY(-5px); box-shadow: 0 16px 34px rgba(59,58,54,.14); }
+  .fu-card svg { width: min(56%, 140px); aspect-ratio: 1; display: block; margin: 0 auto 14px; }
+  .fu-card .no { font-size: 12px; font-weight: 900; letter-spacing: .3em; color: var(--ink-soft); display: block; margin-bottom: 6px; }
+  .fu-card h4 { font-size: clamp(18px, 1.6vw, 23px); font-weight: 900; letter-spacing: .16em; margin-bottom: 8px; }
+  .fu-card .sub { font-size: 12.5px; color: var(--ink-soft); letter-spacing: .05em; line-height: 1.7; }
+  .fu-card .go {
+    display: inline-block; margin-top: 14px; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    color: var(--ink); border-bottom: 2px solid currentColor; padding-bottom: 2px;
+  }
+
+  /* ── 結尾 ── */
+  .fu-outro {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 32px; position: relative; overflow: hidden;
+  }
+  .fu-outro h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .14em; margin-bottom: 10px; }
+  .fu-outro p { font-size: 14.5px; line-height: 2; letter-spacing: .04em; color: var(--ink-soft); max-width: 64em; margin-bottom: 18px; }
+  .fu-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .fu-flow span.stg {
+    font-size: 13.5px; font-weight: 900; letter-spacing: .1em; padding: 8px 16px;
+    border-radius: 999px; border: 2px solid var(--line); background: var(--paper);
+  }
+  .fu-flow span.arw { color: var(--ink-soft); font-weight: 900; }
+  .fu-outro .closing { font-size: 15.5px; font-weight: 700; letter-spacing: .06em; color: var(--ink); }
+  .fu-outro a.to-expo {
+    display: inline-block; margin-top: 16px; text-decoration: none; font-weight: 900; font-size: 14.5px; letter-spacing: .1em;
+    color: var(--paper); background: var(--ink); border-radius: 999px; padding: 11px 24px; transition: opacity .2s;
+  }
+  .fu-outro a.to-expo:hover { opacity: .82; }
+
+  /* ══ 子題全頁 ══ */
+  #topic-view {
+    position: fixed; inset: 0; z-index: 90; display: none;
+    background: var(--paper); overflow: hidden;
+  }
+  #topic-view.on { display: flex; flex-direction: column; }
+  #topic-view .tv-rings { position: absolute; border-radius: 50%; pointer-events: none; opacity: .45; }
+  #topic-view .tv-rings.a { width: 42vw; height: 42vw; left: -14vw; bottom: -18vw; }
+  #topic-view .tv-rings.b { width: 24vw; height: 24vw; right: -8vw; top: -9vw; }
+
+  .tv-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 30px 6px; position: relative; z-index: 2; gap: 16px; flex-wrap: wrap;
+  }
+  .tv-back {
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: .1em;
+    border: 2px solid var(--ink); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 8px 20px; cursor: pointer; transition: all .2s;
+  }
+  .tv-back:hover { background: var(--ink); color: var(--paper); }
+
+  .tv-steps { display: flex; align-items: center; gap: 0; }
+  .tv-step { display: flex; align-items: center; }
+  .tv-step button {
+    font-family: inherit; cursor: pointer; border: none; background: transparent;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 2px 12px; color: var(--ink-soft);
+  }
+  .tv-step .dot {
+    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid var(--line); background: var(--card); font-size: 15px; transition: all .2s;
+  }
+  .tv-step small { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .tv-step.cur .dot { border-color: var(--step-c); background: var(--step-c); color: #fff; transform: scale(1.12); }
+  .tv-step.cur small, .tv-step.cur button { color: var(--ink); }
+  .tv-step .link { width: 26px; height: 2px; background: var(--line); }
+
+  .tv-main {
+    flex: 1; min-height: 0; position: relative; z-index: 1;
+    display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%);
+    align-items: stretch; gap: 0; padding: 0 30px 18px;
+  }
+  .tv-scene { min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .tv-scene svg { width: 100%; height: 100%; max-height: 74vh; }
+
+  .tv-article { min-height: 0; overflow-y: auto; padding: 1vh 1vw 2vh 2vw; scrollbar-width: thin; }
+  .tv-article .no { font-size: 14px; font-weight: 900; letter-spacing: .34em; display: block; margin-bottom: 8px; }
+  .tv-article h3 { font-size: clamp(34px, 3.8vw, 52px); font-weight: 900; letter-spacing: .2em; line-height: 1.2; }
+  .tv-article .sub {
+    font-size: clamp(15px, 1.4vw, 19px); font-weight: 700; letter-spacing: .12em;
+    margin: 12px 0 6px; padding-bottom: 14px;
+  }
+  .tv-article .stage-tag {
+    display: inline-block; font-size: 12.5px; font-weight: 900; letter-spacing: .2em;
+    color: #fff; border-radius: 999px; padding: 5px 16px; margin-bottom: 16px;
+  }
+  .tv-article p { font-size: clamp(15px, 1.15vw, 17px); line-height: 2.15; letter-spacing: .05em; margin-bottom: 14px; }
+  .tv-article .keep-title { font-size: 13px; font-weight: 900; letter-spacing: .24em; color: var(--ink-soft); margin: 20px 0 10px; }
+  .tv-article .keeps { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tv-article .keeps span {
+    font-size: 14px; font-weight: 700; letter-spacing: .06em;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 18px;
+  }
+  .tv-nav { display: flex; gap: 10px; margin-top: 26px; }
+  .tv-nav button {
+    font-family: inherit; font-size: 14.5px; font-weight: 700; letter-spacing: .1em;
+    border: 2px solid var(--ink); background: transparent; color: var(--ink);
+    border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: all .2s;
+  }
+  .tv-nav button:hover { background: var(--ink); color: var(--paper); }
+  .tv-nav button:disabled { opacity: .22; pointer-events: none; }
+  .tv-nav .to-expo2 { background: var(--ink); color: var(--paper); }
+  .tv-nav .to-expo2:hover { opacity: .82; }
+
+  /* ── 年輪動畫（沿用系統共用手法：draw / etch / pop / pulse）── */
+  .draw { fill: none; stroke-linecap: round; stroke-dasharray: 1500; stroke-dashoffset: 1500; }
+  .play .draw { animation: drawIn 1.6s ease-out var(--d, 0s) forwards; }
+  @keyframes drawIn { to { stroke-dashoffset: 0; } }
+
+  .etch { fill: none; transform-origin: var(--org); transform: scale(0); opacity: 0; }
+  .play .etch { animation: etchIn .9s cubic-bezier(.2,.75,.35,1.1) var(--d, 0s) forwards; }
+  @keyframes etchIn { to { transform: scale(1); opacity: 1; } }
+
+  .popd { transform-origin: var(--org); transform: scale(0); }
+  .play .popd { animation: popIn .7s cubic-bezier(.3,1.6,.5,1) var(--d, 0s) forwards; }
+  @keyframes popIn { to { transform: scale(1); } }
+
+  .pulse1 { fill: none; transform-origin: var(--org); transform: scale(.3); opacity: 0; }
+  .play .pulse1 { animation: pulseOnce 2.6s ease-out var(--d, 0s) forwards; }
+  @keyframes pulseOnce {
+    0% { transform: scale(.3); opacity: 0; }
+    20% { opacity: .55; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  .fadein { opacity: 0; }
+  .play .fadein { animation: fadeIn 1s ease var(--d, 0s) forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .scene-note { font-size: 14px; letter-spacing: .28em; fill: var(--ink-soft); opacity: 0; }
+  .play .scene-note { animation: fadeIn 1.2s ease 1.6s forwards; }
+
+  @media (max-aspect-ratio: 1/1) {
+    .fu-hero { grid-template-columns: 1fr; }
+    .fu-why { grid-template-columns: 1fr; }
+    #topic-view { overflow-y: auto; }
+    .tv-main { grid-template-columns: 1fr; }
+    .tv-scene svg { max-height: 44vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="about.html">認識百大文化基地</a>
+      <a href="index.html">百大基地地圖</a>
+      <a href="workshops.html">體驗工作坊</a>
+      <a href="joint-action.html">共創行動</a>
+      <a href="meetup.html">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="fu-stage">
+    <section class="fu-hero">
+      <div class="ring-title">
+        <svg width="190" height="190" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#3b3a36">
+            <circle cx="100" cy="100" r="16" stroke-width="2.4" stroke-dasharray="40 6"/>
+            <circle cx="100" cy="100" r="34" stroke-width="2"   stroke-dasharray="80 8 40 8"/>
+            <circle cx="100" cy="100" r="52" stroke-width="2.4" stroke-dasharray="130 10 70 8"/>
+            <circle cx="100" cy="100" r="70" stroke-width="2"   stroke-dasharray="180 10 100 10"/>
+            <circle cx="100" cy="100" r="88" stroke-width="2.4" stroke-dasharray="240 12 140 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <h2>打開地方未來式</h2>
+        <div class="en">OPENING THE NEXT DECADE</div>
+        <div class="lead-line">從一圈年輪開始，回望基地的生長，也一起描繪下一個十年。</div>
+      </div>
+    </section>
+
+    <section class="fu-why">
+      <div class="ring-wrap" id="why-ring"></div>
+      <div>
+        <h3>為什麼是「年輪」</h3>
+        <p>每一個文化基地，都有自己的生長方式。</p>
+        <p>有些年份快速成長，有些時候停下來；有些經驗留下清楚的痕跡，也有一些困難形成裂縫。基地一路走來累積的人、事、地方關係與選擇，就像年輪一樣，不一定完整或對稱，卻記錄著自己的生長節奏。</p>
+        <p>「打開地方未來式」以年輪作為交流媒介，邀請基地工作者先回望自己，再打開彼此的經驗，從故事、困境、資源與關係中，一起思考地方的下一步。</p>
+      </div>
+    </section>
+
+    <section class="fu-grid" id="fu-grid"></section>
+
+    <section class="fu-outro">
+      <h3>一張年輪，留下的不只是基地的過去</h3>
+      <p>從自己的年輪開始，到別人在年輪上留下痕跡，「打開地方未來式」讓基地的過去、現在與未來出現在同一張圖上。年輪裡留下基地一路走來的故事，也留下正在面對的缺口、其他夥伴的回應，以及未來可能繼續生長的關係。</p>
+      <div class="fu-flow" id="fu-flow"></div>
+      <div class="closing">地方的未來，不需要一次被畫完。重要的是，先讓下一圈開始生長。</div>
+      <a class="to-expo" href="exhibition.html">前往共創展 →</a>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+  </footer>
+</div>
+
+<!-- ══ 子題全頁 ══ -->
+<div id="topic-view">
+  <div class="tv-rings a"></div>
+  <div class="tv-rings b"></div>
+  <div class="tv-top">
+    <button class="tv-back" id="tv-back">← 回打開地方未來式</button>
+    <div class="tv-steps" id="tv-steps"></div>
+  </div>
+  <div class="tv-main">
+    <div class="tv-scene" id="tv-scene"></div>
+    <article class="tv-article" id="tv-article"></article>
+  </div>
+</div>
+
+<script>
+const C = { tc: "#3fb6cd", ch: "#ef9b84", yl: "#eecb2f", nt: "#84bf41", ink: "#3b3a36" };
+
+const STAGES = [
+  {
+    no: "01", title: "看見自己", sub: "回望一路走來",
+    color: C.tc, soft: "#d3eef4", stage: "畫下第一圈年輪",
+    paras: [
+      "從基地的歷史、生長條件與發展速度開始，畫出屬於自己的年輪。",
+      "年輪不需要完整，也不需要對稱。大小、形狀與疏密，都可以成為基地不同階段的成長痕跡。"
+    ],
+    keepTitle: "這個階段，留下：",
+    keeps: ["基地的核心關鍵字"],
+    tip: null
+  },
+  {
+    no: "02", title: "允許對話", sub: "聽見彼此的聲音",
+    color: C.ch, soft: "#fbe6df", stage: "畫下一道裂紋",
+    paras: [
+      "每一個基地都有正在面對的困難。",
+      "在自己的年輪上畫下一道裂紋，重新觀看並介紹自己的年輪，也說出目前最需要被理解、被回應的事情。"
+    ],
+    keepTitle: "這個階段，留下：",
+    keeps: ["一道裂紋", "一句明確的需求"],
+    tip: null
+  },
+  {
+    no: "03", title: "支持他人", sub: "讓經驗彼此連結",
+    color: C.yl, soft: "#faf0c4", stage: "在對方年輪上留下痕跡",
+    paras: [
+      "先傾聽，不急著給答案。",
+      "當另一個基地說出自己的困境，我們開始尋找彼此是否有相似經驗、可以互補的資源，或能夠一起開始的事情。",
+      "傾聽之後，在對方的年輪上留下一點自己的痕跡。"
+    ],
+    keepTitle: "這個階段，留下：",
+    keeps: ["一個回應", "一項資源", "一個可以共同開始的行動"],
+    tip: null
+  },
+  {
+    no: "04", title: "共同創造", sub: "共創下一個十年",
+    color: C.nt, soft: "#e4f1d3", stage: "看見同一張圖上的過去與未來",
+    paras: [
+      "回看年輪裡已經留下的故事、挑戰，以及其他夥伴留下的回應與連結。",
+      "接下來，希望基地繼續長出什麼？需要哪些關係與資源？又願意先從哪一件事情開始？"
+    ],
+    keepTitle: "這個階段，留下：",
+    keeps: ["未來願景", "一項可以開始的行動", "希望繼續連結的夥伴或資源"],
+    tip: null
+  }
+];
+
+/* ── 不規則年輪產生器（同一組起伏參數，縮放後即成巢狀不規則年輪）── */
+function ringPath(cx, cy, r, s, p1, p2, p3, n) {
+  n = n || 56;
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const th = i / n * Math.PI * 2;
+    const f = 1 + .1 * Math.sin(2 * th + p1) + .06 * Math.sin(3 * th + p2) + .045 * Math.sin(5 * th + p3);
+    pts.push((cx + r * s * f * Math.cos(th)).toFixed(1) + "," + (cy + r * s * f * Math.sin(th)).toFixed(1));
+  }
+  return "M" + pts.join(" L") + " Z";
+}
+function ringGroup(cx, cy, r, color, layers, baseDelay, step, p1, p2, p3) {
+  step = step || .22; p1 = p1 || 1.1; p2 = p2 || .4; p3 = p3 || 2.3;
+  let out = "";
+  for (let i = 0; i < layers; i++) {
+    const s = (i + 1) / layers;
+    out += `<path class="draw" d="${ringPath(cx, cy, r, s, p1, p2, p3)}"
+      stroke="${color}" stroke-width="${i % 2 ? 2 : 2.6}"
+      style="stroke-dasharray:1500;stroke-dashoffset:1500;--d:${(baseDelay + i * step).toFixed(2)}s"/>`;
+  }
+  return out;
+}
+function sceneNote(t, x, y) {
+  return `<text class="scene-note" x="${x}" y="${y}" text-anchor="middle">${t.stage}</text>`;
+}
+
+/* ── 為什麼是年輪：靜態大年輪（不規則）── */
+function whyRingSVG() {
+  return `<svg viewBox="0 0 320 320" aria-hidden="true">
+    <g class="play">
+      ${ringGroup(160, 160, 140, "#b9b3a2", 6, 0, .18)}
+      <circle cx="160" cy="160" r="4" fill="${C.nt}"/>
+    </g>
+  </svg>`;
+}
+
+/* 01 看見自己：從中心長出第一圈年輪 */
+function sceneOne(t) {
+  return `<svg viewBox="0 0 400 400" aria-label="${t.stage}">
+    <g class="play">
+      ${ringGroup(200, 200, 160, t.color, 5, .3, .22, 1.1, .4, 2.3)}
+      <circle class="popd" cx="200" cy="200" r="7" fill="${t.color}" style="--org:200px 200px;--d:1.6s"/>
+      ${sceneNote(t, 200, 372)}
+    </g>
+  </svg>`;
+}
+/* 02 允許對話：年輪上多一道裂紋與需求標記 */
+function sceneTwo(t) {
+  const crack = "M200,200 C210,150 190,110 214,60";
+  return `<svg viewBox="0 0 400 400" aria-label="${t.stage}">
+    <g class="play">
+      ${ringGroup(200, 200, 160, t.color, 5, 0, .22, 1.1, .4, 2.3)}
+      <path class="draw" d="${crack}" stroke="${C.ink}" stroke-width="3.4"
+        style="stroke-dasharray:400;stroke-dashoffset:400;--d:1.9s"/>
+      <g class="popd" style="--org:214px 60px;--d:2.7s">
+        <circle cx="214" cy="60" r="9" fill="${C.ink}"/>
+      </g>
+      ${sceneNote(t, 200, 372)}
+    </g>
+  </svg>`;
+}
+/* 03 支持他人：自己的年輪＋對方的年輪，留下一點痕跡 */
+function sceneThree(t) {
+  const A = [138, 210], B = [280, 176];
+  return `<svg viewBox="0 0 420 400" aria-label="${t.stage}">
+    <g class="play">
+      ${ringGroup(A[0], A[1], 95, C.tc, 4, 0, .2, .6, .2, 1.4)}
+      ${ringGroup(B[0], B[1], 110, t.color, 4, .5, .2, 2.0, 1.0, 3.0)}
+      <path class="draw" d="M${A[0] + 70},${A[1] - 30} Q${(A[0]+B[0])/2},${(A[1]+B[1])/2 - 46} ${B[0] - 60},${B[1] - 40}"
+        stroke="${C.ink}" stroke-width="2.6" stroke-dasharray="3 12" style="stroke-dasharray:3 12;stroke-dashoffset:0;opacity:0" class="fadein" fill="none"/>
+      <g class="popd" style="--org:${B[0]-60}px ${B[1]-40}px;--d:2.6s">
+        <circle cx="${B[0]-60}" cy="${B[1]-40}" r="8" fill="${C.tc}"/>
+      </g>
+      ${sceneNote(t, 210, 376)}
+    </g>
+  </svg>`;
+}
+/* 04 共同創造：四色年輪交疊，成為同一張未來的圖 */
+function sceneFour(t) {
+  const pts = [
+    [160, 200, C.tc, 0], [260, 150, C.ch, .3], [230, 260, C.yl, .6], [140, 130, C.nt, .9]
+  ];
+  const rings = pts.map(([x, y, c, d]) => ringGroup(x, y, 78, c, 4, d, .18, 1 + d, .3 + d, 2 + d)).join("");
+  const dots = pts.map(([x, y, c, d]) => `<g class="popd" style="--org:${x}px ${y}px;--d:${(2.4 + d).toFixed(2)}s"><circle cx="${x}" cy="${y}" r="6" fill="${c}"/></g>`).join("");
+  return `<svg viewBox="0 0 400 400" aria-label="${t.stage}">
+    <g class="play">
+      ${rings}
+      ${dots}
+      <ellipse class="pulse1" cx="200" cy="195" rx="180" ry="180" fill="none" stroke="${C.nt}" stroke-width="2" style="--org:200px 195px;--d:3.4s"/>
+      ${sceneNote(t, 200, 380)}
+    </g>
+  </svg>`;
+}
+const SCENES = [sceneOne, sceneTwo, sceneThree, sceneFour];
+
+/* ── 為什麼是年輪的靜態插圖 ── */
+document.getElementById("why-ring").innerHTML = whyRingSVG();
+document.getElementById("why-ring").classList.add("play");
+
+/* ── 總覽卡片 ── */
+function cardRingSVG(color, size) {
+  return `<svg viewBox="0 0 200 200" width="${size}" height="${size}" aria-hidden="true">
+    <path d="${ringPath(100, 100, 88, 1, 1.1, .4, 2.3)}" fill="none" stroke="${color}" stroke-width="2.6"/>
+    <path d="${ringPath(100, 100, 88, .72, 1.1, .4, 2.3)}" fill="none" stroke="${color}" stroke-width="2.2"/>
+    <path d="${ringPath(100, 100, 88, .45, 1.1, .4, 2.3)}" fill="none" stroke="${color}" stroke-width="2.6"/>
+    <path d="${ringPath(100, 100, 88, .2, 1.1, .4, 2.3)}" fill="none" stroke="${color}" stroke-width="2.2"/>
+    <circle cx="100" cy="100" r="94" fill="${color}" opacity=".08"/>
+  </svg>`;
+}
+const grid = document.getElementById("fu-grid");
+grid.innerHTML = STAGES.map((t, i) => `
+  <button class="fu-card" data-i="${i}">
+    ${cardRingSVG(t.color, 140)}
+    <span class="no" style="color:${t.color}">打開地方未來式 ${t.no}</span>
+    <h4>${t.title}</h4>
+    <div class="sub">${t.sub}</div>
+    <span class="go" style="color:${t.color}">進入子題 →</span>
+  </button>`).join("");
+grid.querySelectorAll(".fu-card").forEach(c =>
+  c.addEventListener("click", () => openTopic(+c.dataset.i)));
+
+/* ── 結尾流程 ── */
+document.getElementById("fu-flow").innerHTML = STAGES.map((t, i) =>
+  `<span class="stg" style="border-color:${t.color}44;color:${t.color}">${t.title}</span>` +
+  (i < STAGES.length - 1 ? `<span class="arw">→</span>` : "")).join("");
+
+/* ── 全頁子題 ── */
+const view = document.getElementById("topic-view");
+const sceneHost = document.getElementById("tv-scene");
+const articleHost = document.getElementById("tv-article");
+const stepsHost = document.getElementById("tv-steps");
+let cur = 0;
+
+function openTopic(i) {
+  cur = i;
+  const t = STAGES[i];
+
+  view.querySelector(".tv-rings.a").style.background =
+    `repeating-radial-gradient(circle at 50% 50%, ${t.color}22 0 2px, transparent 2px 11px, ${t.color}14 11px 13px, transparent 13px 26px)`;
+  view.querySelector(".tv-rings.b").style.background =
+    `repeating-radial-gradient(circle at 50% 50%, ${t.color}26 0 2px, transparent 2px 9px)`;
+
+  stepsHost.innerHTML = STAGES.map((s, j) => `
+    <div class="tv-step ${j === i ? "cur" : ""}" style="--step-c:${s.color}">
+      <button data-j="${j}" title="${s.title}">
+        <span class="dot">${s.no}</span><small>${s.title}</small>
+      </button>
+    </div>${j < STAGES.length - 1 ? '<div class="tv-step"><span class="link"></span></div>' : ""}`).join("");
+  stepsHost.querySelectorAll("button[data-j]").forEach(b =>
+    b.addEventListener("click", () => openTopic(+b.dataset.j)));
+
+  articleHost.innerHTML = `
+    <span class="no" style="color:${t.color}">打開地方未來式 ${t.no}／04</span>
+    <h3>${t.title}</h3>
+    <div class="sub" style="border-bottom:3px solid ${t.color}">${t.sub}</div>
+    <span class="stage-tag" style="background:${t.color}">共創階段｜${t.stage}</span>
+    ${t.paras.map(p => `<p>${p}</p>`).join("")}
+    <div class="keep-title">${t.keepTitle}</div>
+    <div class="keeps">${t.keeps.map(k => `<span>${k}</span>`).join("")}</div>
+    <div class="tv-nav">
+      <button id="tv-prev" ${i === 0 ? "disabled" : ""}>← ${i > 0 ? STAGES[i-1].no + " " + STAGES[i-1].title : "上一個"}</button>
+      ${i < STAGES.length - 1
+        ? `<button id="tv-next">${STAGES[i+1].no} ${STAGES[i+1].title} →</button>`
+        : `<button class="to-expo2" id="tv-expo">前往共創展 →</button>`}
+    </div>`;
+  const prev = document.getElementById("tv-prev");
+  if (prev) prev.addEventListener("click", () => openTopic(cur - 1));
+  const next = document.getElementById("tv-next");
+  if (next) next.addEventListener("click", () => openTopic(cur + 1));
+  const expo = document.getElementById("tv-expo");
+  if (expo) expo.addEventListener("click", () => (location.href = "exhibition.html"));
+  articleHost.scrollTop = 0;
+
+  sceneHost.innerHTML = SCENES[i](t);
+  view.classList.add("on");
+  document.body.style.overflow = "hidden";
+  sceneHost.classList.remove("play");
+  requestAnimationFrame(() => requestAnimationFrame(() => sceneHost.classList.add("play")));
+  history.replaceState(null, "", "#" + (i + 1));
+}
+
+function closeTopic() {
+  view.classList.remove("on");
+  document.body.style.overflow = "";
+  history.replaceState(null, "", location.pathname);
+}
+document.getElementById("tv-back").addEventListener("click", closeTopic);
+document.addEventListener("keydown", e => {
+  if (!view.classList.contains("on")) return;
+  if (e.key === "Escape") closeTopic();
+  if (e.key === "ArrowRight" && cur < STAGES.length - 1) openTopic(cur + 1);
+  if (e.key === "ArrowLeft" && cur > 0) openTopic(cur - 1);
+});
+
+// 深連結：futures.html#1 ~ #4
+const hash = parseInt(location.hash.slice(1), 10);
+if (hash >= 1 && hash <= STAGES.length) openTopic(hash - 1);
+</script>
+</body>
+</html>

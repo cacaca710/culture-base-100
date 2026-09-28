@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>共創行動｜山海匯聚 — 中臺灣文化百頁行動共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .ja-stage { flex: 1; display: flex; flex-direction: column; gap: 30px; padding: 12px 2vw 34px; }
+
+  /* ── 前言 ── */
+  .ja-intro { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; max-width: 1240px; }
+  .ja-intro h2 { font-size: clamp(34px, 3.6vw, 52px); font-weight: 900; letter-spacing: .18em; margin-bottom: 8px; }
+  .ja-intro .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 14px; }
+  .ja-intro .lead-line { font-size: 16px; font-weight: 700; letter-spacing: .06em; color: var(--ink); margin-bottom: 10px; }
+  .ja-intro p { font-size: 15.5px; line-height: 2; letter-spacing: .05em; color: var(--ink); max-width: 64em; }
+  .ja-intro p + p { margin-top: 8px; }
+  .ja-intro .note {
+    margin-top: 14px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.95;
+    border-left: 3px solid var(--line); padding-left: 14px; max-width: 62em;
+  }
+
+  /* ── 兩張大卡片 ── */
+  .ja-cards { display: flex; flex-wrap: wrap; gap: 22px; }
+  .ja-card {
+    flex: 1 1 380px; position: relative; overflow: hidden; text-decoration: none; color: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 26px;
+    padding: 34px 32px 30px; display: flex; flex-direction: column; gap: 12px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ja-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(59,58,54,.16); }
+  .ja-card .ring-bg {
+    position: absolute; right: -50px; top: -50px; width: 220px; height: 220px;
+    border-radius: 50%; pointer-events: none;
+  }
+  .ja-card .no { font-size: 13px; font-weight: 900; letter-spacing: .34em; }
+  .ja-card h3 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 900; letter-spacing: .16em; position: relative; z-index: 1; }
+  .ja-card .sub { font-size: 15px; line-height: 1.9; letter-spacing: .05em; color: var(--ink-soft); max-width: 30em; position: relative; z-index: 1; }
+  .ja-card .go {
+    margin-top: auto; align-self: flex-start; font-size: 13.5px; font-weight: 900; letter-spacing: .14em;
+    border-bottom: 2px solid currentColor; padding-bottom: 2px;
+  }
+
+  /* ── 關係圖 ── */
+  .ja-chain { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 28px 32px; }
+  .ja-chain h3 { font-size: clamp(19px, 1.8vw, 24px); font-weight: 900; letter-spacing: .14em; margin-bottom: 6px; }
+  .ja-chain > p { font-size: 15px; line-height: 1.95; color: var(--ink-soft); letter-spacing: .04em; max-width: 60em; margin-bottom: 22px; }
+  .chain-flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+  .chain-flow a, .chain-flow .step {
+    flex: 1; min-width: 168px; text-decoration: none; color: inherit;
+    border: 2px solid var(--ink); border-radius: 16px; padding: 16px 18px; background: var(--paper);
+    display: flex; flex-direction: column; gap: 4px; transition: all .2s;
+  }
+  .chain-flow a:hover { background: var(--ink); color: var(--paper); }
+  .chain-flow .k { font-size: 11px; font-weight: 900; letter-spacing: .2em; opacity: .7; }
+  .chain-flow .t { font-size: 16px; font-weight: 900; letter-spacing: .1em; }
+  .chain-flow .d { font-size: 12px; letter-spacing: .04em; opacity: .8; margin-top: 2px; }
+  .chain-arrow { align-self: center; font-size: 18px; color: var(--ink-soft); font-weight: 900; }
+
+  @media (max-aspect-ratio: 1/1) {
+    .ja-intro { grid-template-columns: 1fr; }
+    .chain-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣百頁共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="about.html">認識百大文化基地</a>
+      <a href="index.html">百大基地地圖</a>
+      <a href="workshops.html">體驗工作坊</a>
+      <a href="joint-action.html" class="active">共創行動</a>
+      <a href="meetup.html">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="ja-stage">
+    <section class="ja-intro">
+      <div class="ring-title">
+        <svg width="190" height="190" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#3b3a36">
+            <circle cx="100" cy="100" r="16" stroke-width="2.4" stroke-dasharray="40 6"/>
+            <circle cx="100" cy="100" r="34" stroke-width="2"   stroke-dasharray="80 8 40 8"/>
+            <circle cx="100" cy="100" r="52" stroke-width="2.4" stroke-dasharray="130 10 70 8"/>
+            <circle cx="100" cy="100" r="70" stroke-width="2"   stroke-dasharray="180 10 100 10"/>
+            <circle cx="100" cy="100" r="88" stroke-width="2.4" stroke-dasharray="240 12 140 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <h2>共創行動</h2>
+        <div class="en">JOINT ACTION</div>
+        <div class="lead-line">從走進地方，到留下回聲；從彼此交流，到一起想像地方的下一步。</div>
+        <p>四場文化基地體驗工作坊帶著參與者走進不同地方，看見文化路徑、工藝、地方記憶、空間再生與基地經營的不同實踐。</p>
+        <p>我們也希望這些經驗不只停留在一次參訪。因此，計畫透過「地方回聲」留下參與者在現場的觀察、交流與文化經驗；再透過「打開地方未來式」，邀請文化基地工作者從自身經驗出發，分享基地一路走來的故事、面對的困境，以及下一步可能共同發展的方向。</p>
+        <div class="note">地方回聲 × 打開地方未來式，讓不同地方的經驗被看見、被留下，也有機會在交流中產生新的連結。</div>
+      </div>
+    </section>
+
+    <section class="ja-cards">
+      <a class="ja-card" href="echo.html" style="border-color:#cfe9ef">
+        <div class="ring-bg" style="background:repeating-radial-gradient(circle at 50% 50%, rgba(63,182,205,.16) 0 2px, transparent 2px 11px)"></div>
+        <span class="no" style="color:#3fb6cd">01｜地方回聲</span>
+        <h3>地方回聲</h3>
+        <p class="sub">把走進地方之後，看見、聽見與想到的事情留下來。</p>
+        <span class="go" style="color:#3fb6cd">進入地方回聲 →</span>
+      </a>
+      <a class="ja-card" href="futures.html" style="border-color:#dcecc7">
+        <div class="ring-bg" style="background:repeating-radial-gradient(circle at 50% 50%, rgba(132,191,65,.16) 0 2px, transparent 2px 11px)"></div>
+        <span class="no" style="color:#84bf41">02｜打開地方未來式</span>
+        <h3>打開地方未來式</h3>
+        <p class="sub">從一圈年輪開始，回望基地的生長，也一起描繪下一個十年。</p>
+        <span class="go" style="color:#84bf41">進入打開地方未來式 →</span>
+      </a>
+    </section>
+
+    <section class="ja-chain">
+      <h3>走進地方，到匯聚地方</h3>
+      <p>四場工作坊是內容，地方回聲是留下經驗的方法，打開地方未來式是讓基地彼此對話的方法，最後匯聚到交流會與共創展——讓不同地方的經驗被看見、被留下，也在交流中產生新的連結。</p>
+      <div class="chain-flow">
+        <a href="workshops.html"><span class="k">走進地方</span><span class="t">體驗工作坊</span><span class="d">四場文化基地體驗工作坊</span></a>
+        <span class="chain-arrow">→</span>
+        <a href="echo.html"><span class="k">留下地方</span><span class="t">地方回聲</span><span class="d">觀察｜交流｜經驗｜迴響</span></a>
+        <span class="chain-arrow">→</span>
+        <a href="futures.html"><span class="k">打開對話</span><span class="t">打開地方未來式</span><span class="d">看見自己｜允許對話｜支持他人｜共同創造</span></a>
+        <span class="chain-arrow">→</span>
+        <a href="exhibition.html"><span class="k">匯聚地方</span><span class="t">文化基地交流 × 共創展</span><span class="d">交流會與共創展</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+  </footer>
+</div>
+
+</body>
+</html>
