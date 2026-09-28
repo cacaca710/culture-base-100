@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文化基地體驗工作坊｜山海匯聚 — 中臺灣文化百頁行動共創計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .wk-stage { flex: 1; display: flex; flex-direction: column; gap: 30px; padding: 12px 2vw 34px; }
+
+  .wk-intro { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; max-width: 1240px; }
+  .wk-intro h2 { font-size: clamp(32px, 3.4vw, 50px); font-weight: 900; letter-spacing: .16em; margin-bottom: 8px; }
+  .wk-intro .en { font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); margin-bottom: 14px; }
+  .wk-intro p { font-size: 15.5px; line-height: 2; letter-spacing: .05em; color: var(--ink); max-width: 60em; }
+  .wk-intro .note {
+    margin-top: 14px; font-size: 13px; color: var(--ink-soft); line-height: 1.9;
+    border-left: 3px solid var(--line); padding-left: 14px;
+  }
+
+  .wk-time { position: relative; display: flex; flex-direction: column; gap: 20px; }
+  .wk-time::before {
+    content: ""; position: absolute; left: 27px; top: 12px; bottom: 12px; width: 2px;
+    background: repeating-linear-gradient(var(--line) 0 8px, transparent 8px 14px);
+  }
+  .wk-item { position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 22px; align-items: stretch; }
+  .wk-node { position: relative; z-index: 1; width: 56px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 24px; }
+  .wk-node .dot { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 900; color: #fff; box-shadow: 0 0 0 6px var(--paper); }
+
+  .wk-card {
+    display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 0;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    overflow: hidden; text-decoration: none; color: inherit;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .wk-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(59,58,54,.14); }
+  .wk-cover { position: relative; min-height: 180px; overflow: hidden; }
+  .wk-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wk-cover .ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+  .wk-cover .ph svg { width: 70px; height: 70px; opacity: .9; }
+  .wk-cover .ph span { font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--ink-soft); }
+
+  .wk-body { padding: 24px 28px; display: flex; flex-direction: column; }
+  .wk-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .wk-meta .date { font-size: 13px; font-weight: 900; letter-spacing: .16em; color: var(--ink-soft); }
+  .wk-meta .place { font-size: 12px; font-weight: 900; letter-spacing: .14em; color: #fff; border-radius: 999px; padding: 3px 12px; }
+  .wk-body h3 { font-size: clamp(21px, 2vw, 27px); font-weight: 900; letter-spacing: .12em; margin-bottom: 10px; }
+  .wk-body .lead { font-size: 14.5px; line-height: 1.95; letter-spacing: .04em; color: var(--ink); margin-bottom: 14px; }
+  .wk-dirs { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+  .wk-dirs span { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; }
+  .wk-go { margin-top: auto; font-size: 13.5px; font-weight: 900; letter-spacing: .12em; }
+  .wk-status { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--ink-soft); border: 1px dashed var(--line); border-radius: 999px; padding: 3px 11px; margin-left: 10px; }
+
+  .wk-chain { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 26px 30px; position: relative; overflow: hidden; }
+  .wk-chain h3 { font-size: clamp(19px, 1.8vw, 24px); font-weight: 900; letter-spacing: .14em; margin-bottom: 6px; }
+  .wk-chain > p { font-size: 14px; line-height: 1.95; color: var(--ink-soft); letter-spacing: .04em; max-width: 58em; margin-bottom: 20px; }
+  .chain-flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+  .chain-flow a, .chain-flow .step {
+    flex: 1; min-width: 150px; text-decoration: none; color: inherit;
+    border: 2px solid var(--ink); border-radius: 16px; padding: 16px 18px; background: var(--paper);
+    display: flex; flex-direction: column; gap: 4px; transition: all .2s;
+  }
+  .chain-flow a:hover { background: var(--ink); color: var(--paper); }
+  .chain-flow .step.here { background: var(--ink); color: var(--paper); }
+  .chain-flow .k { font-size: 11px; font-weight: 900; letter-spacing: .2em; opacity: .7; }
+  .chain-flow .t { font-size: 16px; font-weight: 900; letter-spacing: .1em; }
+  .chain-arrow { align-self: center; font-size: 18px; color: var(--ink-soft); font-weight: 900; }
+
+  @media (max-aspect-ratio: 1/1) {
+    .wk-intro { grid-template-columns: 1fr; }
+    .wk-card { grid-template-columns: 1fr; }
+    .wk-cover { min-height: 160px; }
+    .chain-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣文化百頁行動共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="about.html">認識百大文化基地</a>
+      <a href="index.html">百大基地地圖</a>
+      <a href="workshops.html" class="active">體驗工作坊</a>
+      <a href="echo.html">地方回聲</a>
+      <a href="meetup.html">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="wk-stage">
+    <section class="wk-intro">
+      <div class="ring-title">
+        <svg width="190" height="190" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#3b3a36">
+            <circle cx="100" cy="100" r="16" stroke-width="2.4" stroke-dasharray="40 6"/>
+            <circle cx="100" cy="100" r="34" stroke-width="2"   stroke-dasharray="80 8 40 8"/>
+            <circle cx="100" cy="100" r="52" stroke-width="2.4" stroke-dasharray="130 10 70 8"/>
+            <circle cx="100" cy="100" r="70" stroke-width="2"   stroke-dasharray="180 10 100 10"/>
+            <circle cx="100" cy="100" r="88" stroke-width="2.4" stroke-dasharray="240 12 140 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <h2>文化基地體驗工作坊</h2>
+        <div class="en">CULTURE BASE EXPERIENCE WORKSHOPS</div>
+        <p>計畫在中臺灣走訪不同類型的文化基地，透過四場各具主題的體驗工作坊，帶著夥伴走進場域、動手體驗、彼此交流，並以「地方回聲」記錄下觀察與感受。</p>
+        <div class="note">四場工作坊分別對應城市文化路徑、工藝轉譯、地方記憶展示與基地經營合作等不同的文化實踐方向，累積為計畫的參與歷程，並銜接後續的交流分享會議與共創展。</div>
+      </div>
+    </section>
+
+    <section class="wk-time" id="wk-time"></section>
+
+    <section class="wk-chain">
+      <h3>四場工作坊，如何走向共創</h3>
+      <p>四場體驗工作坊有一個共同的參與機制「地方回聲」——參與者透過參訪、體驗、交流與書寫，記錄自己在文化場域中的觀察、理解與感受。這些紀錄，將一路銜接到文化基地交流分享會議與共創展。</p>
+      <div class="chain-flow">
+        <div class="step here"><span class="k">NOW</span><span class="t">體驗工作坊</span></div>
+        <span class="chain-arrow">→</span>
+        <a href="echo.html"><span class="k">RECORD</span><span class="t">地方回聲</span></a>
+        <span class="chain-arrow">→</span>
+        <a href="meetup.html"><span class="k">SHARE</span><span class="t">交流會</span></a>
+        <span class="chain-arrow">→</span>
+        <a href="exhibition.html"><span class="k">CO-CREATE</span><span class="t">共創展</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+  </footer>
+</div>
+
+<script src="js/workshops.js"></script>
+<script>
+  const timeHost = document.getElementById("wk-time");
+
+  function coverBlock(w, c) {
+    if (w.cover) {
+      return `<div class="wk-cover"><img src="assets/workshops/${w.cover}" alt="${w.place}場・${w.title}"></div>`;
+    }
+    return `<div class="wk-cover" style="background:${c.soft}">
+      <div class="ph">
+        <svg viewBox="0 0 120 120" fill="none" stroke="${c.color}" aria-hidden="true">
+          <circle cx="60" cy="60" r="12" stroke-width="3" stroke-dasharray="30 5"/>
+          <circle cx="60" cy="60" r="26" stroke-width="2.4" stroke-dasharray="60 6 30 6"/>
+          <circle cx="60" cy="60" r="40" stroke-width="3" stroke-dasharray="90 8 50 6"/>
+          <circle cx="60" cy="60" r="52" stroke-width="2.4" stroke-dasharray="120 8 70 6"/>
+        </svg>
+        <span>代表照片待補</span>
+      </div>
+    </div>`;
+  }
+
+  timeHost.innerHTML = WORKSHOPS.map(w => {
+    const c = WK_COLORS[w.key];
+    const statusTag = w.status === "outline" ? `<span class="wk-status">內文整理中</span>` : "";
+    return `
+      <div class="wk-item">
+        <div class="wk-node"><div class="dot" style="background:${c.color}">${w.no}</div></div>
+        <a class="wk-card" href="workshop.html?s=${w.id}">
+          ${coverBlock(w, c)}
+          <div class="wk-body">
+            <div class="wk-meta">
+              <span class="date">${w.date}</span>
+              <span class="place" style="background:${c.color}">${w.place}</span>
+            </div>
+            <h3>${w.title}${statusTag}</h3>
+            <p class="lead">${w.lead}</p>
+            <div class="wk-dirs">${w.directions.map(d => `<span>${d}</span>`).join("")}</div>
+            <span class="wk-go" style="color:${c.color}">進入本場紀錄 →</span>
+          </div>
+        </a>
+      </div>`;
+  }).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>體驗工作坊紀錄｜山海匯聚</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow-y: auto; }
+  .app { height: auto; min-height: 100vh; }
+
+  .wd-stage { flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 12px 2vw 40px; max-width: 1180px; width: 100%; margin: 0 auto; }
+
+  .wd-back { align-self: flex-start; }
+  .wd-back a { font-size: 13.5px; font-weight: 700; letter-spacing: .1em; text-decoration: none; color: var(--ink); border: 2px solid var(--ink); background: var(--card); border-radius: 999px; padding: 8px 20px; transition: all .2s; display: inline-block; }
+  .wd-back a:hover { background: var(--ink); color: var(--paper); }
+
+  .wd-hero { border-radius: 24px; overflow: hidden; border: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  .wd-hero .txt { padding: 34px 38px; background: var(--card); display: flex; flex-direction: column; justify-content: center; }
+  .wd-hero .no { font-size: 13px; font-weight: 900; letter-spacing: .34em; margin-bottom: 12px; }
+  .wd-hero .meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .wd-hero .date { font-size: 14px; font-weight: 900; letter-spacing: .16em; color: var(--ink-soft); }
+  .wd-hero .place { font-size: 12.5px; font-weight: 900; letter-spacing: .14em; color: #fff; border-radius: 999px; padding: 4px 14px; }
+  .wd-hero h2 { font-size: clamp(30px, 3.6vw, 50px); font-weight: 900; letter-spacing: .12em; line-height: 1.25; }
+  .wd-hero .official { font-size: 14px; font-weight: 700; letter-spacing: .08em; color: var(--ink-soft); margin-top: 10px; line-height: 1.7; }
+  .wd-hero .lead { font-size: 15.5px; line-height: 2; letter-spacing: .04em; margin-top: 14px; color: var(--ink); }
+  .wd-hero .cover { position: relative; min-height: 260px; }
+  .wd-hero .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wd-hero .cover .ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .wd-hero .cover .ph svg { width: 96px; height: 96px; }
+  .wd-hero .cover .ph span { font-size: 12.5px; font-weight: 700; letter-spacing: .16em; color: var(--ink-soft); }
+
+  .wd-sec { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 26px 32px; }
+  .wd-sec > .h { font-size: 13px; font-weight: 900; letter-spacing: .24em; color: var(--ink-soft); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .wd-sec > .h::before { content: ""; width: 22px; height: 3px; border-radius: 2px; background: var(--wc, var(--ink)); }
+  .wd-sec h3 { font-size: clamp(20px, 2vw, 26px); font-weight: 900; letter-spacing: .12em; margin-bottom: 10px; }
+
+  .dirs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dirs span { font-size: 14px; font-weight: 700; letter-spacing: .06em; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 7px 18px; }
+
+  .venue-cards { display: flex; flex-wrap: wrap; gap: 16px; }
+  .vc { flex: 1 1 340px; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; background: var(--paper); }
+  .vc-name { font-size: 19px; font-weight: 900; letter-spacing: .1em; }
+  .vc-tag { font-size: 13px; font-weight: 900; letter-spacing: .08em; margin: 6px 0 10px; }
+  .vc-line { width: 100%; height: 88px; margin-bottom: 12px; opacity: .92; background-color: var(--wc, #3fb6cd); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: left center; mask-position: left center; -webkit-mask-size: contain; mask-size: contain; }
+  .vc p { font-size: 14.5px; line-height: 1.95; letter-spacing: .03em; margin: 0; }
+
+  /* 文化走讀路徑帶 */
+  .route { display: flex; align-items: flex-end; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .route-node { flex: 1 1 200px; min-width: 180px; max-width: 340px; text-align: center; }
+  .rn-line { width: 100%; height: 128px; background-color: var(--wc, #3fb6cd); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center bottom; mask-position: center bottom; -webkit-mask-size: contain; mask-size: contain; }
+  .rn-name { font-size: 17px; font-weight: 900; letter-spacing: .1em; margin-top: 14px; }
+  .rn-tag { font-size: 12.5px; font-weight: 900; letter-spacing: .14em; margin-top: 5px; }
+  .route-link { flex: 0 0 110px; align-self: center; padding-bottom: 46px; }
+  .route-link svg { width: 110px; height: 40px; display: block; }
+  .route-cap { text-align: center; font-size: 13.5px; color: var(--ink-soft); letter-spacing: .05em; margin: 18px auto 0; max-width: 44em; line-height: 1.85; }
+
+  .talks { display: flex; flex-direction: column; gap: 16px; }
+  .talk { border: 1px solid var(--line); border-left: 4px solid var(--wc, var(--ink)); border-radius: 14px; padding: 18px 22px; background: var(--paper); }
+  .talk-head { display: flex; gap: 16px; align-items: center; }
+  .talk-avatar { flex: none; width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 2px solid var(--line); }
+  .talk-headtext { min-width: 0; }
+  .talk-title { font-size: 18px; font-weight: 900; letter-spacing: .08em; line-height: 1.45; }
+  .talk-sub { font-size: 14.5px; font-weight: 700; letter-spacing: .05em; margin-top: 4px; }
+  .talk-meta { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--ink-soft); margin-top: 8px; }
+  .talk p { font-size: 14.5px; line-height: 1.95; letter-spacing: .03em; margin: 12px 0 0; }
+
+  .venue-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .venue-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.8; letter-spacing: .04em; }
+  .venue-list li .m { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 900; color: #fff; background: var(--wc, var(--ink)); margin-top: 2px; }
+  .venue-note { margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); letter-spacing: .04em; }
+
+  .todo-box { border: 1px dashed var(--line); border-radius: 16px; padding: 18px 22px; background: var(--paper); }
+  .todo-box .lbl { font-size: 12.5px; font-weight: 900; letter-spacing: .16em; color: var(--ink-soft); margin-bottom: 10px; }
+
+  .gallery { display: flex; flex-wrap: wrap; gap: 12px; }
+  .gallery .g { flex: 1 1 260px; aspect-ratio: 4/3; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); position: relative; }
+  .gallery .g img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery .g.ph { display: flex; align-items: center; justify-content: center; }
+  .gallery .g.ph svg { width: 46px; height: 46px; opacity: .8; }
+
+  .echo-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .echo-row .e { flex: 1; min-width: 130px; border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: var(--paper); text-align: center; }
+  .echo-row .e .n { font-size: 12px; font-weight: 900; letter-spacing: .2em; color: var(--ink-soft); }
+  .echo-row .e .nm { font-size: 16px; font-weight: 900; letter-spacing: .1em; margin-top: 6px; }
+  .echo-cta a { text-decoration: none; font-weight: 900; font-size: 14.5px; letter-spacing: .1em; color: var(--paper); background: var(--ink); border-radius: 999px; padding: 11px 24px; display: inline-block; transition: opacity .2s; }
+  .echo-cta a:hover { opacity: .84; }
+
+  .wd-nav { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
+  .wd-nav a, .wd-nav .to-overview { text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: .08em; border: 2px solid var(--ink); background: transparent; color: var(--ink); border-radius: 999px; padding: 10px 22px; transition: all .2s; cursor: pointer; }
+  .wd-nav a:hover, .wd-nav .to-overview:hover { background: var(--ink); color: var(--paper); }
+
+  @media (max-aspect-ratio: 1/1) {
+    .wd-hero { grid-template-columns: 1fr; }
+    .wd-hero .cover { min-height: 200px; order: -1; }
+    .gallery .g { flex-basis: calc(50% - 6px); }
+    .vc { flex-basis: 100%; }
+    .route { flex-direction: column; align-items: center; }
+    .route-node { max-width: 300px; }
+    .route-link { padding-bottom: 0; transform: rotate(90deg); margin: 4px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ring-deco r1"></div>
+<div class="ring-deco r2"></div>
+<div class="ring-deco r3"></div>
+<div class="ring-deco r4"></div>
+
+<div class="app">
+  <header class="site">
+    <div class="brand">
+      <h1>山海匯聚</h1>
+      <div class="sub">
+        <div class="en">TAIWAN CULTURE BASE</div>
+        <div class="zh">中臺灣文化百頁行動共創計畫</div>
+        <div class="tag">人文地景的交織與對話，描繪出文化的回響與土地的情感</div>
+      </div>
+    </div>
+    <nav class="top">
+      <a href="about.html">認識百大文化基地</a>
+      <a href="index.html">百大基地地圖</a>
+      <a href="workshops.html" class="active">體驗工作坊</a>
+      <a href="echo.html">地方回聲</a>
+      <a href="meetup.html">交流會</a>
+      <a href="exhibition.html">共創展｜打開地方未來式</a>
+    </nav>
+  </header>
+
+  <main class="wd-stage" id="wd-stage"></main>
+
+  <footer class="site">
+    <span><b>指導單位</b>｜文化部</span>
+    <span><b>主辦單位</b>｜國立彰化生活美學館</span>
+    <span><b>執行單位</b>｜國立雲林科技大學</span>
+  </footer>
+</div>
+
+<script src="js/workshops.js"></script>
+<script>
+  const stage = document.getElementById("wd-stage");
+
+  function getId() {
+    const q = parseInt(new URLSearchParams(location.search).get("s"), 10);
+    if (q >= 1 && q <= WORKSHOPS.length) return q;
+    const h = parseInt(location.hash.slice(1), 10);
+    if (h >= 1 && h <= WORKSHOPS.length) return h;
+    return 1;
+  }
+
+  function ringPH(color, size) {
+    return `<svg viewBox="0 0 120 120" fill="none" stroke="${color}" aria-hidden="true" style="width:${size}px;height:${size}px">
+      <circle cx="60" cy="60" r="12" stroke-width="3" stroke-dasharray="30 5"/>
+      <circle cx="60" cy="60" r="26" stroke-width="2.4" stroke-dasharray="60 6 30 6"/>
+      <circle cx="60" cy="60" r="40" stroke-width="3" stroke-dasharray="90 8 50 6"/>
+      <circle cx="60" cy="60" r="52" stroke-width="2.4" stroke-dasharray="120 8 70 6"/>
+    </svg>`;
+  }
+
+  function render(id) {
+    const w = WORKSHOPS[id - 1];
+    const c = WK_COLORS[w.key];
+    document.title = `${w.place}場・${w.title}｜體驗工作坊｜山海匯聚`;
+
+    const cover = w.cover
+      ? `<img src="assets/workshops/${w.cover}" alt="${w.place}場・${w.title}">`
+      : `<div class="ph">${ringPH(c.color, 96)}<span>代表照片待補</span></div>`;
+
+    const axisSec = w.axis
+      ? `<div class="wd-sec" style="--wc:${c.color}"><div class="h">參訪主軸</div><p class="lead" style="margin:0">${w.axis}</p></div>`
+      : "";
+
+    // 文化走讀路徑帶（需 ≥2 張建築線稿）
+    const lineNodes = (w.venueIntros || []).filter(v => v.line);
+    const routeSec = lineNodes.length >= 2
+      ? `<div class="wd-sec route-sec" style="--wc:${c.color}">
+          <div class="h">城市文化走讀路徑</div>
+          <div class="route">
+            ${lineNodes.map((v, i) => `
+              ${i > 0 ? `<div class="route-link" aria-hidden="true">
+                <svg viewBox="0 0 120 44" fill="none" stroke="${c.color}" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M4,30 C40,18 78,16 110,22"/>
+                  <path d="M97,14 C104,17 108,20 112,22 C107,24 102,26 98,31"/>
+                </svg>
+              </div>` : ""}
+              <div class="route-node">
+                <div class="rn-line" style="background-color:${c.color};-webkit-mask-image:url(assets/workshops/${v.line});mask-image:url(assets/workshops/${v.line})"></div>
+                <div class="rn-name">${v.name}</div>
+                ${v.routeTag ? `<div class="rn-tag" style="color:${c.color}">${v.routeTag}</div>` : ""}
+              </div>`).join("")}
+          </div>
+          <p class="route-cap">依循「知識文化 → 產業轉譯」的路徑，從城市閱讀出發，走向產業空間再生。</p>
+        </div>`
+      : "";
+
+    let venuesSec;
+    if (w.venueIntros && w.venueIntros.length) {
+      venuesSec = `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">參訪文化基地</div>
+          <div class="venue-cards">
+            ${w.venueIntros.map(v => `
+              <div class="vc">
+                ${v.line ? `<div class="vc-line" style="background-color:${c.color};-webkit-mask-image:url(assets/workshops/${v.line});mask-image:url(assets/workshops/${v.line})"></div>` : ""}
+                <div class="vc-name">${v.name}</div>
+                ${v.tagline ? `<div class="vc-tag" style="color:${c.color}">${v.tagline}</div>` : ""}
+                <p>${v.body}</p>
+              </div>`).join("")}
+          </div>
+        </div>`;
+    } else if (w.venues.length) {
+      venuesSec = `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">主要場域</div>
+          <ul class="venue-list">${w.venues.map((v, i) => `<li><span class="m">${i + 1}</span><span>${v}</span></li>`).join("")}</ul>
+          ${w.venuesNote ? `<div class="venue-note">＊${w.venuesNote}</div>` : ""}
+        </div>`;
+    } else {
+      venuesSec = `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">主要場域</div>
+          <div class="todo-box"><div class="lbl">此場場域整理中</div><div class="venue-note" style="margin-top:0">參訪／體驗場域待活動簡章確認後補上。</div></div>
+        </div>`;
+    }
+
+    const talksSec = (w.talks && w.talks.length)
+      ? `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">講座分享</div>
+          <div class="talks">
+            ${w.talks.map(t => `
+              <div class="talk">
+                <div class="talk-head">
+                  ${t.speakerPhoto ? `<img class="talk-avatar" src="assets/workshops/${t.speakerPhoto}" alt="講者 ${t.speaker || ""}">` : ""}
+                  <div class="talk-headtext">
+                    <div class="talk-title">${t.title}</div>
+                    ${t.subtitle ? `<div class="talk-sub">${t.subtitle}</div>` : ""}
+                    ${t.place ? `<div class="talk-meta">場域｜${t.place}</div>` : ""}
+                    ${t.speaker ? `<div class="talk-meta">講者｜${t.speaker}${t.speakerRole ? `（${t.speakerRole}）` : ""}</div>` : ""}
+                  </div>
+                </div>
+                <p>${t.body}</p>
+              </div>`).join("")}
+          </div>
+        </div>`
+      : "";
+
+    const photosSec = w.photos.length
+      ? `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">活動現場</div>
+          <div class="gallery">${w.photos.map(p => `<div class="g"><img src="assets/workshops/${p}" alt="${w.place}場活動現場"></div>`).join("")}</div>
+        </div>`
+      : `<div class="wd-sec" style="--wc:${c.color}">
+          <div class="h">活動現場</div>
+          <div class="gallery">${[0,1,2].map(() => `<div class="g ph" style="background:${c.soft}">${ringPH(c.color, 46)}</div>`).join("")}</div>
+          <div class="venue-note">照片待「照片使用清單」完成來源與授權確認後放上，未確認者不公開。</div>
+        </div>`;
+
+    const prevW = WORKSHOPS[id - 2];
+    const nextW = WORKSHOPS[id];
+    const nav = `
+      <div class="wd-nav">
+        ${prevW ? `<a href="workshop.html?s=${prevW.id}">← ${prevW.no}　${prevW.title}</a>` : `<span></span>`}
+        <a class="to-overview" href="workshops.html">回四場總覽</a>
+        ${nextW ? `<a href="workshop.html?s=${nextW.id}">${nextW.no}　${nextW.title} →</a>` : `<a href="echo.html">前往地方回聲 →</a>`}
+      </div>`;
+
+    stage.innerHTML = `
+      <div class="wd-back"><a href="workshops.html">← 文化基地體驗工作坊</a></div>
+
+      <section class="wd-hero">
+        <div class="txt">
+          <span class="no" style="color:${c.color}">地方體驗工作坊 ${w.no}／0${WORKSHOPS.length}</span>
+          <div class="meta">
+            <span class="date">${w.date}</span>
+            <span class="place" style="background:${c.color}">${w.place}</span>
+          </div>
+          <h2>${w.title}</h2>
+          ${w.officialName ? `<div class="official">${w.officialName}</div>` : ""}
+          <p class="lead">${w.lead}</p>
+        </div>
+        <div class="cover" style="background:${c.soft}">${cover}</div>
+      </section>
+
+      <div class="wd-sec" style="--wc:${c.color}">
+        <div class="h">主題與核心概念</div>
+        <h3>${w.theme}</h3>
+        <div class="dirs">${w.directions.map(d => `<span>${d}</span>`).join("")}</div>
+      </div>
+
+      ${axisSec}
+      ${routeSec}
+      ${venuesSec}
+      ${talksSec}
+      ${photosSec}
+
+      <div class="wd-sec" style="--wc:${c.color}">
+        <div class="h">地方回聲</div>
+        <p class="lead" style="margin-bottom:16px">四場工作坊共同的參與機制。夥伴以四個方向，記錄在場域中的觀察、理解與感受，銜接後續交流會與共創展。</p>
+        <div class="echo-row">
+          ${ECHO_STEPS.map(s => `<div class="e"><div class="n" style="color:${c.color}">回聲 ${s.no}</div><div class="nm">${s.name}</div></div>`).join("")}
+        </div>
+        <div class="echo-cta"><a href="echo.html">進入地方回聲 →</a></div>
+      </div>
+
+      ${nav}
+    `;
+    window.scrollTo(0, 0);
+  }
+
+  render(getId());
+  window.addEventListener("popstate", () => render(getId()));
+</script>
+</body>
+</html>
