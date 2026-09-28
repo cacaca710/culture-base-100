@@ -25,6 +25,14 @@
     border-left: 3px solid var(--line); padding-left: 14px;
   }
 
+  /* ── 現場紀錄 ── */
+  .echo-photos { display: flex; flex-direction: column; gap: 14px; }
+  .echo-photos h3 { font-size: clamp(19px, 1.8vw, 24px); font-weight: 900; letter-spacing: .14em; }
+  .echo-photos > p { font-size: 14.5px; line-height: 1.95; color: var(--ink-soft); letter-spacing: .04em; max-width: 58em; }
+  .echo-gallery { display: flex; flex-wrap: wrap; gap: 12px; }
+  .echo-gallery .g { flex: 1 1 260px; aspect-ratio: 4/3; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+  .echo-gallery .g img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
   /* ── 四子題卡 ── */
   .echo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
   .echo-card {
@@ -255,6 +263,7 @@
 
   @media (max-aspect-ratio: 1/1) {
     .echo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .echo-gallery .g { flex-basis: calc(50% - 6px); }
     .echo-intro { grid-template-columns: 1fr; }
     #topic-view { overflow-y: auto; }
     .tv-main { grid-template-columns: 1fr; }
@@ -283,6 +292,7 @@
       <a href="about.html">認識百大文化基地</a>
       <a href="index.html">百大基地地圖</a>
       <a href="workshops.html">體驗工作坊</a>
+      <a href="joint-action.html">共創行動</a>
       <a href="echo.html" class="active">地方回聲</a>
       <a href="meetup.html">交流會</a>
       <a href="exhibition.html">共創展｜打開地方未來式</a>
@@ -312,6 +322,17 @@
     </section>
 
     <section class="echo-grid" id="echo-grid"></section>
+
+    <section class="echo-photos">
+      <h3>現場紀錄</h3>
+      <p>參與者在四場工作坊現場，翻開「地方回聲」紀錄頁，寫下、畫下當下的觀察與想法。</p>
+      <div class="echo-gallery">
+        <div class="g"><img src="assets/echo/echo-check-basemap.jpg" alt="參與者對照百大文化基地一覽表" loading="lazy"></div>
+        <div class="g"><img src="assets/echo/echo-sketch-notes.jpg" alt="參與者在地方回聲紀錄頁上手繪筆記" loading="lazy"></div>
+        <div class="g"><img src="assets/echo/echo-phone-notes.jpg" alt="參與者一邊參考手機資料一邊填寫紀錄頁" loading="lazy"></div>
+        <div class="g"><img src="assets/echo/echo-handwrite-notes.jpg" alt="參與者手寫填寫地方回聲01參訪觀察" loading="lazy"></div>
+      </div>
+    </section>
 
     <section class="echo-outro">
       <h3>從地方回聲<br>走向共創</h3>
