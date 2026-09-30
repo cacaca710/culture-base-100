@@ -225,7 +225,9 @@
   /* ── 卡片模板 ───────────────────── */
   function wsCard(w, badge, color) {
     const c = color || "#3b3a36";
-    return `<div class="ws-card" style="border-left-color:${c}">
+    const tag = w.sessionId ? "a" : "div";
+    const link = w.sessionId ? ` href="workshop.html?s=${w.sessionId}"` : "";
+    return `<${tag} class="ws-card${w.sessionId ? " linked" : ""}" style="border-left-color:${c}"${link}>
       <div class="row1">
         <span class="badge" style="background:${c}">${w.session ? badge + "・" + w.session : badge}</span>
         <span class="date">${w.date}(${w.weekday})</span>
@@ -234,7 +236,8 @@
       </div>
       <h4>${w.title}</h4>
       <div class="venue">📍 ${w.venue}</div>
-    </div>`;
+      ${w.sessionId ? `<span class="go">查看工作坊紀錄與照片 →</span>` : ""}
+    </${tag}>`;
   }
 
   function expoCard(color) {
@@ -254,6 +257,9 @@
     const official = b.link && b.link.url
       ? `<a class="gmap-link official" target="_blank" rel="noopener" href="${b.link.url}">${officialLabel} ↗</a>`
       : "";
+    const workshop = b.workshopSession
+      ? `<a class="gmap-link workshop" href="workshop.html?s=${b.workshopSession}">查看工作坊紀錄與照片 →</a>`
+      : "";
     return `<div class="base-card" data-q="${encodeURIComponent(b.name + " " + b.county)}">
       <button class="head">
         <span class="txt">
@@ -264,6 +270,7 @@
       <div class="base-detail">
         <div class="map-slot"></div>
         <div class="link-row">
+          ${workshop}
           <a class="gmap-link" target="_blank" rel="noopener"
              href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + " " + b.county)}">
             在 Google 地圖開啟 ↗</a>

@@ -328,13 +328,18 @@ aside.panel {
 
 /* 工作坊卡片 */
 .ws-card {
+  display: block;
   border-radius: 16px;
   padding: 14px 18px;
   margin-bottom: 10px;
   background: var(--paper);
   border-left: 6px solid var(--ink);
   position: relative;
+  text-decoration: none;
+  color: inherit;
 }
+.ws-card.linked { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.ws-card.linked:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,58,54,.12); }
 .ws-card .row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
 .ws-card .badge {
   font-size: 12px; font-weight: 900; letter-spacing: .1em;
@@ -345,6 +350,10 @@ aside.panel {
 .ws-card .tag { font-size: 12px; color: var(--ink-soft); letter-spacing: .08em; }
 .ws-card h4 { font-size: 15px; font-weight: 700; letter-spacing: .04em; line-height: 1.6; }
 .ws-card .venue { font-size: 13px; color: var(--ink-soft); margin-top: 4px; letter-spacing: .05em; }
+.ws-card .go {
+  display: block; margin-top: 8px; font-size: 12.5px; font-weight: 900;
+  letter-spacing: .08em; color: var(--ink);
+}
 
 /* 基地卡片 */
 .base-card {
@@ -397,6 +406,8 @@ aside.panel {
 .base-detail .gmap-link:hover { background: var(--ink); color: #fff; }
 .base-detail .gmap-link.official { border-color: var(--nt); color: var(--nt); }
 .base-detail .gmap-link.official:hover { background: var(--nt); color: #fff; }
+.base-detail .gmap-link.workshop { border-color: var(--tc); color: var(--tc); }
+.base-detail .gmap-link.workshop:hover { background: var(--tc); color: #fff; }
 
 /* 頁尾 */
 footer.site {

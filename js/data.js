@@ -79,26 +79,26 @@ const BASES = [
   { no: 37,  name: "卓也小屋天然手作有限公司", org: "卓也小屋天然手作有限公司", cat: "craft", county: "苗栗縣", link: { url: "https://www.joye.com.tw/", type: "website" } },
   { no: 38,  name: "農村工藝生活館", org: "台灣藺草學會", cat: "craft", county: "苗栗縣", link: { url: "https://www.facebook.com/Shanjiao.sjc/", type: "facebook" } },
   { no: 39,  name: "銅鑼窯", org: "銅鑼窯", cat: "craft", county: "苗栗縣", link: { url: "https://www.facebook.com/TongluoKiln/", type: "facebook" } },
-  { no: 40,  name: "中央書局", org: "財團法人上善人文基金會", cat: "bookstore", county: "臺中市", link: { url: "https://www.facebook.com/centralbook.1927/", type: "facebook" } },
+  { no: 40,  name: "中央書局", org: "財團法人上善人文基金會", cat: "bookstore", county: "臺中市", link: { url: "https://www.facebook.com/centralbook.1927/", type: "facebook" }, workshopSession: 1 },
   { no: 41,  name: "月眉糖廠糖業文化路徑文化基地", org: "如山文創有限公司", cat: "heritage", county: "臺中市", link: { url: "https://www.facebook.com/TSCYUEMEI/?locale=zh_TW", type: "facebook" } },
   { no: 42,  name: "北屯新村-臺中市眷村文物館", org: "兩果文化創意有限公司", cat: "museum", county: "臺中市", link: { url: "https://www.facebook.com/go.tmkvm/", type: "facebook" } },
-  { no: 43,  name: "富興工廠 1962", org: "富興工廠文化有限公司", cat: "craft", county: "臺中市", link: { url: "https://www.fusionspace1962.com/", type: "website" } },
+  { no: 43,  name: "富興工廠 1962", org: "富興工廠文化有限公司", cat: "craft", county: "臺中市", link: { url: "https://www.fusionspace1962.com/", type: "website" }, workshopSession: 1 },
   { no: 44,  name: "臺中市霧峰區桐林社區發展協會", org: "臺中市霧峰區桐林社區發展協會", cat: "community", county: "臺中市", link: { url: "https://www.facebook.com/wftonglin/", type: "facebook" } },
   { no: 45,  name: "霧峰林家宮保第園區", org: "霧峰林家宮保第園區(林本堂股份有限公司)", cat: "heritage", county: "臺中市", link: { url: "https://www.wufenglins.com.tw/", type: "website" } },
   { no: 46,  name: "八堡圳頭文化創生行動基地", org: "彰化縣二水鄉源泉社區發展協會", cat: "community", county: "彰化縣", link: { url: "https://ycc.org.tw/ycc/index.php?action=index", type: "website" } },
   { no: 47,  name: "王功海牛文化基地", org: "王功海牛文化基地", cat: "community", county: "彰化縣", link: { url: "https://www.facebook.com/WangGongbookstore", type: "facebook" } },
-  { no: 48,  name: "田中窯創意園區", org: "久藝窯業有限公司", cat: "craft", county: "彰化縣", link: { url: "https://www.facebook.com/profile.php?id=100063586455993", type: "facebook" } },
+  { no: 48,  name: "田中窯創意園區", org: "久藝窯業有限公司", cat: "craft", county: "彰化縣", link: { url: "https://www.facebook.com/profile.php?id=100063586455993", type: "facebook" }, workshopSession: 2 },
   { no: 49,  name: "長源醫院—鹿港歷史影像館", org: "雄本老屋規劃有限公司", cat: "museum", county: "彰化縣", link: { url: "https://www.facebook.com/profile.php?id=100068402070339", type: "facebook" } },
   { no: 50,  name: "洛津組合-鹿港大街創生基地", org: "鹿港囝仔文化事業有限公司", cat: "community", county: "彰化縣", link: { url: "https://tkfl.tw/", type: "website" } },
-  { no: 51,  name: "日月老茶廠", org: "台灣農林股份有限公司南投分公司", cat: "museum", county: "南投縣", link: { url: "https://www.assamteafarm.com.tw/", type: "website" } },
+  { no: 51,  name: "日月老茶廠", org: "台灣農林股份有限公司南投分公司", cat: "museum", county: "南投縣", link: { url: "https://www.assamteafarm.com.tw/", type: "website" }, workshopSession: 4 },
   { no: 52,  name: "水里蛇窯陶藝文化園區", org: "水里蛇窯陶藝文化園區", cat: "community", county: "南投縣", link: { url: "https://www.snakekiln.com.tw/", type: "website" } },
   { no: 53,  name: "南投戲院", org: "南投戲院", cat: "film", county: "南投縣", link: { url: "https://www.nantoutheater.com/", type: "website" } },
   { no: 54,  name: "紙教堂新故鄉見學園區", org: "財團法人新故鄉文教基金會", cat: "community", county: "南投縣", link: { url: "https://paperdome.org.tw/", type: "website" } },
   { no: 55,  name: "廣興紙寮", org: "廣鴻興有限公司", cat: "museum", county: "南投縣", link: { url: "https://www.taiwanpaper.net/", type: "website" } },
-  { no: 56,  name: "毓繡美術館", org: "財團法人毓繡文化基金會", cat: "arts", county: "南投縣", link: { url: "https://www.yu-hsiu.org/", type: "website" } },
+  { no: 56,  name: "毓繡美術館", org: "財團法人毓繡文化基金會", cat: "arts", county: "南投縣", link: { url: "https://www.yu-hsiu.org/", type: "website" }, workshopSession: 3 },
   { no: 57,  name: "西螺生態博物館", org: "財團法人雲林縣螺陽文教基金會", cat: "museum", county: "雲林縣", link: { url: "https://www.facebook.com/siluo.yenping.museum/", type: "facebook" } },
   { no: 58,  name: "虎尾建國眷村", org: "雲林縣虎尾鎮建國眷村再造協會", cat: "heritage", county: "雲林縣", link: { url: "https://www.jianguohuwei.com/", type: "website" } },
-  { no: 59,  name: "雲林記憶 Cool", org: "社團法人台灣公益 CEO 協會", cat: "heritage", county: "雲林縣", link: { url: "https://www.facebook.com/Yunlin.memorycool/", type: "facebook" } },
+  { no: 59,  name: "雲林記憶 Cool", org: "社團法人台灣公益 CEO 協會", cat: "heritage", county: "雲林縣", link: { url: "https://www.facebook.com/Yunlin.memorycool/", type: "facebook" }, workshopSession: 3 },
   { no: 60,  name: "雲林故事館", org: "社團法人雲林縣雲林故事人協會", cat: "museum", county: "雲林縣", link: { url: "http://www.ylstoryhouse.org.tw", type: "website" } },
   { no: 61,  name: "雲林布袋戲館", org: "雲林布袋戲館", cat: "museum", county: "雲林縣", link: { url: "https://sites.google.com/view/yunlinpuppet", type: "website" } },
   { no: 62,  name: "大林慢城發展協會", org: "嘉義縣大林慢城發展協會", cat: "craft", county: "嘉義縣", link: { url: "https://www.facebook.com/DalinCittaSlow/", type: "facebook" } },
@@ -155,25 +155,25 @@ const BASES = [
 // 文化基地工作坊(4 場)
 const WORKSHOPS = [
   {
-    session: "場次一", counties: ["臺中市"], tag: "走讀工作坊",
+    session: "場次一", sessionId: 1, counties: ["臺中市"], tag: "走讀工作坊",
     title: "城市記憶的再生路徑—從知識地景到產業空間",
     date: "7/17", weekday: "五", time: "09:30–16:30",
     venue: "中央書局 × 富興工廠1962"
   },
   {
-    session: "場次二", counties: ["彰化縣"], tag: "定點工作坊",
+    session: "場次二", sessionId: 2, counties: ["彰化縣"], tag: "定點工作坊",
     title: "陶工藝的文化轉譯—從工藝體驗到基地品牌經營",
     date: "8/06", weekday: "四", time: "08:40–16:20",
     venue: "田中窯創藝園區"
   },
   {
-    session: "場次三", counties: ["南投縣", "雲林縣"], tag: "跨縣市走讀工作坊",
+    session: "場次三", sessionId: 3, counties: ["南投縣", "雲林縣"], tag: "跨縣市走讀工作坊",
     title: "地方記憶的跨域策展—從美術館觀看方法到地方記憶展示",
     date: "8/21", weekday: "五", time: "08:40–17:00",
     venue: "毓繡美術館 × 雲林記憶Cool"
   },
   {
-    session: "場次四", counties: ["南投縣"], tag: "定點工作坊",
+    session: "場次四", sessionId: 4, counties: ["南投縣"], tag: "定點工作坊",
     title: "茶文化的經營與結盟—以五感經驗思考文化體驗與異業結合",
     date: "9/03", weekday: "四", time: "08:30–16:30",
     venue: "日月老茶廠"
